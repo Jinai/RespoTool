@@ -1,0 +1,35 @@
+﻿v0.1 [05/11/2015]
+=================
+
+	Version initiale
+
+v0.2 [06/11/2015]
+=================
+
+	* Possibilité de copier le contenu de n'importe quelle cellule avec un double-clic
+	* Possibilité d'archiver les signalements [En test]
+
+v0.3 [10/11/2015]
+=================
+	
+	* Sélectionner une ou plusieurs lignes puis faire Supprimer/Retour pour les retirer
+	* Sélectionner une ligne puis faire Entrée pour éditer le statut
+	* Archiver devrait mieux marcher, pour info ça ajoute les signalements traités à la
+	  fin du fichier archives/archives.txt
+	* Possibilité d'importer/exporter une sauvegarde des signalements en cours (plus
+	  flexible que de garder le contenu de /sigmdm car les statuts sont conservés)
+	* Tri par colonnes fonctionnel (par date ou par ordre alphabétique, permet par
+	  exemple de rassembler les différents flags pour les traiter d'un coup)
+	* statuts.txt liste les statuts disponibles (techniquement on peut mettre n'importe
+	  quoi mais ce serait cool d'avoir les mêmes pour faire des stats par exemple)
+
+v0.4 [11/11/2015]
+=================
+
+	* Correction du parser pour ne garder que le dernier signalement en cas de doublons
+	* Possibilité d'ajouter des signalements à la suite des autres sans tout effacer ou
+	  devoir réencoder chaque statut
+	* L'import/export ouvre une boite de dialogue pour sélectionner un fichier, c'est
+	  plus pratique qu'un fichier par défaut
+	* Correction d'un petit bug qui empêchait de trier par numéro d'ajout dans la liste
+	* Signalements non traités en rouge
