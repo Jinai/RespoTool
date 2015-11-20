@@ -1,0 +1,12 @@
+Les différents statuts possibles :
+
+todo
+vu
+ignoré
+corrigé
+supprimé
+reset
+reclassé
+mappeur contacté
+
+Hésitez pas à compléter si besoin
