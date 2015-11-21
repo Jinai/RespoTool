@@ -68,7 +68,7 @@ class Siglist(Treelist):
             self._entry_edit.destroy()
         x, y, width, height = self.tree.bbox(item, "statut")
         pady = height // 2
-        self._entry_edit = ttk.Entry(self.tree, width=11)
+        self._entry_edit = ttk.Entry(self.tree, width=17)
         self._entry_edit.place(x=x + width, y=y + pady, anchor="e")
         self._entry_edit.item = item
         self._entry_edit.bind('<Escape>', lambda *x: self._entry_edit.destroy())
@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
     root = tk.Tk()
     headers = ['date', 'auteur', 'code', 'flag', 'description', 'statut']
-    column_widths = [30, 40, 85, 100, 80, 350, 70]
+    column_widths = [30, 40, 85, 100, 80, 350, 105]
     sigs = [
         signalement.Signalement("5/11", "Jinai", "@123456789", "Rally", "faille inf"),
         signalement.Signalement("6/11", "Shodaboy", "@987654321", "Défilante", "Impossible"),
