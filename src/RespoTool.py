@@ -59,7 +59,7 @@ class RespoTool(tk.Tk):
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
         headers = ['date', 'auteur', 'code', 'flag', 'description', 'statut']
-        column_widths = [30, 40, 85, 100, 80, 350, 70]
+        column_widths = [30, 40, 85, 100, 80, 350, 105]
         sort_keys = [
             lambda x: int(x[0]),
             lambda x: (int(x[0].split("/")[1]), int(x[0].split("/")[0])),
@@ -116,7 +116,7 @@ class RespoTool(tk.Tk):
         msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nIls seront retirés de la liste une fois fait !"
         if mbox.askokcancel("Archiver", msg, icon="warning", parent=self):
             header = signalement.Signalement("Date", "Auteur Sig.", "Code", "Flag", "Description", "Statut").format()
-            sep = "------+--------------+----------------+-------------+------------------------------------------------------------------------------------------------------+-------"
+            sep = "------+--------------+----------------+-------------+------------------------------------------------------------------------------------------------------+-----------------"
             if not os.path.exists("archives/archives.txt"):
                 with open("archives/archives.txt", "w") as f:
                     f.write(header + "\n")
