@@ -1,7 +1,6 @@
 Les différents statuts possibles :
 
 todo
-vu
 ignoré
 corrigé
 supprimé
