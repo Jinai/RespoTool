@@ -6,7 +6,7 @@ import tkinter as tk
 
 class Popup(tk.Toplevel):
     def __init__(self, message, cursor_x, cursor_y, lifetime=1500, delay=0, fadein=200, fadeout=600, offset=(10, -20),
-                 **options):
+                 txt_color="black", bg_color="#F0F0F0", **options):
         tk.Toplevel.__init__(self, **options)
         self.message = message      # Message to display
         self.cursor_x = cursor_x    # Position of cursor on x-axis
@@ -16,6 +16,8 @@ class Popup(tk.Toplevel):
         self.fadein = fadein        # Duration of fadein (milliseconds)
         self.fadeout = fadeout      # Duration of fadeout (milliseconds)
         self.offset = offset        # (x,y) offset from cursor (pixels)
+        self.txt_color = txt_color  # Color the message will appear in
+        self.bg_color = bg_color    # Background color of the popup
         self.refresh_delay = 30     # Delay between each transparency adjustment (milliseconds)
         self.alpha_fadein = (1 / self.fadein) * self.refresh_delay    # Fadein transparency increment
         self.alpha_fadeout = (1 / self.fadeout) * self.refresh_delay  # Fadeout transparency decrement
@@ -26,8 +28,7 @@ class Popup(tk.Toplevel):
         self.overrideredirect(True)  # Removes title bar
         self.wm_geometry("+{}+{}".format(self.cursor_x + self.offset[0], self.cursor_y + self.offset[1]))
         self.attributes("-alpha", 0.0)  # Set transparency to 0%
-        self.label = tk.Label(self, text=self.message, justify="left", background="#ffffff", relief="solid",
-                              borderwidth=1)
+        self.label = tk.Label(self, text=self.message, justify="left", fg=self.txt_color, bg=self.bg_color)
         self.label.pack()
         self.after(self.delay, self.fade_in)
 
