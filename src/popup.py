@@ -8,16 +8,16 @@ class Popup(tk.Toplevel):
     def __init__(self, message, cursor_x, cursor_y, lifetime=1500, delay=0, fadein=200, fadeout=600, offset=(10, -20),
                  **options):
         tk.Toplevel.__init__(self, **options)
-        self.message = message  # Message to display
-        self.cursor_x = cursor_x  # Position of cursor in x axis
-        self.cursor_y = cursor_y  # Position of cursor in y axis
-        self.lifetime = lifetime  # Time the popup stays on screen (milliseconds)
-        self.delay = delay  # Delay before fadein begins (milliseconds)
-        self.fadein = fadein  # Duration of fadein (milliseconds)
-        self.fadeout = fadeout  # Duration of dadeout (milliseconds)
-        self.offset = offset  # (x,y) offset from cursor (pixels)
-        self.refresh_delay = 30  # Delay between each transparency adjustment (milliseconds)
-        self.alpha_fadein = (1 / self.fadein) * self.refresh_delay  # Fadein transparency increment
+        self.message = message      # Message to display
+        self.cursor_x = cursor_x    # Position of cursor on x-axis
+        self.cursor_y = cursor_y    # Position of cursor on y-axis
+        self.lifetime = lifetime    # Time the popup stays on screen (milliseconds)
+        self.delay = delay          # Delay before fadein begins (milliseconds)
+        self.fadein = fadein        # Duration of fadein (milliseconds)
+        self.fadeout = fadeout      # Duration of fadeout (milliseconds)
+        self.offset = offset        # (x,y) offset from cursor (pixels)
+        self.refresh_delay = 30     # Delay between each transparency adjustment (milliseconds)
+        self.alpha_fadein = (1 / self.fadein) * self.refresh_delay    # Fadein transparency increment
         self.alpha_fadeout = (1 / self.fadeout) * self.refresh_delay  # Fadeout transparency decrement
 
         self.after(self.delay, self.setup)
