@@ -20,7 +20,7 @@ class Popup(tk.Toplevel):
         self.alpha_fadein = (1 / self.fadein) * self.refresh_delay    # Fadein transparency increment
         self.alpha_fadeout = (1 / self.fadeout) * self.refresh_delay  # Fadeout transparency decrement
 
-        self.after(self.delay, self.setup)
+        self.setup()
 
     def setup(self):
         self.overrideredirect(True)  # Removes title bar
@@ -29,7 +29,7 @@ class Popup(tk.Toplevel):
         self.label = tk.Label(self, text=self.message, justify="left", background="#ffffff", relief="solid",
                               borderwidth=1)
         self.label.pack()
-        self.fade_in()
+        self.after(self.delay, self.fade_in)
 
     def fade_in(self):
         alpha = self.attributes("-alpha")
