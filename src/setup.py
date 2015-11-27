@@ -7,7 +7,7 @@ def py2exe():
     from distutils.core import setup
     import py2exe
 
-    dist_dir = "S:/DEV/RespoTool/bin"
+    dist_dir = "../bin"
 
     setup(
         name="RespoTool",
