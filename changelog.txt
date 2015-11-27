@@ -5,6 +5,11 @@
 	  (histoire d'avoir un retour visuel et d'être sûr que ça a bien fonctionné)
 	* Largeur de la colonne Statut légèrement augmentée
 
+	v0.5.1
+	------
+
+		* Ajusté l'apparence du popup
+
 v0.4 [11/11/2015]
 =================
 
