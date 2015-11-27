@@ -6,6 +6,7 @@ import tkinter.ttk as ttk
 import pyperclip
 from treelist import Treelist
 from signalement import Signalement
+from popup import Popup
 
 STATUS = [
     "ignoré",
@@ -54,10 +55,15 @@ class Siglist(Treelist):
 
     def on_doubleclick(self, event):
         if self.tree.identify_region(event.x, event.y) == "cell":
+            # Clipboard
             item = self.tree.identify("item", event.x, event.y)
             column = int(self.tree.identify("column", event.x, event.y)[1:]) - 1
             value = self.tree.item(item)['values'][column]
             pyperclip.copy(value)
+            # Popup
+            x, y = self.master.winfo_pointerx(), self.master.winfo_pointery()
+            msg = value if len(value) <= 20 else value[:20] + "..."
+            Popup('"{}" copié dans le presse-papiers'.format(msg), x, y)
 
     def on_enter(self, event):
         item = self.tree.selection()[0]
