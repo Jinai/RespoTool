@@ -32,10 +32,8 @@ class Siglist(Treelist):
             6: lambda x: x.statut.lower(),
         }
         self._entry_edit = None
-        # Bindings
         self.tree.bind('<Double-1>', self.on_doubleclick)
         self.tree.bind('<Return>', self.on_enter)
-        # Tags
         self.tree.tag_configure("todo", foreground="red")
 
     def insert(self, values, update=True, tags=()):
@@ -74,16 +72,21 @@ class Siglist(Treelist):
             self._entry_edit.destroy()
         x, y, width, height = self.tree.bbox(item, "statut")
         pady = height // 2
+        statut = self.tree.item(item)['values'][-1]
         self._entry_edit = ttk.Entry(self.tree, width=17)
         self._entry_edit.place(x=x + width, y=y + pady, anchor="e")
         self._entry_edit.item = item
+        self._entry_edit.insert(0, statut)
+        self._entry_edit.select_range(0, "end")
+        self._entry_edit.bind('<FocusOut>', lambda *x: self._entry_edit.destroy())
         self._entry_edit.bind('<Escape>', lambda *x: self._entry_edit.destroy())
         self._entry_edit.bind('<Control-a>', lambda *x: self._entry_edit.select_range(0, "end"))
-        self._entry_edit.bind('<Return>', lambda event: self.edit_status(event, item))
+        self._entry_edit.bind('<Return>', lambda *x: self.edit_status())
         self._entry_edit.focus_force()
 
-    def edit_status(self, event, item):
-        new = event.widget.get()
+    def edit_status(self):
+        item = self._entry_edit.item
+        new = self._entry_edit.get()
         values = self.tree.item(self._entry_edit.item)['values']
         values[0] = str(values[0])
         data_index = self._data.index(values)
