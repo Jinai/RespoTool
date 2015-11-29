@@ -98,6 +98,8 @@ class Siglist(Treelist):
         item_index = self.tree.get_children().index(item)
         self.refresh()
         self.selection(item_index)
+        self.tree.focus_set()
+        self.tree.focus(self.tree.get_children()[item_index])
 
     def selection(self, index):
         self.tree.selection_set(self.tree.get_children()[index])
