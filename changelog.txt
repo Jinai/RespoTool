@@ -1,18 +1,20 @@
 ﻿v0.5 [27/11/2015]
 =================
-
 	* Un popup apparait maintenant lors d'un double-clic sur une cellule du tableau
 	  (histoire d'avoir un retour visuel et d'être sûr que ça a bien fonctionné)
 	* Largeur de la colonne Statut légèrement augmentée
 
 	v0.5.1
 	------
-
 		* Ajusté l'apparence du popup
+
+	v0.5.2
+	------
+		* Amélioré la navigation au clavier dans la liste de signalements, notamment
+		  après avoir édité un statut (obligé d'utiliser la souris avant)
 
 v0.4 [11/11/2015]
 =================
-
 	* Correction du parser pour ne garder que le dernier signalement en cas de doublons
 	* Possibilité d'ajouter des signalements à la suite des autres sans tout effacer ou
 	  devoir réencoder chaque statut
@@ -22,8 +24,7 @@ v0.4 [11/11/2015]
 	* Signalements non traités en rouge
 
 v0.3 [10/11/2015]
-=================
-	
+=================	
 	* Sélectionner une ou plusieurs lignes puis faire Supprimer/Retour pour les retirer
 	* Sélectionner une ligne puis faire Entrée pour éditer le statut
 	* Archiver devrait mieux marcher, pour info ça ajoute les signalements traités à la
@@ -37,11 +38,9 @@ v0.3 [10/11/2015]
 
 v0.2 [06/11/2015]
 =================
-
 	* Possibilité de copier le contenu de n'importe quelle cellule avec un double-clic
 	* Possibilité d'archiver les signalements [En test]
 
 v0.1 [05/11/2015]
 =================
-
 	Version initiale
