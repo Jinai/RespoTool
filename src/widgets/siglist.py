@@ -4,9 +4,9 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import pyperclip
-from treelist import Treelist
+from .treelist import Treelist
 from signalement import Signalement
-from popup import Popup
+from .popup import Popup
 
 STATUS = [
     "ignoré",

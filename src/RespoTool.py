@@ -10,8 +10,8 @@ import tkinter.filedialog as fdialog
 
 import pyperclip
 import sigparser
-import siglist
 import signalement
+from widgets import siglist
 from _version import __version__
 
 __author__ = "Jinai"
