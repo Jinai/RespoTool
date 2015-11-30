@@ -43,7 +43,8 @@ class Siglist(Treelist):
 
     def delete(self):
         for item in self.tree.selection():
-            self.signalements.remove(Signalement(*self.tree.item(item)['values'][1:]))
+            index = self.tree.get_children().index(item)
+            del self.signalements[index]
         super().delete()
 
     def sort(self, col, descending):
@@ -87,22 +88,14 @@ class Siglist(Treelist):
     def edit_status(self):
         item = self._entry_edit.item
         new = self._entry_edit.get()
-        values = self.tree.item(self._entry_edit.item)['values']
-        values[0] = str(values[0])
-        data_index = self._data.index(values)
-        sig_index = self.signalements.index(Signalement(*values[1:]))
-        values[-1] = new
-        self._data[data_index] = values
-        self.signalements[sig_index] = Signalement(*values[1:])
         self._entry_edit.destroy()
-        item_index = self.tree.get_children().index(item)
+        values = self.tree.item(item)['values']
+        values[0] = str(values[0])  # tkinter forces str to int if it's a digit
+        index = self._data.index(values)
+        values[-1] = new
+        self.signalements[index] = Signalement(*values[1:])
         self.refresh()
-        self.selection(item_index)
-        self.tree.focus_set()
-        self.tree.focus(self.tree.get_children()[item_index])
-
-    def selection(self, index):
-        self.tree.selection_set(self.tree.get_children()[index])
+        self.focus_index(index)
 
     def populate(self):
         for sig in self.signalements:
