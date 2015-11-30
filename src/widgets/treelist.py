@@ -68,18 +68,29 @@ class Treelist(tk.Frame):
             self._data.append(values)
 
     def delete(self):
-        for item in self.tree.selection():
+        selection = self.tree.selection()
+        for item in selection:
             values = self.tree.item(item)['values']
             values[0] = str(values[0])
+            index = self._data.index(values)
             self._data.remove(values)
             self.tree.delete(item)
             self._item_count -= 1
+            if item == selection[-1]:
+                self.focus_index(index)
 
     def clear(self, keep_data=False):
         self.tree.delete(*self.tree.get_children())
         self._item_count = 0
         if not keep_data:
             del self._data[:]
+
+    def focus_index(self, index):
+        if index < self._item_count:
+            item = self.tree.get_children()[index]
+            self.tree.selection_set(item)
+            self.tree.focus_set()
+            self.tree.focus(item)
 
     def sort(self, col, descending):
         data = [(self.tree.set(child, col), child) for child in self.tree.get_children('')]
