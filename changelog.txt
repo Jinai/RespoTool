@@ -1,4 +1,11 @@
-﻿v0.5 [27/11/2015]
+﻿v0.6 [01/12/2015]
+=================
+	* Correction d'un bug causé par les doublons où éditer un sig modifiait un autre
+	* Encore amélioré la navigation au clavier, supprimer un élément garde le focus
+	  sur l'élément suivant et permet d'enchaîner
+	* Case à cocher pour autoriser les doublons (cochée par défaut)
+
+v0.5 [27/11/2015]
 =================
 	* Un popup apparait maintenant lors d'un double-clic sur une cellule du tableau
 	  (histoire d'avoir un retour visuel et d'être sûr que ça a bien fonctionné)
