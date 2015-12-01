@@ -11,7 +11,7 @@ import tkinter.filedialog as fdialog
 import pyperclip
 import sigparser
 import signalement
-from widgets import siglist, stats
+from widgets import siglist
 from _version import __version__
 
 __author__ = "Jinai"
@@ -56,8 +56,8 @@ class RespoTool(tk.Tk):
         button_export = ttk.Button(labelframe_session, text="Exporter", command=self.export_save)
         button_export.pack(side="left", padx=(0, 5), pady=5)
 
-        labelframe_stats = stats.Stats(frame_impexp, text="Stats")
-        labelframe_stats.pack(side="right", fill="x", expand=True, padx=(20, 17))
+        # labelframe_stats = stats.Stats(frame_impexp, text="Stats")
+        # labelframe_stats.pack(side="right", fill="x", expand=True, padx=(20, 17))
 
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
