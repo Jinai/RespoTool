@@ -77,11 +77,16 @@ class RespoTool(tk.Tk):
         # ------------------------------------------------ COMMANDS ------------------------------------------------ #
 
         frame_commands = tk.Frame(main_frame)
-        frame_commands.pack()
-        self.button_playlist = ttk.Button(frame_commands, text="Playlist", command=self.playlist, state="disabled")
-        self.button_playlist.pack(side="left")
+        frame_commands.pack(fill="x")
+        self._allow_duplicates = tk.BooleanVar()
+        self._allow_duplicates.set(True)
+        self.cb_duplicates = ttk.Checkbutton(frame_commands, text="Autoriser les doublons",
+                                             variable=self._allow_duplicates)
+        self.cb_duplicates.pack(side="left", padx=(5, 0))
         self.button_archive = ttk.Button(frame_commands, text="Archiver", command=self.archive, state="disabled")
-        self.button_archive.pack()
+        self.button_archive.pack(side="right", padx=(0, 329))
+        self.button_playlist = ttk.Button(frame_commands, text="Playlist", command=self.playlist, state="disabled")
+        self.button_playlist.pack(side="right")
 
     def new_file(self):
         file_name = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
