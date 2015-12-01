@@ -7,12 +7,9 @@ from signalement import Signalement
 # parser dégueu fait à la va vite, mais il marche !!
 # je m'y connais pas assez en regex pour faire un truc propre
 
-def parse(text, sep="\n"):
-    """
-    :param text: String copiée/collée de la page /sigmdm contenant tous les signalements
-    :param sep:  String séparant chaque entrée dans /sigmdm, généralement un retour à la ligne (\n)
-    :return:     Liste d'objets de type Signalement
-    """
+def parse(text, allow_duplicates=True, previous_sigs=None, sep="\n"):
+    if previous_sigs is None:
+        previous_sigs = []
     signalements = []
     if not isinstance(text, str):
         return signalements
@@ -32,7 +29,7 @@ def parse(text, sep="\n"):
             sig[2] = "@" + sig[2]  # Rajoute @ devant le timestamp
 
             s = Signalement(*sig)
-            if s in signalements:
+            if ((s in signalements) or (s in previous_sigs)) and (not allow_duplicates):
                 signalements.remove(s)
             signalements.append(s)
 
