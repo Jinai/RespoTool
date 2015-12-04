@@ -26,6 +26,8 @@ class RespoTool(tk.Tk):
         self.update_idletasks()
         self.minsize(self.winfo_reqwidth(), self.winfo_reqheight())
 
+        self.bind('<Control-q>', lambda _: self.quit())
+
     def _setup_widgets(self):
         self.main_frame = tk.Frame(self)
         self.main_frame.pack(fill='both', expand=True, pady=5, padx=5)
@@ -161,6 +163,8 @@ class RespoTool(tk.Tk):
         self.button_playlist.configure(state="enabled")
         self.button_archive.configure(state="enabled")
 
+    def quit(self):
+        raise SystemExit
 
 if __name__ == '__main__':
     app = RespoTool()
