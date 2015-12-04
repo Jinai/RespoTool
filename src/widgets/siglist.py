@@ -15,6 +15,8 @@ STATUS = [
     "reset",
     "reclassé",
     "mappeur contacté",
+    "modo contacté",
+    "doublon"
 ]
 
 
@@ -34,6 +36,7 @@ class Siglist(Treelist):
         self._entry_edit = None
         self.tree.bind('<Double-1>', self.on_doubleclick)
         self.tree.bind('<Return>', self.on_enter)
+        self.tree.bind('<Control-c>', self.copy)
         self.tree.tag_configure("todo", foreground="red")
 
     def insert(self, values, update=True, tags=()):
@@ -67,6 +70,21 @@ class Siglist(Treelist):
     def on_enter(self, event):
         item = self.tree.selection()[0]
         self.place_entry(item)
+
+    def copy(self, event):
+        selection = self.tree.selection()
+        if len(selection) == 1:
+            item = selection[0]
+            load = "/load "
+            load += self.tree.item(item)['values'][3]
+            pyperclip.copy(load)
+            try:
+                x, y, width, height = self.tree.bbox(item, "code")
+                x = x + self.master.master.winfo_x() + 5
+                y = y + self.master.master.winfo_y() + 96
+                Popup('"{}" copié dans le presse-papiers'.format(load), x, y, delay=50, txt_color="white", bg_color="#111111")
+            except ValueError:
+                pass
 
     def place_entry(self, item):
         if self._entry_edit is not None:
