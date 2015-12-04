@@ -11,7 +11,7 @@ import tkinter.filedialog as fdialog
 import pyperclip
 import sigparser
 import signalement
-from widgets import siglist
+from widgets import siglist, stats
 from _version import __version__
 
 __author__ = "Jinai"
@@ -27,37 +27,30 @@ class RespoTool(tk.Tk):
         self.minsize(self.winfo_reqwidth(), self.winfo_reqheight())
 
     def _setup_widgets(self):
-        main_frame = tk.Frame(self)
-        main_frame.pack(fill='both', expand=True, pady=5, padx=5)
+        self.main_frame = tk.Frame(self)
+        self.main_frame.pack(fill='both', expand=True, pady=5, padx=5)
 
         # -------------------------------------------- IMPORT / EXPORT --------------------------------------------- #
 
-        frame_impexp = tk.Frame(main_frame)
-        frame_impexp.pack(fill="both")
+        self.labelframe_new = ttk.Labelframe(self.main_frame, text="Nouvelle session")
+        button_file = ttk.Button(self.labelframe_new, text="Fichier", command=self.new_file)
+        button_file.pack(fill="both", expand=True, side="left", padx=(7, 0), pady=(0, 7))
+        button_clipboard = ttk.Button(self.labelframe_new, text="Presse-papiers", command=self.new_clipboard)
+        button_clipboard.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
 
-        labelframe_new = ttk.Labelframe(frame_impexp, text="Nouvelle session")
-        labelframe_new.pack(side="left")
-        button_file = ttk.Button(labelframe_new, text="Fichier", command=self.new_file)
-        button_file.pack(side="left", padx=(5, 0), pady=5)
-        button_clipboard = ttk.Button(labelframe_new, text="Presse-papiers", command=self.new_clipboard)
-        button_clipboard.pack(side="left", padx=(0, 5), pady=5)
+        self.labelframe_append = ttk.Labelframe(self.main_frame, text="Ajouter nouveaux sigs")
+        button_append_file = ttk.Button(self.labelframe_append, text="Fichier", command=self.append_file)
+        button_append_file.pack(fill="both", expand=True, side="left", padx=(7, 0), pady=(0, 7))
+        button_append_clipboard = ttk.Button(self.labelframe_append, text="Presse-papiers", command=self.append_clipboard)
+        button_append_clipboard.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
 
-        labelframe_append = ttk.Labelframe(frame_impexp, text="Ajouter nouveaux sigs")
-        labelframe_append.pack(side="left", padx=20)
-        button_append_file = ttk.Button(labelframe_append, text="Fichier", command=self.append_file)
-        button_append_file.pack(side="left", padx=(5, 0), pady=5)
-        button_append_clipboard = ttk.Button(labelframe_append, text="Presse-papiers", command=self.append_clipboard)
-        button_append_clipboard.pack(side="left", padx=(0, 5), pady=5)
+        self.labelframe_session = ttk.Labelframe(self.main_frame, text="Importer / Exporter session")
+        button_import = ttk.Button(self.labelframe_session, text="Importer", command=self.import_save)
+        button_import.pack(fill="both", expand=True, side="left", padx=(7, 0), pady=(0, 7))
+        button_export = ttk.Button(self.labelframe_session, text="Exporter", command=self.export_save)
+        button_export.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
 
-        labelframe_session = ttk.Labelframe(frame_impexp, text="Importer / Exporter session")
-        labelframe_session.pack(side="left")
-        button_import = ttk.Button(labelframe_session, text="Importer", command=self.import_save)
-        button_import.pack(side="left", padx=(5, 0), pady=5)
-        button_export = ttk.Button(labelframe_session, text="Exporter", command=self.export_save)
-        button_export.pack(side="left", padx=(0, 5), pady=5)
-
-        # labelframe_stats = stats.Stats(frame_impexp, text="Stats")
-        # labelframe_stats.pack(side="right", fill="x", expand=True, padx=(20, 17))
+        self.labelframe_stats = stats.Stats(self.main_frame, text="Stats")
 
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
@@ -73,23 +66,33 @@ class RespoTool(tk.Tk):
             lambda x: x[0].lower(),
         ]
         stretch = [False, False, False, False, False, True, False]
-        self.tree_sig = siglist.Siglist(main_frame, self.signalements, headers, column_widths, sort_keys=sort_keys,
+        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, headers, column_widths, sort_keys=sort_keys,
                                         stretch=stretch)
-        self.tree_sig.pack(fill="both", expand=True, pady=5)
 
         # ------------------------------------------------ COMMANDS ------------------------------------------------ #
 
-        frame_commands = tk.Frame(main_frame)
-        frame_commands.pack(fill="x")
         self._allow_duplicates = tk.BooleanVar()
         self._allow_duplicates.set(True)
-        self.cb_duplicates = ttk.Checkbutton(frame_commands, text="Autoriser les doublons",
+        self.cb_duplicates = ttk.Checkbutton(self.main_frame, text="Autoriser les doublons",
                                              variable=self._allow_duplicates)
-        self.cb_duplicates.pack(side="left", padx=(5, 0))
-        self.button_archive = ttk.Button(frame_commands, text="Archiver", command=self.archive, state="disabled")
-        self.button_archive.pack(side="right", padx=(0, 329))
-        self.button_playlist = ttk.Button(frame_commands, text="Playlist", command=self.playlist, state="disabled")
-        self.button_playlist.pack(side="right")
+
+        self.frame_commands = tk.Frame(self.main_frame)
+        self.button_playlist = ttk.Button(self.frame_commands, text="Playlist", command=self.playlist, state="disabled")
+        self.button_playlist.pack(side="left")
+        self.button_archive = ttk.Button(self.frame_commands, text="Archiver", command=self.archive, state="disabled")
+        self.button_archive.pack(side="right")
+
+        # ------------------------------------------- WIDGETS PLACEMENT -------------------------------------------- #
+
+        self.labelframe_new.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
+        self.labelframe_append.grid(row=0, column=1, sticky="nsew", padx=(0, 10))
+        self.labelframe_session.grid(row=0, column=2, sticky="nsew", padx=(0, 10))
+        self.tree_sig.grid(row=1, column=0, columnspan=3, sticky="nsew", pady=10)
+        self.cb_duplicates.grid(row=2, column=0, sticky="nsew")
+        self.frame_commands.grid(row=3, column=0, columnspan=3)
+
+        self.main_frame.grid_rowconfigure(1, weight=1)
+        self.main_frame.grid_columnconfigure((0, 1, 2), weight=1)
 
     def new_file(self):
         file_name = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
