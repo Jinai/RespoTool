@@ -1,9 +1,31 @@
-﻿v0.6 [01/12/2015]
+﻿v0.6.1 [04/12/2015]
+===================
+	* Ctrl+Q pour quitter l'application
+	* Ctrl+C pour copier la commande de load du signalement sélectionné dans le
+	  presse-papiers ("/load @code")
+	* Layout des boutons légèrement modifié, ils s'adaptent mieux à la fenêtre
+	* Message d'avertissement lors de l'archivage modifié
+
+
+v0.6 [01/12/2015]
 =================
 	* Correction d'un bug causé par les doublons où éditer un sig modifiait un autre
 	* Encore amélioré la navigation au clavier, supprimer un élément garde le focus
 	  sur l'élément suivant et permet d'enchaîner
 	* Case à cocher pour autoriser les doublons (cochée par défaut)
+
+
+v0.5.2 [29/11/2015]
+===================
+	* Amélioré la navigation au clavier dans la liste de signalements, notamment
+	  après avoir édité un statut (obligé d'utiliser la souris avant)
+
+
+v0.5.1 [27/11/2015]
+===================
+	* Ajusté l'apparence du pop-up
+	* Correction d'un bug dans l'affichage du pop-up
+
 
 v0.5 [27/11/2015]
 =================
@@ -11,14 +33,6 @@ v0.5 [27/11/2015]
 	  (histoire d'avoir un retour visuel et d'être sûr que ça a bien fonctionné)
 	* Largeur de la colonne Statut légèrement augmentée
 
-	v0.5.1
-	------
-		* Ajusté l'apparence du popup
-
-	v0.5.2
-	------
-		* Amélioré la navigation au clavier dans la liste de signalements, notamment
-		  après avoir édité un statut (obligé d'utiliser la souris avant)
 
 v0.4 [11/11/2015]
 =================
@@ -29,6 +43,7 @@ v0.4 [11/11/2015]
 	  plus pratique qu'un fichier par défaut
 	* Correction d'un petit bug qui empêchait de trier par numéro d'ajout dans la liste
 	* Signalements non traités en rouge
+
 
 v0.3 [10/11/2015]
 =================	
@@ -43,11 +58,13 @@ v0.3 [10/11/2015]
 	* statuts.txt liste les statuts disponibles (techniquement on peut mettre n'importe
 	  quoi mais ce serait cool d'avoir les mêmes pour faire des stats par exemple)
 
+
 v0.2 [06/11/2015]
 =================
 	* Possibilité de copier le contenu de n'importe quelle cellule avec un double-clic
 	* Possibilité d'archiver les signalements [En test]
 
+
 v0.1 [05/11/2015]
 =================
-	Version initiale
+	* Version initiale
