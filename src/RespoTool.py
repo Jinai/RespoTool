@@ -124,7 +124,8 @@ class RespoTool(tk.Tk):
                 f.write(str(sig) + "\n")
 
     def archive(self):
-        msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nIls seront retirés de la liste une fois fait !"
+        msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nNe le faites que s'ils sont tous traités, " + \
+              "car ils seront retirés de la liste une fois fait !"
         if mbox.askokcancel("Archiver", msg, icon="warning", parent=self):
             header = signalement.Signalement("Date", "Auteur Sig.", "Code", "Flag", "Description", "Statut").format()
             sep = "------+--------------+----------------+-------------+---------------------------------------------" \
