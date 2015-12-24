@@ -99,7 +99,7 @@ class RespoTool(tk.Tk):
     def new_file(self):
         file_name = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
         if file_name:
-            with open(file_name, "r") as f:
+            with open(file_name, "r", encoding="utf-8") as f:
                 self.signalements = sigparser.parse(f.read(), self._allow_duplicates.get())
             self.refresh()
 
@@ -110,7 +110,7 @@ class RespoTool(tk.Tk):
     def append_file(self):
         file_name = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
         if file_name:
-            with open(file_name, "r") as f:
+            with open(file_name, "r", encoding="utf-8") as f:
                 signalements = sigparser.parse(f.read(), self._allow_duplicates.get())
             self.signalements.extend(signalements)
             self.refresh()
@@ -133,10 +133,10 @@ class RespoTool(tk.Tk):
             sep = "------+--------------+----------------+-------------+---------------------------------------------" \
             	  + "---------------------------------------------------------+-----------------"
             if not os.path.exists("archives/archives.txt"):
-                with open("archives/archives.txt", "w") as f:
+                with open("archives/archives.txt", "w", encoding="utf-8") as f:
                     f.write(header + "\n")
                     f.write(sep + "\n")
-            with open("archives/archives.txt", "a") as f:
+            with open("archives/archives.txt", "a", encoding="utf-8") as f:
                 for sig in self.signalements:
                     f.write(sig.format() + "\n")
             self.button_archive.configure(state="disabled")
