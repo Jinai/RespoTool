@@ -2,10 +2,12 @@ Les différents statuts possibles :
 
 todo
 ignoré
-corrigé
+modifié
 supprimé
-reset
+reset (record)
+déclassé
 reclassé
 mappeur contacté
+modo contacté
 
 Hésitez pas à compléter si besoin
