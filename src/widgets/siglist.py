@@ -8,17 +8,6 @@ from .treelist import Treelist
 from signalement import Signalement
 from .popup import Popup
 
-STATUS = [
-    "ignoré",
-    "corrigé",
-    "supprimé",
-    "reset",
-    "reclassé",
-    "mappeur contacté",
-    "modo contacté",
-    "doublon"
-]
-
 
 class Siglist(Treelist):
     def __init__(self, master, signalements, *args, **kwargs):
@@ -97,11 +86,15 @@ class Siglist(Treelist):
         self._entry_edit.item = item
         self._entry_edit.insert(0, statut)
         self._entry_edit.select_range(0, "end")
-        self._entry_edit.bind('<FocusOut>', lambda *x: self._entry_edit.destroy())
-        self._entry_edit.bind('<Escape>', lambda *x: self._entry_edit.destroy())
+        self._entry_edit.bind('<FocusOut>', lambda *x: self.remove_entry())
+        self._entry_edit.bind('<Escape>', lambda *x: self.remove_entry())
         self._entry_edit.bind('<Control-a>', lambda *x: self._entry_edit.select_range(0, "end"))
         self._entry_edit.bind('<Return>', lambda *x: self.edit_status())
         self._entry_edit.focus_force()
+
+    def remove_entry(self):
+        self.focus_item(self._entry_edit.item)
+        self._entry_edit.destroy()
 
     def edit_status(self):
         item = self._entry_edit.item

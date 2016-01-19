@@ -88,9 +88,12 @@ class Treelist(tk.Frame):
     def focus_index(self, index):
         if index < self._item_count:
             item = self.tree.get_children()[index]
-            self.tree.selection_set(item)
-            self.tree.focus_set()
-            self.tree.focus(item)
+            self.focus_item(item)
+
+    def focus_item(self, item):
+        self.tree.selection_set(item)
+        self.tree.focus_set()
+        self.tree.focus(item)
 
     def sort(self, col, descending):
         data = [(self.tree.set(child, col), child) for child in self.tree.get_children('')]
