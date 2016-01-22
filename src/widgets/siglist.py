@@ -49,7 +49,7 @@ class Siglist(Treelist):
             # Clipboard
             item = self.tree.identify("item", event.x, event.y)
             column = int(self.tree.identify("column", event.x, event.y)[1:]) - 1
-            value = self.tree.item(item)['values'][column]
+            value = str(self.tree.item(item)['values'][column])
             pyperclip.copy(value)
             # Popup
             x, y = self.master.winfo_pointerx(), self.master.winfo_pointery()
