@@ -1,4 +1,11 @@
-﻿v0.6.1 [04/12/2015]
+﻿v0.6.2 [07/02/2016]
+===================
+	* Meilleure gestion des caractères en UTF-8
+	* Correction de la perte de focus si Échap est utilisé pour annuler l'édition d'un
+	  statut
+	* Correction d'un bug lors d'un double-clic sur la colonne des numéros de ligne
+
+v0.6.1 [04/12/2015]
 ===================
 	* Ctrl+Q pour quitter l'application
 	* Ctrl+C pour copier la commande de load du signalement sélectionné dans le
