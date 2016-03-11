@@ -25,7 +25,11 @@ class RespoTool(tk.Tk):
         self.title("RespoTool v" + __version__)
         self.update_idletasks()
         self.minsize(self.winfo_reqwidth(), self.winfo_reqheight())
-
+        try:
+            self.tk.call('encoding', 'system', 'utf-8')
+            self.iconbitmap("resources/respotool.ico")
+        except:
+            pass
         self.bind('<Control-q>', lambda _: self.quit())
 
     def _setup_widgets(self):
