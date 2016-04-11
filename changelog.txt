@@ -5,6 +5,7 @@
 	  maintenir l'ordre des archives
 	* Possibilité d'obtenir les signalements sous leur format originel : /sigmdm
 	  (copié dans le presse-papiers), les statuts sont perdus lors de la conversion
+	* Nouveau logo (susceptible de changer)
 
 v0.6.2 [07/02/2016]
 ===================
