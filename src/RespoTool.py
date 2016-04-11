@@ -83,13 +83,21 @@ class RespoTool(tk.Tk):
                                              variable=self._allow_duplicates)
 
         self.frame_commands = tk.Frame(self.main_frame)
-        self.button_playlist = ttk.Button(self.frame_commands, text="Playlist", command=self.playlist, state="disabled")
+        self.frame_cmd1 = tk.Frame(self.frame_commands)
+        self.frame_cmd1.pack()
+        self.button_archive = ttk.Button(self.frame_cmd1, text="Archiver", command=self.archive, state="disabled",
+                                         width=16)
+        self.button_archive.pack(side="left")
         self.button_archive_selection = ttk.Button(self.frame_cmd1, text="Archiver sélection", state="disabled",
                                                    command=self.archive_selection, width=16)
         self.button_archive_selection.pack(side="right")
+
+
+        self.frame_cmd2 = tk.Frame(self.frame_commands)
+        self.frame_cmd2.pack()
+        self.button_playlist = ttk.Button(self.frame_cmd2, text="Playlist", command=self.playlist, state="disabled",
+                                          width=16)
         self.button_playlist.pack(side="left")
-        self.button_archive = ttk.Button(self.frame_commands, text="Archiver", command=self.archive, state="disabled")
-        self.button_archive.pack(side="right")
         self.button_sigmdm = ttk.Button(self.frame_cmd2, text="Obtenir sigmdm", state="disabled", command=self.sigmdm,
                                         width = 16)
         self.button_sigmdm.pack(side="right")
