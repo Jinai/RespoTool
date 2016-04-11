@@ -1,4 +1,12 @@
-﻿v0.6.2 [07/02/2016]
+﻿v0.6.3 [11/04/2016]
+===================
+	* Possibilité d'archiver les n premiers signalements sélectionnés
+	  Ils doivent être consécutifs et commencer par le premier signalement pour
+	  maintenir l'ordre des archives
+	* Possibilité d'obtenir les signalements sous leur format originel : /sigmdm
+	  (copié dans le presse-papiers), les statuts sont perdus lors de la conversion
+
+v0.6.2 [07/02/2016]
 ===================
 	* Meilleure gestion des caractères en UTF-8
 	* Correction de la perte de focus si Échap est utilisé pour annuler l'édition d'un
