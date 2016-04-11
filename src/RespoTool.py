@@ -95,7 +95,7 @@ class RespoTool(tk.Tk):
         self.labelframe_session.grid(row=0, column=2, sticky="nsew", padx=(0, 10))
         self.tree_sig.grid(row=1, column=0, columnspan=3, sticky="nsew", pady=10)
         self.cb_duplicates.grid(row=2, column=0, sticky="nsew")
-        self.frame_commands.grid(row=3, column=0, columnspan=3)
+        self.frame_commands.grid(row=2, column=1, columnspan=2, sticky="w")
 
         self.main_frame.grid_rowconfigure(1, weight=1)
         self.main_frame.grid_columnconfigure((0, 1, 2), weight=1)
