@@ -4,6 +4,7 @@
 
 
 def py2exe():
+    from _version import __version__
     from distutils.core import setup
     import py2exe
 
@@ -11,7 +12,7 @@ def py2exe():
 
     setup(
         name="RespoTool",
-        version="0.4",
+        version=__version__,
         description="Outil de gestion de signalements",
         author="Jinai",
         author_email="jinai.extinction@gmail.com",
