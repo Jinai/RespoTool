@@ -84,6 +84,9 @@ class RespoTool(tk.Tk):
 
         self.frame_commands = tk.Frame(self.main_frame)
         self.button_playlist = ttk.Button(self.frame_commands, text="Playlist", command=self.playlist, state="disabled")
+        self.button_archive_selection = ttk.Button(self.frame_cmd1, text="Archiver sélection", state="disabled",
+                                                   command=self.archive_selection, width=16)
+        self.button_archive_selection.pack(side="right")
         self.button_playlist.pack(side="left")
         self.button_archive = ttk.Button(self.frame_commands, text="Archiver", command=self.archive, state="disabled")
         self.button_archive.pack(side="right")
@@ -133,19 +136,45 @@ class RespoTool(tk.Tk):
         msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nNe le faites que s'ils sont tous traités, " + \
               "car ils seront retirés de la liste une fois fait !"
         if mbox.askokcancel("Archiver", msg, icon="warning", parent=self):
-            header = signalement.Signalement("Date", "Auteur Sig.", "Code", "Flag", "Description", "Statut").format()
-            sep = "------+--------------+----------------+-------------+---------------------------------------------" \
-            	  + "---------------------------------------------------------+-----------------"
-            if not os.path.exists("archives/archives.txt"):
-                with open("archives/archives.txt", "w", encoding="utf-8") as f:
-                    f.write(header + "\n")
-                    f.write(sep + "\n")
+            self.create_archive()
             with open("archives/archives.txt", "a", encoding="utf-8") as f:
                 for sig in self.signalements:
                     f.write(sig.format() + "\n")
-            self.button_archive.configure(state="disabled")
-            self.tree_sig.clear()
             del self.signalements[:]
+            self.refresh()
+            self.button_archive.configure(state="disabled")
+
+    def archive_selection(self):
+        indexes = self.tree_sig.selection_indexes()
+        if self.check_valid_selection(indexes):
+            msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nNe le faites que s'ils sont tous traités, " + \
+                  "car ils seront retirés de la liste une fois fait !"
+            if mbox.askokcancel("Archiver", msg, icon="warning", parent=self):
+                self.create_archive()
+                with open("archives/archives.txt", "a", encoding="utf-8") as f:
+                    for i in indexes:
+                        f.write(self.signalements[i].format() + "\n")
+                        self.signalements = [sig for i, sig in enumerate(self.signalements) if i not in indexes]
+                self.refresh()
+        else:
+            msg = ("Votre sélection doit être d'un seul bloc (pas de trous) et doit commencer par le premier " +
+                   "signalement afin de conserver l'ordre des archives")
+            mbox.showwarning("Mauvais archivage", msg)
+
+    def create_archive(self):
+        if not os.path.exists("archives/archives.txt"):
+            header = signalement.Signalement("Date", "Auteur Sig.", "Code", "Flag", "Description", "Statut").format()
+            sep = "------+--------------+----------------+-------------+---------------------------------------------" \
+                  + "---------------------------------------------------------+-----------------"
+            with open("archives/archives.txt", "w", encoding="utf-8") as f:
+                f.write(header + "\n")
+                f.write(sep + "\n")
+
+    def check_valid_selection(self, indexes):
+        for pos, idx in enumerate(indexes):
+            if pos != idx:
+                return False
+        return len(indexes)
 
     def export_save(self):
         file_name = fdialog.asksaveasfilename(initialdir="saves", initialfile='session', defaultextension='.sig')
@@ -166,6 +195,7 @@ class RespoTool(tk.Tk):
         self.tree_sig.refresh()
         self.button_playlist.configure(state="enabled")
         self.button_archive.configure(state="enabled")
+        self.button_archive_selection.configure(state="enabled")
 
     def quit(self):
         raise SystemExit
