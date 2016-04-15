@@ -165,7 +165,7 @@ class RespoTool(tk.Tk):
                 with open("archives/archives.txt", "a", encoding="utf-8") as f:
                     for i in indexes:
                         f.write(self.signalements[i].format() + "\n")
-                        self.signalements = [sig for i, sig in enumerate(self.signalements) if i not in indexes]
+                    self.signalements = [sig for i, sig in enumerate(self.signalements) if i not in indexes]
                 self.refresh()
         else:
             msg = ("Votre sélection doit être d'un seul bloc (pas de trous) et doit commencer par le premier " +
