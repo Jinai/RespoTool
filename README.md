@@ -24,8 +24,7 @@ Importer / Exporter session
 * __Importer__ : Permet de restaurer l'état du programme (signalements + statuts) depuis un fichier session
   _.sig_.
 
-* __Exporter__ : Permet de stocker l'état du programme dans un fichier session _.sig_.
-
+* __Exporter__ : Permet de stocker l'état du programme dans un fichier session _.sig_.  
   __Note__ : Les sessions sont enregistrées au format JSON. Elles sont lisibles et peut éventuellement être
   modifiées à la main.
 
@@ -33,8 +32,7 @@ Actions
 -------
 * __Archiver__ : 
   Vide la liste des signalements pour les stocker à la fin d'un joli tableau dans archives/archives.txt. À ne
-  faire qu'une fois les signalements entièrement traités.   
-
+  faire qu'une fois les signalements entièrement traités.  
   __Note__ : Penser à exporter la liste ainsi vidée après archivage pour que le prochain respo qui importe la
   session ait une liste clean et ainsi lui éviter du travail inutile.
 
@@ -44,8 +42,7 @@ Actions
 
 * __Playlist__ : 
   Génère un fichier playlist.txt contenant les maps signalées, à charger via /playlist (décocher aléatoire).
-  La playlist reprend aussi les infos de chaque colonne (date, auteur, description, etc.).   
-
+  La playlist reprend aussi les infos de chaque colonne (date, auteur, description, etc.).  
   __Note__ : Cette fonction est obsolète, il est préférable d'utiliser les raccourcis clavier pour load
   rapidement une carte.
 
