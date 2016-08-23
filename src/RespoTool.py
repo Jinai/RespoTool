@@ -56,8 +56,6 @@ class RespoTool(tk.Tk):
         button_export = ttk.Button(self.labelframe_session, text="Exporter", command=self.export_save)
         button_export.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
 
-        self.labelframe_stats = stats.Stats(self.main_frame, text="Stats")
-
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
         headers = ['date', 'auteur', 'code', 'flag', 'description', 'statut']
@@ -71,47 +69,42 @@ class RespoTool(tk.Tk):
             lambda x: x[0].lower(),
             lambda x: x[0].lower(),
         ]
-        stretch = [False, False, False, False, False, True, False]
-        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, headers, column_widths, sort_keys=sort_keys,
         stretch = [False, False, False, False, False, True, True]
         self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, False, headers, column_widths, sort_keys=sort_keys,
                                         stretch=stretch)
 
-        # ------------------------------------------------ COMMANDS ------------------------------------------------ #
+        # ------------------------------------------------ ACTIONS ------------------------------------------------- #
 
-        self._allow_duplicates = tk.BooleanVar()
-        self._allow_duplicates.set(True)
-        self.cb_duplicates = ttk.Checkbutton(self.main_frame, text="Autoriser les doublons",
-                                             variable=self._allow_duplicates)
+        #self.labelframe_stats = stats.Stats(self.main_frame, text="Archives")
 
-        self.frame_commands = tk.Frame(self.main_frame)
-        self.frame_cmd1 = tk.Frame(self.frame_commands)
-        self.frame_cmd1.pack()
-        self.button_archive = ttk.Button(self.frame_cmd1, text="Archiver", command=self.archive, state="disabled",
+        self.frame_actions = tk.Frame(self.main_frame)
+        self.frame_act1 = tk.Frame(self.frame_actions)
+        self.frame_act1.pack()
+        self.button_archive = ttk.Button(self.frame_act1, text="Archiver", command=self.archive, state="disabled",
                                          width=16)
         self.button_archive.pack(side="left")
-        self.button_archive_selection = ttk.Button(self.frame_cmd1, text="Archiver sélection", state="disabled",
+        self.button_archive_selection = ttk.Button(self.frame_act1, text="Archiver sélection", state="disabled",
                                                    command=self.archive_selection, width=16)
         self.button_archive_selection.pack(side="right")
 
 
-        self.frame_cmd2 = tk.Frame(self.frame_commands)
-        self.frame_cmd2.pack()
-        self.button_playlist = ttk.Button(self.frame_cmd2, text="Playlist", command=self.playlist, state="disabled",
+        self.frame_act2 = tk.Frame(self.frame_actions)
+        self.frame_act2.pack()
+        self.button_playlist = ttk.Button(self.frame_act2, text="Playlist", command=self.playlist, state="disabled",
                                           width=16)
         self.button_playlist.pack(side="left")
-        self.button_sigmdm = ttk.Button(self.frame_cmd2, text="Obtenir sigmdm", state="disabled", command=self.sigmdm,
+        self.button_sigmdm = ttk.Button(self.frame_act2, text="Obtenir sigmdm", state="disabled", command=self.sigmdm,
                                         width = 16)
         self.button_sigmdm.pack(side="right")
 
         # ------------------------------------------- WIDGETS PLACEMENT -------------------------------------------- #
 
-        self.labelframe_new.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
-        self.labelframe_append.grid(row=0, column=1, sticky="nsew", padx=(0, 10))
-        self.labelframe_session.grid(row=0, column=2, sticky="nsew", padx=(0, 10))
+        self.labelframe_new.grid(row=0, column=0, sticky="nsew")
+        self.labelframe_append.grid(row=0, column=1, sticky="nsew", padx=10)
+        self.labelframe_session.grid(row=0, column=2, sticky="nsew")
         self.tree_sig.grid(row=1, column=0, columnspan=3, sticky="nsew", pady=10)
-        self.cb_duplicates.grid(row=2, column=0, sticky="nsew")
-        self.frame_commands.grid(row=2, column=1, columnspan=2, sticky="w")
+        #self.labelframe_stats.grid(row=2, column=0, sticky="nw")
+        self.frame_actions.grid(row=2, column=1, sticky="nsew", pady=(0, 5))
 
         self.main_frame.grid_rowconfigure(1, weight=1)
         self.main_frame.grid_columnconfigure((0, 1, 2), weight=1)
