@@ -31,6 +31,7 @@ class RespoTool(tk.Tk):
         except:
             pass
         self.bind('<Control-q>', lambda _: self.quit())
+        self.auto_import()
 
     def _setup_widgets(self):
         self.main_frame = tk.Frame(self)
@@ -188,28 +189,39 @@ class RespoTool(tk.Tk):
             res += sig.sigmdm() + "\n"
         pyperclip.copy(res)
 
-    def export_save(self):
-        file_name = fdialog.asksaveasfilename(initialdir="saves", initialfile='session', defaultextension='.sig')
-        if file_name:
+    def export_save(self, path=None):
+        if path:
+            filename = path
+        else:
+            filename = fdialog.asksaveasfilename(initialdir="saves", initialfile='session', defaultextension='.sig')
+        if filename:
             dicts = []
             for i, sig in enumerate(self.signalements):
                 d = sig.ordered_dict()
                 d.update({"#": i + 1})
                 d.move_to_end("#", last=False)
                 dicts.append(d)
-            with open(file_name, "w", encoding="utf-8") as f:
+            with open(filename, "w", encoding="utf-8") as f:
                 f.write(json.dumps(dicts, indent=4, ensure_ascii=False))
 
-    def import_save(self):
-        file_name = fdialog.askopenfilename(initialdir="saves",
+    def import_save(self, path=None):
+        if path:
+            filename = path
+        else:
+            filename = fdialog.askopenfilename(initialdir="saves",
                                             filetypes=(("Sig Files", "*.sig"), ("All Files", "*.*")))
-        if file_name:
-            with open(file_name, "r", encoding="utf-8") as f:
+        if filename:
+            with open(filename, "r", encoding="utf-8") as f:
                 dicts = json.load(f)
             del self.signalements[:]
             for d in dicts:
                 self.signalements.append(signalement.Signalement.from_dict(d))
             self.refresh()
+
+    def auto_import(self):
+        path = "saves/session.sig"
+        if os.path.exists(path):
+            self.import_save(path)
 
     def refresh(self):
         self.tree_sig.signalements = self.signalements
