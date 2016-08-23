@@ -24,7 +24,7 @@ class RespoTool(tk.Tk):
         self._setup_widgets()
         self.title("RespoTool v" + __version__)
         self.update_idletasks()
-        self.minsize(self.winfo_reqwidth(), self.winfo_reqheight())
+        self.minsize(742, self.winfo_reqheight())
         try:
             self.tk.call('encoding', 'system', 'utf-8')
             self.iconbitmap("resources/respotool.ico")
