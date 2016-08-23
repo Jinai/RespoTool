@@ -2,7 +2,7 @@
 # !python3
 
 import os
-import pickle
+import json
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.messagebox as mbox
@@ -11,7 +11,7 @@ import tkinter.filedialog as fdialog
 import pyperclip
 import sigparser
 import signalement
-from widgets import siglist, stats
+from widgets import siglist
 from _version import __version__
 
 __author__ = "Jinai"
@@ -191,15 +191,24 @@ class RespoTool(tk.Tk):
     def export_save(self):
         file_name = fdialog.asksaveasfilename(initialdir="saves", initialfile='session', defaultextension='.sig')
         if file_name:
-            with open(file_name, "wb") as f:
-                pickle.dump(self.signalements, f)
+            dicts = []
+            for i, sig in enumerate(self.signalements):
+                d = sig.ordered_dict()
+                d.update({"#": i + 1})
+                d.move_to_end("#", last=False)
+                dicts.append(d)
+            with open(file_name, "w", encoding="utf-8") as f:
+                f.write(json.dumps(dicts, indent=4, ensure_ascii=False))
 
     def import_save(self):
         file_name = fdialog.askopenfilename(initialdir="saves",
                                             filetypes=(("Sig Files", "*.sig"), ("All Files", "*.*")))
         if file_name:
-            with open(file_name, "rb") as f:
-                self.signalements = pickle.load(f)
+            with open(file_name, "r", encoding="utf-8") as f:
+                dicts = json.load(f)
+            del self.signalements[:]
+            for d in dicts:
+                self.signalements.append(signalement.Signalement.from_dict(d))
             self.refresh()
 
     def refresh(self):
