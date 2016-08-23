@@ -61,7 +61,7 @@ class RespoTool(tk.Tk):
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
         headers = ['date', 'auteur', 'code', 'flag', 'description', 'statut']
-        column_widths = [30, 40, 85, 100, 80, 350, 105]
+        column_widths = [30, 40, 85, 100, 80, 350, 300]
         sort_keys = [
             lambda x: int(x[0]),
             lambda x: (int(x[0].split("/")[1]), int(x[0].split("/")[0])),
@@ -73,6 +73,8 @@ class RespoTool(tk.Tk):
         ]
         stretch = [False, False, False, False, False, True, False]
         self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, headers, column_widths, sort_keys=sort_keys,
+        stretch = [False, False, False, False, False, True, True]
+        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, False, headers, column_widths, sort_keys=sort_keys,
                                         stretch=stretch)
 
         # ------------------------------------------------ COMMANDS ------------------------------------------------ #
