@@ -1,4 +1,20 @@
-﻿v0.6.3 [11/04/2016]
+v1.0 [23/08/2016]
+=================
+	* Correction d'un bug quand on sélectionne plusieurs signalements à supprimer
+	* Les colonnes Description et Statut sont plus larges et s'adaptent mieux à la
+	  fenêtre
+	* De même, la fenêtre peut être rétrécie un peu plus qu'avant en largeur
+	* Les doublons sont maintenant d'office ajoutés à la liste pour la fiabilité des
+	  archives/stats
+	* Le fichier "session.sig" est automatiquement importé au démarrage (pourra être
+	  amélioré)
+	* Les fichiers de sessions sont maintenant enregistrés dans un format lisible, et
+	  donc modifiable à la main en cas d'erreur
+	* La modification des statuts a été revue et invite maintenant l'utilisateur à
+	  rentrer son texte dans une fenêtre séparée avec plus d'espace
+
+
+v0.6.3 [11/04/2016]
 ===================
 	* Possibilité d'archiver les n premiers signalements sélectionnés
 	  Ils doivent être consécutifs et commencer par le premier signalement pour
@@ -7,12 +23,14 @@
 	  (copié dans le presse-papiers), les statuts sont perdus lors de la conversion
 	* Nouveau logo (susceptible de changer)
 
+
 v0.6.2 [07/02/2016]
 ===================
 	* Meilleure gestion des caractères en UTF-8
 	* Correction de la perte de focus si Échap est utilisé pour annuler l'édition d'un
 	  statut
 	* Correction d'un bug lors d'un double-clic sur la colonne des numéros de ligne
+
 
 v0.6.1 [04/12/2015]
 ===================
