@@ -113,23 +113,23 @@ class RespoTool(tk.Tk):
         file_name = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
         if file_name:
             with open(file_name, "r", encoding="utf-8") as f:
-                self.signalements = sigparser.parse(f.read(), self._allow_duplicates.get())
+                self.signalements = sigparser.parse(f.read())
             self.refresh()
 
     def new_clipboard(self):
-        self.signalements = sigparser.parse(pyperclip.paste(), self._allow_duplicates.get())
+        self.signalements = sigparser.parse(pyperclip.paste())
         self.refresh()
 
     def append_file(self):
         file_name = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
         if file_name:
             with open(file_name, "r", encoding="utf-8") as f:
-                signalements = sigparser.parse(f.read(), self._allow_duplicates.get())
+                signalements = sigparser.parse(f.read())
             self.signalements.extend(signalements)
             self.refresh()
 
     def append_clipboard(self):
-        signalements = sigparser.parse(pyperclip.paste(), self._allow_duplicates.get())
+        signalements = sigparser.parse(pyperclip.paste())
         self.signalements.extend(signalements)
         self.refresh()
 
