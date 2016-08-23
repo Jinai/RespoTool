@@ -110,9 +110,9 @@ class RespoTool(tk.Tk):
         self.main_frame.grid_columnconfigure((0, 1, 2), weight=1)
 
     def new_file(self):
-        file_name = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
-        if file_name:
-            with open(file_name, "r", encoding="utf-8") as f:
+        filename = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
+        if filename:
+            with open(filename, "r", encoding="utf-8") as f:
                 self.signalements = sigparser.parse(f.read())
             self.refresh()
 
@@ -121,9 +121,9 @@ class RespoTool(tk.Tk):
         self.refresh()
 
     def append_file(self):
-        file_name = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
-        if file_name:
-            with open(file_name, "r", encoding="utf-8") as f:
+        filename = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
+        if filename:
+            with open(filename, "r", encoding="utf-8") as f:
                 signalements = sigparser.parse(f.read())
             self.signalements.extend(signalements)
             self.refresh()
