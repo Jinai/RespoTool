@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # !python3
 
+import json
+from collections import OrderedDict
 from datetime import date
 
 
@@ -30,6 +32,13 @@ class Signalement():
     def sigmdm(self):
         # Format /sigmdm
         return "[{}] {} a signalé {} ({}) : {}".format(self.date, self.auteur, self.code[1:], self.flag, self.desc)
+
+    def ordered_dict(self):
+        return OrderedDict(zip(['date', 'auteur', 'code', 'flag', 'desc', 'statut'], self.fields()))
+
+    @staticmethod
+    def from_dict(d):
+        return Signalement(d['date'], d['auteur'], d['code'], d['flag'], d['desc'], d['statut'])
 
     def __str__(self):
         # Format PlayLister + status
