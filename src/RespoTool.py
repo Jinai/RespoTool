@@ -145,7 +145,7 @@ class RespoTool(tk.Tk):
             self.create_archive()
             with open("archives/archives.txt", "a", encoding="utf-8") as f:
                 for sig in self.signalements:
-                    f.write(sig.format() + "\n")
+                    f.write(sig.archive() + "\n")
             del self.signalements[:]
             self.refresh()
             self.button_archive.configure(state="disabled")
@@ -159,7 +159,7 @@ class RespoTool(tk.Tk):
                 self.create_archive()
                 with open("archives/archives.txt", "a", encoding="utf-8") as f:
                     for i in indexes:
-                        f.write(self.signalements[i].format() + "\n")
+                        f.write(self.signalements[i].archive() + "\n")
                     self.signalements = [sig for i, sig in enumerate(self.signalements) if i not in indexes]
                 self.refresh()
         else:
@@ -169,7 +169,7 @@ class RespoTool(tk.Tk):
 
     def create_archive(self):
         if not os.path.exists("archives/archives.txt"):
-            header = signalement.Signalement("Date", "Auteur Sig.", "Code", "Flag", "Description", "Statut").format()
+            header = signalement.Signalement("Date", "Auteur Sig.", "Code", "Flag", "Description", "Statut").archive()
             sep = "------+--------------+----------------+-------------+---------------------------------------------" \
                   + "---------------------------------------------------------+-----------------"
             with open("archives/archives.txt", "w", encoding="utf-8") as f:

@@ -22,7 +22,7 @@ class Signalement():
         y, m, d = date.today().year, int(self.date.split("/")[1]), int(self.date.split("/")[0])
         return date(y, m, d)
 
-    def format(self, separator=" | "):
+    def archive(self, separator=" | "):
         # Format d'archives
         template = separator.join(Signalement.TEMPLATE.split(" "))
         return template.format(**self.__dict__)
