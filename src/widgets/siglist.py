@@ -7,6 +7,7 @@ import pyperclip
 from .treelist import Treelist
 from signalement import Signalement
 from .popup import Popup
+from .editstatus import EditStatusDialog
 
 
 class Siglist(Treelist):
@@ -60,8 +61,21 @@ class Siglist(Treelist):
             Popup('"{}" copié dans le presse-papiers'.format(msg), x, y, delay=50, txt_color="white", bg_color="#111111")
 
     def on_enter(self, event):
-        item = self.tree.selection()[0]
-        self.place_entry(item)
+        select = self.tree.selection()
+        if select:
+            item = select[0]
+            values = self.tree.item(item)['values']
+            dialog = EditStatusDialog(self, "Éditer statut #{} : {}".format(values[0], values[3]), values[-1])
+            new_statut = dialog.result
+            if new_statut is not None:
+                values[0] = str(values[0])  # tkinter forces str to int if it's a digit
+                index = self._data.index(values)
+                values[-1] = new_statut
+                self.signalements[index] = Signalement(*values[1:])
+                self.refresh()
+                self.focus_index(index)
+            else:
+                self.focus_item(item)
 
     def copy(self, event):
         selection = self.tree.selection()
@@ -77,39 +91,6 @@ class Siglist(Treelist):
                 Popup('"{}" copié dans le presse-papiers'.format(load), x, y, delay=50, txt_color="white", bg_color="#111111")
             except ValueError:
                 pass
-
-    def place_entry(self, item):
-        if self._entry_edit is not None:
-            self._entry_edit.destroy()
-        x, y, width, height = self.tree.bbox(item, "statut")
-        pady = height // 2
-        statut = self.tree.item(item)['values'][-1]
-        self._entry_edit = ttk.Entry(self.tree, width=17)
-        self._entry_edit.place(x=x + width, y=y + pady, anchor="e")
-        self._entry_edit.item = item
-        self._entry_edit.insert(0, statut)
-        self._entry_edit.select_range(0, "end")
-        self._entry_edit.bind('<FocusOut>', lambda *x: self.remove_entry())
-        self._entry_edit.bind('<Escape>', lambda *x: self.remove_entry())
-        self._entry_edit.bind('<Control-a>', lambda *x: self._entry_edit.select_range(0, "end"))
-        self._entry_edit.bind('<Return>', lambda *x: self.edit_status())
-        self._entry_edit.focus_force()
-
-    def remove_entry(self):
-        self.focus_item(self._entry_edit.item)
-        self._entry_edit.destroy()
-
-    def edit_status(self):
-        item = self._entry_edit.item
-        new = self._entry_edit.get()
-        self._entry_edit.destroy()
-        values = self.tree.item(item)['values']
-        values[0] = str(values[0])  # tkinter forces str to int if it's a digit
-        index = self._data.index(values)
-        values[-1] = new
-        self.signalements[index] = Signalement(*values[1:])
-        self.refresh()
-        self.focus_index(index)
 
     def populate(self):
         for sig in self.signalements:
