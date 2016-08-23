@@ -1,8 +1,8 @@
 RespoTool
 =========
-Un outil de gestion et d'archivage de signalements (/mdm)
+Un outil de gestion et d'archivage de signalements de cartes sur [Aaaah !](http://www.extinction.fr/minijeux/)
   
-![Demo](http://i.imgur.com/yfeCxKx.png)
+![Demo](http://i.imgur.com/PW8No6S.png)
 
 
 Utilisation
@@ -21,27 +21,37 @@ Ajouter nouveaux sigs
 
 Importer / Exporter session
 ---------------------------
-* __Importer__ : Permet de restaurer l'état du programme (signalements + statuts) depuis un fichier .sig
+* __Importer__ : Permet de restaurer l'état du programme (signalements + statuts) depuis un fichier session
+  _.sig_.
 
-* __Exporter__ : Permet de stocker l'état du programme dans un fichier .sig
+* __Exporter__ : Permet de stocker l'état du programme dans un fichier session _.sig_.
 
-Commandes
----------
-* __Autoriser les doublons__ : 
-  Coché, garde les doublons au sein d'un lot de signalements ajoutés en même temps. Dans tous les cas si 2
-  signalements sont ajoutés à des moments différents, ils seront gardés dans le cas où ils concerneraient
-  2 problèmes distincts.
+  __Note__ : Les sessions sont enregistrées au format JSON. Elles sont lisibles et peut éventuellement être
+  modifiées à la main.
 
-* __Playlist__ : 
-  Génère un fichier playlist.txt contenant les maps signalées, à charger via /playlist (décocher aléatoire).
-  La playlist reprend aussi les infos de chaque colonne (date, auteur, description, etc.).
-
+Actions
+-------
 * __Archiver__ : 
   Vide la liste des signalements pour les stocker à la fin d'un joli tableau dans archives/archives.txt. À ne
   faire qu'une fois les signalements entièrement traités.   
-  __Note :__ Penser à exporter la liste ainsi vidée après archivage pour que le prochain respo qui importe la
+
+  __Note__ : Penser à exporter la liste ainsi vidée après archivage pour que le prochain respo qui importe la
   session ait une liste clean et ainsi lui éviter du travail inutile.
 
+* __Archiver sélection__ : 
+  Archive uniquement les signalements sélectionnés. La sélection doit obligatoirement être d'un seul bloc (pas
+  de trous) et doit commencer par le premier signalement afin de conserver l'ordre des archives.
+
+* __Playlist__ : 
+  Génère un fichier playlist.txt contenant les maps signalées, à charger via /playlist (décocher aléatoire).
+  La playlist reprend aussi les infos de chaque colonne (date, auteur, description, etc.).   
+
+  __Note__ : Cette fonction est obsolète, il est préférable d'utiliser les raccourcis clavier pour load
+  rapidement une carte.
+
+* __Obtenir sigmdm__ :
+  Copie dans le presse-papiers l'équivalent /sigmdm des signalements se trouvant dans la liste. Les statuts
+  sont perdus lors de la conversion.
 
 Raccourcis pratiques
 ====================
@@ -53,9 +63,9 @@ Raccourcis pratiques
   Copie "/load @code" dans le presse-papiers où @code est le code correspondant au signalement
 
 * __Sélectionner une ligne -> Entrée__ :
-  Ouvre un champ de texte permettant d'éditer le statut du signalement. __Entrée__ pour valider,
+  Ouvre une nouvelle fenêtre permettant d'éditer le statut du signalement. __Entrée__ pour valider,
   __Échap__ pour annuler. Voir statuts.txt pour la liste des statuts recommandés.
 
 * __Sélectionner une ligne -> Retour / Suppr__ :
-  Supprime le signalement. Marche aussi avec une multi-sélection (Ctrl+clic et/ou Shift+clic pour sélectionner plusieurs signalements
-  à la fois).
+  Supprime le signalement. Marche aussi avec une multi-sélection (Ctrl+clic et/ou Shift+clic pour sélectionner
+  plusieurs signalements à la fois).
