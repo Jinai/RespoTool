@@ -10,9 +10,10 @@ from .popup import Popup
 
 
 class Siglist(Treelist):
-    def __init__(self, master, signalements, *args, **kwargs):
+    def __init__(self, master, signalements, sortable=False, *args, **kwargs):
         Treelist.__init__(self, master, *args, **kwargs)
         self.signalements = signalements
+        self.sortable = sortable
         self._keys = {
             0: lambda x: 0,
             1: lambda x: x.datetime(),
@@ -26,7 +27,7 @@ class Siglist(Treelist):
         self.tree.bind('<Double-1>', self.on_doubleclick)
         self.tree.bind('<Return>', self.on_enter)
         self.tree.bind('<Control-c>', self.copy)
-        self.tree.tag_configure("todo", foreground="red")
+        self.tree.tag_configure("todo", foreground="red2")
 
     def insert(self, values, update=True, tags=()):
         if "todo" in values[-1]:
@@ -34,15 +35,17 @@ class Siglist(Treelist):
         super().insert(values, update, tags)
 
     def delete(self):
-        for item in self.tree.selection():
+        for item in reversed(self.tree.selection()):  # reversed to avoid index errors
             index = self.tree.get_children().index(item)
             del self.signalements[index]
         super().delete()
+        self.refresh()
 
     def sort(self, col, descending):
-        index = self.headers.index(col)
-        self.signalements.sort(reverse=descending, key=self._keys[index])
-        super().sort(col, descending)
+        if self.sortable:
+            index = self.headers.index(col)
+            self.signalements.sort(reverse=descending, key=self._keys[index])
+            super().sort(col, descending)
 
     def on_doubleclick(self, event):
         if self.tree.identify_region(event.x, event.y) == "cell":
@@ -115,22 +118,3 @@ class Siglist(Treelist):
     def refresh(self):
         self.clear()
         self.populate()
-
-
-if __name__ == '__main__':
-    import signalement
-
-    root = tk.Tk()
-    headers = ['date', 'auteur', 'code', 'flag', 'description', 'statut']
-    column_widths = [30, 40, 85, 100, 80, 350, 105]
-    sigs = [
-        signalement.Signalement("5/11", "Jinai", "@123456789", "Rally", "faille inf"),
-        signalement.Signalement("6/11", "Shodaboy", "@987654321", "Défilante", "Impossible"),
-        signalement.Signalement("7/11", "Jinai", "@123456789", "Rally", "faille inf", "corrigé"),
-        signalement.Signalement("8/11", "Shodaboy", "@987654321", "Défilante", "Impossible", "supprimé"),
-    ]
-    tree = Siglist(root, sigs, headers, column_widths)
-    tree.pack(fill='both', expand=True)
-    for s in sigs:
-        tree.insert(s.fields())
-    root.mainloop()
