@@ -1,3 +1,11 @@
+v1.1 [29/08/2016]
+=================
+	* Ajout de la colonne Respomap qui se charge de retenir quels respomaps se sont
+	  occupés de quels signalements
+	* La couleur des lignes spéciales (todo, contacté, etc) est stockée dans un fichier
+	  JSON et est modifiable pendant que le programme est ouvert
+
+
 v1.0 [23/08/2016]
 =================
 	* Correction d'un bug quand on sélectionne plusieurs signalements à supprimer
