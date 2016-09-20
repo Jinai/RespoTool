@@ -25,6 +25,7 @@ class Siglist(Treelist):
             4: lambda x: x.flag.lower(),
             5: lambda x: x.desc.lower(),
             6: lambda x: x.statut.lower(),
+            7: lambda x: str(x.respo)
         }
         self._entry_edit = None
         self.tree.bind('<Double-1>', self.on_doubleclick)
