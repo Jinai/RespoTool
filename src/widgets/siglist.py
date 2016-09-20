@@ -31,11 +31,19 @@ class Siglist(Treelist):
         self.tree.bind('<Double-1>', self.on_doubleclick)
         self.tree.bind('<Return>', self.on_enter)
         self.tree.bind('<Control-c>', self.copy)
-        self.tree.tag_configure("todo", foreground="red2")
+        self.update_tags()
+
+    def update_tags(self):
+        with open("resources/tags.json", 'r', encoding='utf-8') as f:
+            self.tags = json.load(f)
+        for key in self.tags:
+            self.tree.tag_configure(key, background=self.tags[key])
 
     def insert(self, values, update=True, tags=()):
-        if "todo" in values[-1]:
-            tags = ("todo",)
+        tags = []
+        for key in self.tags:
+            if key in values[-2]:
+                tags.append(key)
         super().insert(values, update, tags)
 
     def delete(self):
@@ -109,3 +117,4 @@ class Siglist(Treelist):
     def refresh(self):
         self.clear()
         self.populate()
+        self.update_tags()
