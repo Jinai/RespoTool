@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
 # !python3
 
-import tkinter as tk
-import tkinter.ttk as ttk
+import json
+import winsound
+
 import pyperclip
 from .treelist import Treelist
 from signalement import Signalement
 from .popup import Popup
 from .editstatus import EditStatusDialog
+from signalement import Signalement
 
 
 class Siglist(Treelist):
-    def __init__(self, master, signalements, sortable=False, *args, **kwargs):
+    def __init__(self, master, signalements, respomap, *args, **kwargs):
         Treelist.__init__(self, master, *args, **kwargs)
         self.signalements = signalements
-        self.sortable = sortable
+        self.respomap = respomap
         self._keys = {
             0: lambda x: 0,
             1: lambda x: x.datetime(),
@@ -63,6 +65,11 @@ class Siglist(Treelist):
     def on_enter(self, event):
         select = self.tree.selection()
         if select:
+            if self.respomap.get() == '':
+                winsound.PlaySound('SystemHand', winsound.SND_ASYNC)
+                x, y = self.master.winfo_rootx(), self.master.winfo_rooty()
+                Popup("<- Qui es-tu ? ^_^", x, y, offset=(220, 61), delay=50, txt_color='white', bg_color='#111111')
+                return
             item = select[0]
             values = self.tree.item(item)['values']
             dialog = EditStatusDialog(self, "Éditer statut #{} : {}".format(values[0], values[3]), values[-1])
@@ -93,8 +100,10 @@ class Siglist(Treelist):
                 pass
 
     def populate(self):
-        for sig in self.signalements:
-            self.insert(sig.fields())
+        for i, sig in enumerate(self.signalements):
+            f = list(sig.fields())
+            f[-1] = ", ".join(f[-1])
+            self.insert(f)
 
     def refresh(self):
         self.clear()

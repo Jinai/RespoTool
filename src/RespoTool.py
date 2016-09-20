@@ -20,6 +20,9 @@ __author__ = "Jinai"
 class RespoTool(tk.Tk):
     def __init__(self, master=None):
         tk.Tk.__init__(self, master)
+        self.current_respo = tk.StringVar()
+        with open("resources/respomaps.json", 'r', encoding='utf-8') as f:
+            self.respomaps = json.load(f)
         self.signalements = []
         self._setup_widgets()
         self.title("RespoTool v" + __version__)
@@ -57,10 +60,19 @@ class RespoTool(tk.Tk):
         button_export = ttk.Button(self.labelframe_session, text="Exporter", command=self.export_save)
         button_export.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
 
+        # --------------------------------------------- CURRENT RESPO ---------------------------------------------- #
+
+        self.frame_respo = tk.Frame(self.main_frame)
+        label_respo = ttk.Label(self.frame_respo, text="Respomap :")
+        label_respo.pack(side="left")
+        dropdown_respo = ttk.Combobox(self.frame_respo, textvariable=self.current_respo)
+        dropdown_respo.pack(side="right")
+        dropdown_respo['values'] = self.respomaps['main'] # comptes principaux
+
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
-        headers = ['date', 'auteur', 'code', 'flag', 'description', 'statut']
-        column_widths = [30, 40, 85, 100, 80, 350, 300]
+        headers = ['date', 'auteur', 'code', 'flag', 'description', 'statut', 'respomap']
+        column_widths = [30, 40, 85, 100, 80, 350, 300, 100]
         sort_keys = [
             lambda x: int(x[0]),
             lambda x: (int(x[0].split("/")[1]), int(x[0].split("/")[0])),
@@ -69,10 +81,12 @@ class RespoTool(tk.Tk):
             lambda x: x[0].lower(),
             lambda x: x[0].lower(),
             lambda x: x[0].lower(),
+            lambda x: x[0].lower(),
         ]
-        stretch = [False, False, False, False, False, True, True]
-        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, False, headers, column_widths, sort_keys=sort_keys,
-                                        stretch=stretch)
+        stretch = [False, False, False, False, False, True, True, True]
+        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.current_respo, headers,
+                                        column_widths, sort_keys=sort_keys, stretch=stretch, sortable=False,
+                                        auto_increment=True)
 
         # ------------------------------------------------ ACTIONS ------------------------------------------------- #
 
@@ -103,9 +117,9 @@ class RespoTool(tk.Tk):
         self.labelframe_new.grid(row=0, column=0, sticky="nsew")
         self.labelframe_append.grid(row=0, column=1, sticky="nsew", padx=10)
         self.labelframe_session.grid(row=0, column=2, sticky="nsew")
-        self.tree_sig.grid(row=1, column=0, columnspan=3, sticky="nsew", pady=10)
-        #self.labelframe_stats.grid(row=2, column=0, sticky="nw")
-        self.frame_actions.grid(row=2, column=1, sticky="nsew", pady=(0, 5))
+        self.frame_respo.grid(row=1, column=0, sticky="nsw", pady=10)
+        self.tree_sig.grid(row=2, column=0, columnspan=3, sticky="nsew", pady=(0, 10))
+        # self.labelframe_stats.grid(row=2, column=0, sticky="nw")
 
         self.main_frame.grid_rowconfigure(1, weight=1)
         self.main_frame.grid_columnconfigure((0, 1, 2), weight=1)
@@ -170,12 +184,14 @@ class RespoTool(tk.Tk):
 
     def create_archive(self):
         if not os.path.exists("archives/archives.txt"):
-            header = signalement.Signalement("Date", "Auteur Sig.", "Code", "Flag", "Description", "Statut").archive()
-            sep = "------+--------------+----------------+-------------+---------------------------------------------" \
-                  + "---------------------------------------------------------+-----------------"
+            header = "Date  | Auteur Sig.  | Code           | Flag        | Respomap                 | Description" + \
+                     "                                                                                          | " + \
+                     "Statut                                                      " + \
+                     "------+--------------+----------------+-------------+--------------------------+------------" + \
+                     "------------------------------------------------------------------------------------------+-" + \
+                     "------------------------------------------------------------"
             with open("archives/archives.txt", "w", encoding="utf-8") as f:
                 f.write(header + "\n")
-                f.write(sep + "\n")
 
     def check_valid_selection(self, indexes):
         for pos, idx in enumerate(indexes):
