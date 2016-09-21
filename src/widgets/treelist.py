@@ -37,14 +37,14 @@ class Treelist(tk.Frame):
         frame_tree.pack(fill='both', expand=True)
         vsb = ttk.Scrollbar(frame_tree, orient="vertical")
         vsb.pack(side='right', fill='y')
-        hsb = ttk.Scrollbar(frame_tree, orient="horizontal")
-        hsb.pack(side='bottom', fill='x')
+        # hsb = ttk.Scrollbar(frame_tree, orient="horizontal")
+        # hsb.pack(side='bottom', fill='x')
         self.tree = ttk.Treeview(frame_tree, columns=self.headers, displaycolumns=self.headers, show="headings",
                                  height=self.height, selectmode="extended")
         self.tree.pack(side='top', fill='both', expand=True)
-        self.tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+        self.tree.configure(yscrollcommand=vsb.set)  # , xscrollcommand=hsb.set)
         vsb.configure(command=self.tree.yview)
-        hsb.configure(command=self.tree.xview)
+        # hsb.configure(command=self.tree.xview)
         # Tags
         self.tree.tag_configure("even_row", background=self.alt_colors[0])
         self.tree.tag_configure("odd_row", background=self.alt_colors[1])
