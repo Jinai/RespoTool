@@ -57,7 +57,7 @@ class Treelist(tk.Frame):
 
     def _build_tree(self):
         for i, header in enumerate(self.headers):
-            self.tree.heading(header, text=header.title(), anchor="w", command=lambda h=header: self.sort(h, False))
+            self.tree.heading(header, text=header.title(), anchor="w", command=lambda h=header: self.sort(h, True))
             self.tree.column(self.headers[i], width=self.column_widths[i], stretch=self.stretch[i])
 
     def insert(self, values, update=True, tags=None):
@@ -110,16 +110,17 @@ class Treelist(tk.Frame):
         return indexes
 
     def sort(self, col, descending):
-        data = [(self.tree.set(child, col), child) for child in self.tree.get_children('')]
-        index = self.headers.index(col)
-        data.sort(reverse=descending, key=self.sort_keys[index])
-        self._data.sort(reverse=descending, key=lambda x: (self.sort_keys[index]([x[index]]), int(x[0])))
-        for index, item in enumerate(data):
-            self.tree.move(item[1], '', index)
-        # Switch heading command to reverse the sort next time
-        self.tree.heading(col, command=lambda col=col: self.sort(col, not descending))
-        # Hack to refresh the tree with an empty search to get the alternate colors right
-        self.search()
+        if self.sortable:
+            tree_data = [(self.tree.set(child, col), self.tree.set(child, 0), child) for child in self.tree.get_children('')]
+            index = self.headers.index(col)
+            tree_data.sort(reverse=descending, key=lambda x: (self.sort_keys[index](x), int(x[1])))
+            self._data.sort(reverse=descending, key=lambda x: (self.sort_keys[index]([x[index]]), int(x[0])))
+            for index, item in enumerate(tree_data):
+                self.tree.move(item[2], '', index)
+            # Switch heading command to reverse the sort next time
+            self.tree.heading(col, command=lambda col=col: self.sort(col, not descending))
+            # In case the user is in the middle of a search
+            self.search()
 
     def search(self, key=None):
         key = key if key else self._search_key.get()
