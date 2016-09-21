@@ -52,7 +52,8 @@ class RespoTool(tk.Tk):
         self.labelframe_append = ttk.Labelframe(self.main_frame, text="Ajouter nouveaux sigs")
         button_append_file = ttk.Button(self.labelframe_append, text="Fichier", command=self.append_file)
         button_append_file.pack(fill="both", expand=True, side="left", padx=(7, 0), pady=(0, 7))
-        button_append_clipboard = ttk.Button(self.labelframe_append, text="Presse-papiers", command=self.append_clipboard)
+        button_append_clipboard = ttk.Button(self.labelframe_append, text="Presse-papiers",
+                                             command=self.append_clipboard)
         button_append_clipboard.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
 
         self.labelframe_session = ttk.Labelframe(self.main_frame, text="Importer / Exporter session")
@@ -114,14 +115,13 @@ class RespoTool(tk.Tk):
                                                    command=self.archive_selection, width=16)
         self.button_archive_selection.pack(side="right")
 
-
         self.frame_act2 = tk.Frame(self.frame_actions)
         self.frame_act2.pack()
         self.button_playlist = ttk.Button(self.frame_act2, text="Playlist", command=self.playlist, state="disabled",
                                           width=16)
         self.button_playlist.pack(side="left")
         self.button_sigmdm = ttk.Button(self.frame_act2, text="Obtenir sigmdm", state="disabled", command=self.sigmdm,
-                                        width = 16)
+                                        width=16)
         self.button_sigmdm.pack(side="right")
 
         # ------------------------------------------- WIDGETS PLACEMENT -------------------------------------------- #
@@ -239,7 +239,7 @@ class RespoTool(tk.Tk):
             filename = path
         else:
             filename = fdialog.askopenfilename(initialdir="saves",
-                                            filetypes=(("Sig Files", "*.sig"), ("All Files", "*.*")))
+                                               filetypes=(("Sig Files", "*.sig"), ("All Files", "*.*")))
         if filename:
             with open(filename, "r", encoding="utf-8") as f:
                 dicts = json.load(f)

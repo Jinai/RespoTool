@@ -35,8 +35,8 @@ def py2exe():
                  },
         zipfile=None,
         windows=[{"script": "RespoTool.py",
-        		  "icon_resources": [(0, "resources/respotool.ico")],
-        		  }],
+                  "icon_resources": [(0, "resources/respotool.ico")],
+                 }],
         data_files=[('resources', ['resources/respotool.ico'])]
     )
 

@@ -93,7 +93,8 @@ class Siglist(Treelist):
             # Popup
             x, y = self.master.winfo_pointerx(), self.master.winfo_pointery()
             msg = value if len(value) <= 20 else value[:20] + "..."
-            Popup('"{}" copié dans le presse-papiers'.format(msg), x, y, delay=50, txt_color="white", bg_color="#111111")
+            Popup('"{}" copié dans le presse-papiers'.format(msg), x, y, delay=50, txt_color="white",
+                  bg_color="#111111")
 
     def on_enter(self, event):
         select = self.tree.selection()
