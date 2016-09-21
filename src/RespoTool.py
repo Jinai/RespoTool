@@ -11,19 +11,23 @@ import tkinter.filedialog as fdialog
 import pyperclip
 import sigparser
 import signalement
-from widgets import siglist
+from widgets import siglist, modaldialog
 from _version import __version__
 
 __author__ = "Jinai"
 
 
 class RespoTool(tk.Tk):
-    def __init__(self, master=None):
+    def __init__(self, master=None, warning=True, warning_msg=""):
         tk.Tk.__init__(self, master)
+        self.master = master
+        self.warning = warning
+        self.warning_msg = warning_msg
         self.current_respo = tk.StringVar()
         with open("resources/respomaps.json", 'r', encoding='utf-8') as f:
             self.respomaps = json.load(f)
         self.signalements = []
+
         self._setup_widgets()
         self.title("RespoTool v" + __version__)
         self.update_idletasks()
@@ -36,6 +40,8 @@ class RespoTool(tk.Tk):
         self.bind('<Control-f>', lambda _: self.search())
         self.bind('<Control-q>', lambda _: self.quit())
         self.auto_import()
+        if self.warning:
+            modaldialog.InfoModal(self, "RespoTool v" + __version__, self.warning_msg, "J'ai compris")
 
     def _setup_widgets(self):
         self.main_frame = tk.Frame(self)
@@ -268,6 +274,8 @@ class RespoTool(tk.Tk):
     def quit(self):
         raise SystemExit
 
+
 if __name__ == '__main__':
-    app = RespoTool()
+    msg = ""
+    app = RespoTool(warning=False, warning_msg=msg)
     app.mainloop()
