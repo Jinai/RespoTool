@@ -26,9 +26,9 @@ class Treelist(tk.Frame):
 
         # Internal variables
         self._search_key = tk.StringVar()
-        self._search_key.trace("w", lambda _, __, ___: self.search())
-        self._data = []
-        self._item_count = 0
+        self._search_key.trace("w", lambda *x: self.search())
+        self._data = []  # Contains inserted values
+        self._parity_check = 0  # For alt colors, incremented every insertion and resetted when the tree is cleared
 
         self._setup_widgets()
 
@@ -46,8 +46,8 @@ class Treelist(tk.Frame):
         vsb.configure(command=self.tree.yview)
         hsb.configure(command=self.tree.xview)
         # Tags
-        self.tree.tag_configure("odd_row", background=self.alt_colors[0])
-        self.tree.tag_configure("even_row", background=self.alt_colors[1])
+        self.tree.tag_configure("even_row", background=self.alt_colors[0])
+        self.tree.tag_configure("odd_row", background=self.alt_colors[1])
         # Bindings
         self.tree.bind('<BackSpace>', lambda _: self.delete())
         self.tree.bind('<Delete>', lambda _: self.delete())
@@ -85,8 +85,8 @@ class Treelist(tk.Frame):
         return index
 
     def clear(self, keep_data=False):
+        self._parity_check = 0
         self.tree.delete(*self.tree.get_children())
-        self._item_count = 0
         if not keep_data:
             del self._data[:]
 
