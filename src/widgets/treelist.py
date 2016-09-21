@@ -122,7 +122,7 @@ class Treelist(tk.Frame):
         for values in self._data:
             for item in values:
                 if key.lower() in str(item).lower():
-                    self.insert(values[1:], update=False)
+                    self.insert(values, update=False)
                     break
 
     def select_all(self):

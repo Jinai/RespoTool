@@ -59,6 +59,13 @@ class Siglist(Treelist):
             self.signalements.sort(reverse=descending, key=self._keys[index])
             super().sort(col, descending)
 
+    def search(self, key=None):
+        key = key if key else self._search_key.get()
+        if key == '':
+            self.refresh()
+        else:
+            super().search(key)
+
     def on_doubleclick(self, event):
         if self.tree.identify_region(event.x, event.y) == "cell":
             # Clipboard

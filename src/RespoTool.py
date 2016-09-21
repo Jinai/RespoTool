@@ -33,6 +33,7 @@ class RespoTool(tk.Tk):
             self.iconbitmap("resources/respotool.ico")
         except:
             pass
+        self.bind('<Control-f>', lambda _: self.search())
         self.bind('<Control-q>', lambda _: self.quit())
         self.auto_import()
 
@@ -90,7 +91,18 @@ class RespoTool(tk.Tk):
 
         # ------------------------------------------------ ACTIONS ------------------------------------------------- #
 
-        #self.labelframe_stats = stats.Stats(self.main_frame, text="Archives")
+        # self.labelframe_stats = stats.Stats(self.main_frame, text="Archives")
+
+        self.labelframe_search = ttk.Labelframe(self.main_frame, text="Rechercher")
+        self.frame_searchbox = tk.Frame(self.labelframe_search, bg='white', bd=1, relief='sunken')
+        self.frame_searchbox.pack(fill='both', expand=True, padx=5, pady=(0, 6))
+        self.entry_search = tk.Entry(self.frame_searchbox, textvariable=self.tree_sig._search_key, width=10, bd=0,
+                                     highlightthickness=0)
+        self.entry_search.pack(fill='x', expand=True, side='left')
+        self.label_search = tk.Label(self.frame_searchbox, background='white', borderwidth=1, highlightthickness=1)
+        self.label_search.pack(side='left')
+        self.label_search.icon = tk.PhotoImage(file="resources/search.gif")
+        self.label_search.configure(image=self.label_search.icon)
 
         self.frame_actions = tk.Frame(self.main_frame)
         self.frame_act1 = tk.Frame(self.frame_actions)
@@ -120,8 +132,10 @@ class RespoTool(tk.Tk):
         self.frame_respo.grid(row=1, column=0, sticky="nsw", pady=10)
         self.tree_sig.grid(row=2, column=0, columnspan=3, sticky="nsew", pady=(0, 10))
         # self.labelframe_stats.grid(row=2, column=0, sticky="nw")
+        self.labelframe_search.grid(row=3, column=0, sticky="new")
+        self.frame_actions.grid(row=3, column=1, sticky="nsew")
 
-        self.main_frame.grid_rowconfigure(1, weight=1)
+        self.main_frame.grid_rowconfigure(2, weight=1)
         self.main_frame.grid_columnconfigure((0, 1, 2), weight=1)
 
     def new_file(self):
@@ -238,6 +252,10 @@ class RespoTool(tk.Tk):
         path = "saves/session.sig"
         if os.path.exists(path):
             self.import_save(path)
+
+    def search(self):
+        self.entry_search.focus()
+        self.entry_search.select_range(0, 'end')
 
     def refresh(self):
         self.tree_sig.signalements = self.signalements
