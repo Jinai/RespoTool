@@ -47,16 +47,33 @@ class Siglist(Treelist):
         super().insert(values, update, tags)
 
     def delete(self):
-        for item in reversed(self.tree.selection()):  # reversed to avoid index errors
-            index = self.tree.get_children().index(item)
-            del self.signalements[index]
-        super().delete()
-        self.refresh()
+        if self.tree.selection():
+            for item in self.tree.selection():
+                values = self.tree.item(item)['values']
+                values[0] = str(values[0])  # Treeviews force str to int if it's a digit
+                values[-1] = [respo.strip() for respo in values[-1].split(",")] if values[-1] else []
+                sig = Signalement(*values[1:])
+                self.signalements.remove(sig)
+            index = super().delete()
+            self.refresh()
+            if self._search_key.get() != '':
+                self.search()
+            self.focus_index(index)
+
+    def selection_indexes(self):
+        indexes = []
+        selection = self.tree.selection()
+        for item in selection:
+            indexes.append(int(self.tree.item(item)['values'][0]) - 1)
+        return indexes
 
     def sort(self, col, descending):
         if self.sortable:
             index = self.headers.index(col)
-            self.signalements.sort(reverse=descending, key=self._keys[index])
+            if index == 0:
+                self.signalements.reverse()
+            else:
+                self.signalements.sort(reverse=descending, key=self._keys[index])
             super().sort(col, descending)
 
     def search(self, key=None):
@@ -87,16 +104,30 @@ class Siglist(Treelist):
                 Popup("<- Qui es-tu ? ^_^", x, y, offset=(220, 61), delay=50, txt_color='white', bg_color='#111111')
                 return
             item = select[0]
+            item_index = self.tree.get_children().index(item)
             values = self.tree.item(item)['values']
-            dialog = EditStatusDialog(self, "Éditer statut #{} : {}".format(values[0], values[3]), values[-1])
+            values[0] = str(values[0])  # Treeviews force str to int if it's a digit
+            data_index = self._data.index(values)
+            dialog = EditStatusDialog(self, "Éditer statut #{} : {}".format(values[0], values[3]), values[-2])
             new_statut = dialog.result
-            if new_statut is not None:
-                values[0] = str(values[0])  # tkinter forces str to int if it's a digit
-                index = self._data.index(values)
-                values[-1] = new_statut
-                self.signalements[index] = Signalement(*values[1:])
-                self.refresh()
-                self.focus_index(index)
+            if new_statut is not None and new_statut != values[-2]:
+                values[-1] = [respo.strip() for respo in values[-1].split(",")] if values[-1] else []
+                sig = Signalement(*values[1:])
+                sig_index = self.signalements.index(sig)
+                respo = self.respomap.get()
+                if respo != '' and respo not in sig.respo:
+                    sig.respo.append(respo)
+                if "/reset" in new_statut.lower():
+                    sig.respo = []
+                else:
+                    sig.statut = new_statut
+                new_values = list(sig.fields())
+                new_values.insert(0, values[0])
+                new_values[-1] = ", ".join(new_values[-1])
+                self._data[data_index] = new_values
+                self.signalements[sig_index] = sig
+                self.search()
+                self.focus_index(item_index)
             else:
                 self.focus_item(item)
 
