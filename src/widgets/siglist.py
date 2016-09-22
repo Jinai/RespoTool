@@ -174,7 +174,8 @@ class Siglist(Treelist):
                 x, y = self.tree.bbox(item, "code")[:2]
                 x = x + self.winfo_rootx()
                 y = y + self.winfo_rooty() + 20
-                self.last_popup = Popup(text, x, y, delay=50, offset=(0, 0), txt_color="white", bg_color="#111111")
+                self.last_popup = Popup(text, x, y, delay=50, offset=(0, 0), persistant=True, max_alpha=0.90,
+                                        txt_color="white", bg_color="#111111")
 
     def remove_popup(self, *args):
         if self.last_popup:
