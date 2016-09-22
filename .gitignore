@@ -1,8 +1,10 @@
 .idea/
 bin/
-tcl/
-stats/
+debug/
 icon/
+stats/
+tcl/
+utils/
 *.sig
 *.pyc
 archives.txt
