@@ -1,3 +1,12 @@
+v1.3 [22/09/2016]
+=================
+	* Appuyer sur Espace lorsqu'un signalement est sélectionné affiche sous forme
+	  d'un popup les signalements des archives / session courante qui correspondent
+	  à la même map. Le template d'affichage de ce popup est stocké dans un fichier
+	  JSON. Modifiable pendant que le programme est ouvert
+	* Correction du popup de ctrl+c apparaissant au mauvais endroit
+
+
 v1.2 [09/09/2016]
 =================
 	* Possibilité de filtrer la liste par une recherche (ctrl+f)
@@ -12,8 +21,8 @@ v1.1 [29/08/2016]
 =================
 	* Ajout de la colonne Respomap qui se charge de retenir quels respomaps se sont
 	  occupés de quels signalements
-	* Les couleurs des lignes spéciales (todo, contacté, etc.) sont stockées dans un fichier
-	  JSON et sont modifiables pendant que le programme est ouvert
+	* Les couleurs des lignes spéciales (todo, contacté, etc.) sont stockées dans un
+	  fichier JSON et sont modifiables pendant que le programme est ouvert
 
 
 v1.0 [23/08/2016]
