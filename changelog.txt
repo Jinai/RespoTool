@@ -1,9 +1,19 @@
+v1.2 [09/09/2016]
+=================
+	* Possibilité de filtrer la liste par une recherche (ctrl+f)
+	* Correction de nombreux bugs liés à l'affichage des signalements et au mauvais
+	  indexage de ceux-ci dans la liste
+	* Correction d'un bug possible dans l'alternance des couleurs des lignes paires /
+	  impaires
+	* Retrait de la scrollbar horizontale qui n'était pas très utile
+
+
 v1.1 [29/08/2016]
 =================
 	* Ajout de la colonne Respomap qui se charge de retenir quels respomaps se sont
 	  occupés de quels signalements
-	* La couleur des lignes spéciales (todo, contacté, etc) est stockée dans un fichier
-	  JSON et est modifiable pendant que le programme est ouvert
+	* Les couleurs des lignes spéciales (todo, contacté, etc.) sont stockées dans un fichier
+	  JSON et sont modifiables pendant que le programme est ouvert
 
 
 v1.0 [23/08/2016]
