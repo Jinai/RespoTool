@@ -145,10 +145,11 @@ class Siglist(Treelist):
             load += self.tree.item(item)['values'][3]
             pyperclip.copy(load)
             try:
-                x, y, width, height = self.tree.bbox(item, "code")
-                x = x + self.master.master.winfo_x() + 5
-                y = y + self.master.master.winfo_y() + 96
-                Popup('"{}" copié dans le presse-papiers'.format(load), x, y, delay=50, txt_color="white", bg_color="#111111")
+                x, y = self.tree.bbox(item, "code")[:2]
+                x = x + self.winfo_rootx()
+                y = y + self.winfo_rooty() - 21
+                Popup('"{}" copié dans le presse-papiers'.format(load), x, y, delay=50, offset=(0, 0), txt_color="white",
+                      bg_color="#111111")
             except ValueError:
                 pass
 
