@@ -7,11 +7,33 @@ ARCHIVES_PATH = "archives/archives.txt"
 
 
 class Archives():
-    def __init__(self, path):
+    def __init__(self, path=None, open=False):
         self.path = path
         self.raw_text = ''
         self.signalements = []
-        self.read_archives()
+        self.access_counter = 0
+        if open:
+            self.open()
+
+    def open(self, path=None):
+        if path:
+            self.path = path
+        elif not self.path:
+            return
+
+        try:
+            f = open(self.path, 'r', encoding='utf-8')
+        except IOError:
+            pass
+        else:
+            try:
+                self.raw_text = ''.join(f.readlines()[2:])
+                self.signalements = Archives.parse(self.raw_text)
+                self.access_counter += 1
+            except (IOError, IndexError):
+                pass
+            finally:
+                f.close()
 
     @staticmethod
     def parse(text, line_sep='\n', col_sep='|'):
@@ -27,20 +49,6 @@ class Archives():
                 s = Signalement(*values)
                 signalements.append(s)
         return signalements
-
-    def read_archives(self):
-        try:
-            f = open(self.path, 'r', encoding='utf-8')
-        except IOError:
-            pass
-        else:
-            try:
-                self.raw_text = ''.join(f.readlines()[2:])
-                self.signalements = Archives.parse(self.raw_text)
-            except (IOError, IndexError):
-                pass
-            finally:
-                f.close()
 
     def get_sigs(self, key, *values, exact=False, func=None, source=None):
         s = []
