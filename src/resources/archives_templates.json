@@ -1,0 +1,5 @@
+{
+    "archives": "[{date}] [{auteur}] {desc}",
+    "session": "[{date}] [{auteur}] {desc}",
+    "__comment": "Les différents accesseurs : {date} {auteur} {code} {flag} {desc} {statut} {respo}"
+}

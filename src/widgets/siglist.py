@@ -37,12 +37,17 @@ class Siglist(Treelist):
         self.tree.bind('<FocusOut>', self.remove_popup)
         self.tree.bind('<<TreeviewSelect>>', self.remove_popup)
         self.update_tags()
+        self.update_templates()
 
     def update_tags(self):
         with open("resources/tags.json", 'r', encoding='utf-8') as f:
             self.tags = json.load(f)
         for key in self.tags:
             self.tree.tag_configure(key, background=self.tags[key])
+
+    def update_templates(self):
+        with open("resources/archives_templates.json", 'r', encoding='utf-8') as f:
+            self.archives_templates = json.load(f)
 
     def insert(self, values, update=True, tags=()):
         tags = []
@@ -148,7 +153,8 @@ class Siglist(Treelist):
                 x, y = self.tree.bbox(item, "code")[:2]
                 x = x + self.winfo_rootx()
                 y = y + self.winfo_rooty() - 21
-                Popup('"{}" copié dans le presse-papiers'.format(load), x, y, delay=50, offset=(0, 0), txt_color="white",
+                Popup('"{}" copié dans le presse-papiers'.format(load), x, y, delay=50, offset=(0, 0),
+                      txt_color="white",
                       bg_color="#111111")
             except ValueError:
                 pass
@@ -165,16 +171,18 @@ class Siglist(Treelist):
                 text = ""
                 if len(match_archives) != 0:
                     text += "Cette map apparait dans les archives :"
-                    text += "\n    ".join([''] + ["[{}][{}] {}".format(s.date, s.auteur, s.desc) for s in match_archives])
+                    text += "\n    ".join(
+                        [''] + [self.archives_templates["archives"].format(**s.__dict__) for s in match_archives])
                 if len(match_session) > 1:
                     if text:
                         text += "\n"
                     text += "Cette map apparait dans la session courante :"
-                    text += "\n    ".join([''] + ["[{}][{}] {}".format(s.date, s.auteur, s.desc) for s in match_session])
+                    text += "\n    ".join(
+                        [''] + [self.archives_templates["session"].format(**s.__dict__) for s in match_session])
                 x, y = self.tree.bbox(item, "code")[:2]
                 x = x + self.winfo_rootx()
                 y = y + self.winfo_rooty() + 20
-                self.last_popup = Popup(text, x, y, delay=50, offset=(0, 0), persistant=True, max_alpha=0.90,
+                self.last_popup = Popup(text, x, y, delay=50, offset=(0, 0), persistent=True, max_alpha=0.90,
                                         txt_color="white", bg_color="#111111")
 
     def remove_popup(self, *args):
@@ -191,3 +199,4 @@ class Siglist(Treelist):
         self.clear()
         self.populate()
         self.update_tags()
+        self.update_templates()
