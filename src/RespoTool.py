@@ -8,6 +8,7 @@ import tkinter.ttk as ttk
 import tkinter.messagebox as mbox
 import tkinter.filedialog as fdialog
 
+import archives
 import pyperclip
 import sigparser
 import signalement
@@ -18,16 +19,21 @@ __author__ = "Jinai"
 
 
 class RespoTool(tk.Tk):
-    def __init__(self, master=None, warning=True, warning_msg=""):
+    def __init__(self, master=None, session_path=None, auto_import=False, warning=True, warning_msg=""):
+        # Init var
         tk.Tk.__init__(self, master)
         self.master = master
+        self.session_path = session_path
+        self.auto_import = auto_import
         self.warning = warning
         self.warning_msg = warning_msg
         self.current_respo = tk.StringVar()
         with open("resources/respomaps.json", 'r', encoding='utf-8') as f:
             self.respomaps = json.load(f)
         self.signalements = []
+        self.archives = archives.Archives(archives.ARCHIVES_PATH)
 
+        # Rendering
         self._setup_widgets()
         self.title("RespoTool v" + __version__)
         self.update_idletasks()
@@ -37,9 +43,18 @@ class RespoTool(tk.Tk):
             self.iconbitmap("resources/respotool.ico")
         except:
             pass
+
+        # Imports
+        if self.auto_import:
+            self.archives.open()
+            if self.session_path and os.path.exists(self.session_path):
+                self.import_save(self.session_path)
+
+        # Bindings
         self.bind('<Control-f>', lambda _: self.search())
         self.bind('<Control-q>', lambda _: self.quit())
-        self.auto_import()
+
+        # Warnings
         if self.warning:
             modaldialog.InfoModal(self, "RespoTool v" + __version__, self.warning_msg, "J'ai compris")
 
@@ -92,7 +107,7 @@ class RespoTool(tk.Tk):
             lambda x: x[0].lower(),
         ]
         stretch = [False, False, False, False, False, True, True, True]
-        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.current_respo, headers,
+        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.current_respo, self.archives, headers,
                                         column_widths, sort_keys=sort_keys, stretch=stretch, sortable=False,
                                         auto_increment=True)
 
@@ -182,7 +197,7 @@ class RespoTool(tk.Tk):
                 for sig in self.signalements:
                     f.write(sig.archive() + "\n")
             del self.signalements[:]
-            self.refresh()
+            self.refresh(archives=True)
             self.button_archive.configure(state="disabled")
 
     def archive_selection(self):
@@ -196,7 +211,7 @@ class RespoTool(tk.Tk):
                     for i in indexes:
                         f.write(self.signalements[i].archive() + "\n")
                     self.signalements = [sig for i, sig in enumerate(self.signalements) if i not in indexes]
-                self.refresh()
+                self.refresh(archives=True)
         else:
             msg = ("Votre sélection doit être d'un seul bloc (pas de trous) et doit commencer par le premier " +
                    "signalement afin de conserver l'ordre des archives")
@@ -247,6 +262,7 @@ class RespoTool(tk.Tk):
             filename = fdialog.askopenfilename(initialdir="saves",
                                                filetypes=(("Sig Files", "*.sig"), ("All Files", "*.*")))
         if filename:
+            self.session_path = filename
             with open(filename, "r", encoding="utf-8") as f:
                 dicts = json.load(f)
             del self.signalements[:]
@@ -254,18 +270,15 @@ class RespoTool(tk.Tk):
                 self.signalements.append(signalement.Signalement.from_dict(d))
             self.refresh()
 
-    def auto_import(self):
-        path = "saves/session.sig"
-        if os.path.exists(path):
-            self.import_save(path)
-
     def search(self):
         self.entry_search.focus()
         self.entry_search.select_range(0, 'end')
 
-    def refresh(self):
+    def refresh(self, archives=False):
         self.tree_sig.signalements = self.signalements
         self.tree_sig.refresh()
+        if archives:
+            self.archives.open()
         self.button_playlist.configure(state="enabled")
         self.button_archive.configure(state="enabled")
         self.button_archive_selection.configure(state="enabled")
@@ -277,5 +290,5 @@ class RespoTool(tk.Tk):
 
 if __name__ == '__main__':
     msg = ""
-    app = RespoTool(warning=False, warning_msg=msg)
+    app = RespoTool(session_path="saves/session.sig", auto_import=True, warning=False, warning_msg=msg)
     app.mainloop()

@@ -5,15 +5,15 @@ import json
 import winsound
 
 import pyperclip
+
 from .treelist import Treelist
-from signalement import Signalement
 from .popup import Popup
 from .editstatus import EditStatusDialog
 from signalement import Signalement
 
 
 class Siglist(Treelist):
-    def __init__(self, master, signalements, respomap, *args, **kwargs):
+    def __init__(self, master, signalements, respomap, archives, *args, **kwargs):
         Treelist.__init__(self, master, *args, **kwargs)
         self.signalements = signalements
         self.respomap = respomap
@@ -28,9 +28,14 @@ class Siglist(Treelist):
             7: lambda x: str(x.respo)
         }
         self._entry_edit = None
+        self.archives = archives
+        self.last_popup = None
         self.tree.bind('<Double-1>', self.on_doubleclick)
         self.tree.bind('<Return>', self.on_enter)
         self.tree.bind('<Control-c>', self.copy)
+        self.tree.bind('<space>', self.search_archives)
+        self.tree.bind('<FocusOut>', self.remove_popup)
+        self.tree.bind('<<TreeviewSelect>>', self.remove_popup)
         self.update_tags()
 
     def update_tags(self):
@@ -146,6 +151,33 @@ class Siglist(Treelist):
                 Popup('"{}" copié dans le presse-papiers'.format(load), x, y, delay=50, txt_color="white", bg_color="#111111")
             except ValueError:
                 pass
+
+    def search_archives(self, event):
+        selection = self.tree.selection()
+        if len(selection) == 1:
+            item = selection[0]
+            code = self.tree.item(item)['values'][3]
+            match_archives = self.archives.get_sigs("code", code)
+            match_session = self.archives.get_sigs("code", code, source=self.signalements)
+            if len(match_archives) != 0 or len(match_session) > 1:
+                self.remove_popup()
+                text = ""
+                if len(match_archives) != 0:
+                    text += "Cette map apparait dans les archives :"
+                    text += "\n    ".join([''] + ["[{}][{}] {}".format(s.date, s.auteur, s.desc) for s in match_archives])
+                if len(match_session) > 1:
+                    if text:
+                        text += "\n"
+                    text += "Cette map apparait dans la session courante :"
+                    text += "\n    ".join([''] + ["[{}][{}] {}".format(s.date, s.auteur, s.desc) for s in match_session])
+                x, y = self.tree.bbox(item, "code")[:2]
+                x = x + self.winfo_rootx()
+                y = y + self.winfo_rooty() + 20
+                self.last_popup = Popup(text, x, y, delay=50, offset=(0, 0), txt_color="white", bg_color="#111111")
+
+    def remove_popup(self, *args):
+        if self.last_popup:
+            self.last_popup.destroy()
 
     def populate(self):
         for i, sig in enumerate(self.signalements):
