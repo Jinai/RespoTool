@@ -6,9 +6,9 @@ import winsound
 
 import pyperclip
 
-from .treelist import Treelist
-from .popup import Popup
-from .editstatus import EditStatusDialog
+from widgets.treelist import Treelist
+from widgets.popup import Popup
+from widgets.editstatus import EditStatusDialog
 from signalement import Signalement
 
 
