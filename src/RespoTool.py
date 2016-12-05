@@ -113,14 +113,15 @@ class RespoTool(tk.Tk):
         stretch = [False, False, False, False, False, True, True, True]
         self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.current_respo, self.archives, headers,
                                         column_widths, sort_keys=sort_keys, stretch=stretch, sortable=False,
-                                        auto_increment=True)
+                                        auto_increment=True, search_excludes=["Rechercher"])
+        self.entry_search.entry.configure(textvariable=self.tree_sig._search_key)
 
         # ------------------------------------------------ ACTIONS ------------------------------------------------- #
 
         self.frame_actions = tk.Frame(self.main_frame)
         self.frame_act1 = tk.Frame(self.frame_actions)
         self.frame_act1.pack()
-        self.button_archive = ttk.Button(self.frame_act1, text="Archiver", command=self.archive, state="disabled",
+        self.button_archive = ttk.Button(self.frame_act1, text="Archiver", command=self.archive_all, state="disabled",
                                          width=16)
         self.button_archive.pack(side="left")
         self.button_archive_selection = ttk.Button(self.frame_act1, text="Archiver sélection", state="disabled",
@@ -144,8 +145,6 @@ class RespoTool(tk.Tk):
         self.frame_respo.grid(row=1, column=0, sticky="nsw", pady=10)
         self.entry_search.grid(row=1, column=2, sticky="se", padx=(0, 17), pady=10)
         self.tree_sig.grid(row=2, column=0, columnspan=3, sticky="nsew", pady=(0, 10))
-        # self.labelframe_stats.grid(row=2, column=0, sticky="nw")
-        self.labelframe_search.grid(row=3, column=0, sticky="new")
         self.frame_actions.grid(row=3, column=1, sticky="nsew")
 
         self.main_frame.grid_rowconfigure(2, weight=1)
@@ -176,7 +175,8 @@ class RespoTool(tk.Tk):
         self.refresh()
 
     def playlist(self):
-        with open("playlist.txt", "w", encoding="utf-8") as f:
+        path = "playlist.txt"
+        with open(path, "w", encoding="utf-8") as f:
             for sig in self.signalements:
                 f.write(str(sig) + "\n")
 
@@ -229,7 +229,7 @@ class RespoTool(tk.Tk):
         res = ""
         for sig in self.signalements:
             res += sig.sigmdm() + "\n"
-        pyperclip.copy(res)
+        pyperclip.copy(res.strip())
 
     def export_save(self, path=None):
         if path:
@@ -265,7 +265,6 @@ class RespoTool(tk.Tk):
         self.entry_search.focus()
         self.entry_search.select_range(0, 'end')
 
-    def refresh(self, archives=False):
     def refresh(self, archives=False, auto_scroll=True):
         self.tree_sig.signalements = self.signalements
         self.tree_sig.refresh()
