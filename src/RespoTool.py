@@ -189,45 +189,44 @@ class RespoTool(tk.Tk):
             for sig in self.signalements:
                 f.write(str(sig) + "\n")
 
-    def archive(self):
-        msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nNe le faites que s'ils sont tous traités, " + \
-              "car ils seront retirés de la liste une fois fait !"
-        if mbox.askokcancel("Archiver", msg, icon="warning", parent=self):
-            self.create_archive()
-            with open("archives/archives.txt", "a", encoding="utf-8") as f:
-                for sig in self.signalements:
-                    f.write(sig.archive() + "\n")
-            del self.signalements[:]
-            self.refresh(archives=True)
-            self.button_archive.configure(state="disabled")
+    def archive_all(self):
+        archived = []
+        msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nIls seront retirés de la liste une fois fait !"
+        if mbox.askokcancel("Archiver {} sig".format(len(self.signalements)), msg, icon="warning", parent=self):
+            for sig in self.signalements:
+                if "todo" in sig.statut:
+                    msg = "Chaque signalement doit être traité !\nSignalement : {}".format(sig.sigmdm())
+                    mbox.showerror("Archiver [{}] {}".format(sig.date, sig.code), msg, parent=self)
+                    break
+                else:
+                    self.archives.archive_sig(sig)
+                    archived.append(self.signalements.pop(sig))
+            if archived:
+                self.refresh(archives=True)
 
     def archive_selection(self):
         indexes = self.tree_sig.selection_indexes()
+        archived = []
         if self.check_valid_selection(indexes):
-            msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nNe le faites que s'ils sont tous traités, " + \
-                  "car ils seront retirés de la liste une fois fait !"
-            if mbox.askokcancel("Archiver", msg, icon="warning", parent=self):
-                self.create_archive()
-                with open("archives/archives.txt", "a", encoding="utf-8") as f:
-                    for i in indexes:
-                        f.write(self.signalements[i].archive() + "\n")
-                    self.signalements = [sig for i, sig in enumerate(self.signalements) if i not in indexes]
-                self.refresh(archives=True)
+            msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nIls seront retirés de la liste une fois fait !"
+            if mbox.askokcancel("Archiver {} sig".format(len(indexes)), msg, icon="warning", parent=self):
+                for i in indexes:
+                    sig = self.signalements[i]
+                    if "todo" in sig.statut:
+                        msg = "Chaque signalement doit être traité !\nSignalement : {}".format(sig.sigmdm())
+                        mbox.showerror("Archiver [{}] {}".format(sig.date, sig.code), msg, parent=self)
+                        break
+                    elif self.archives.archive_sig(sig):
+                        archived.append(sig)
+                    else:
+                        break
+                if archived:
+                    self.signalements = [sig for sig in self.signalements if sig not in archived]
+                    self.refresh(archives=True)
         else:
             msg = ("Votre sélection doit être d'un seul bloc (pas de trous) et doit commencer par le premier " +
                    "signalement afin de conserver l'ordre des archives")
             mbox.showwarning("Mauvais archivage", msg)
-
-    def create_archive(self):
-        if not os.path.exists("archives/archives.txt"):
-            header = "Date  | Auteur Sig.  | Code           | Flag        | Respomap                 | Description" + \
-                     "                                                                                          | " + \
-                     "Statut                                                      " + \
-                     "------+--------------+----------------+-------------+--------------------------+------------" + \
-                     "------------------------------------------------------------------------------------------+-" + \
-                     "------------------------------------------------------------"
-            with open("archives/archives.txt", "w", encoding="utf-8") as f:
-                f.write(header + "\n")
 
     def check_valid_selection(self, indexes):
         for pos, idx in enumerate(indexes):

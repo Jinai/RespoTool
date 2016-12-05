@@ -42,19 +42,75 @@ class Archives():
         self.signalements = Archives.parse(self.raw_text)
         return opened
 
+    def archive_sig(self, sig):
+        if not self.files:
+            self.new_archive(os.path.join(self.dir_path, "archives_{}.txt".format(sig.datetime().year)))
+        if self.signalements and sig.datetime().month < self.signalements[-1].datetime().month:
+            self.new_archive()  # New year => new file
 
+        archived = False
         try:
+            f = open(self.current_file(), 'a', encoding='utf-8')
         except IOError:
             pass
         else:
             try:
+                f.write(sig.archive() + "\n")
+                Archives.write_counter += 1
+                archived = True
+            except IOError:
                 pass
             finally:
                 f.close()
+        return archived
+
+    def new_archive(self, filename=None):
+        if filename is None:
+            try:
+                current = self.current_file()
+                if current:
+                    increment = int(os.path.splitext(current)[0][-4:]) + 1
+                    filename = os.path.join(self.dir_path, "archives_{}.txt".format(increment))
+                else:
+                    filename = os.path.join(self.dir_path, "archives_{}.txt".format(datetime.datetime.now().year))
+            except ValueError as e:
+                print(e)
+                filename = os.path.join(self.dir_path, "archives_tmp.txt")
+        self.files.append(filename)
+        return self.write_header(filename)
+
+    def write_header(self, path):
+        created = False
+        header = "Date  | Auteur Sig.  | Code           | Flag        | Respomap                 | Description" + \
+                 "                                                                                          | " + \
+                 "Statut                                                      \n" + \
+                 "------+--------------+----------------+-------------+--------------------------+------------" + \
+                 "------------------------------------------------------------------------------------------+-" + \
+                 "------------------------------------------------------------"
+        try:
+            f = open(path, 'w', encoding='utf-8')
+        except IOError:
+            pass
+        else:
+            try:
+                f.write(header + "\n")
+                Archives.write_counter += 1
+                created = True
+            except IOError as e:
+                print(e)
+            finally:
+                f.close()
+        return created
+
     def current_file(self):
         if self.files:
             return self.files[-1]
         return None
+
+    def strip_comments(self):
+        for sig in self.signalements:
+            if '//' in sig.statut:
+                sig.statut = sig.statut[:sig.statut.find('//')].strip()
 
     @staticmethod
     def parse(text, line_sep='\n', col_sep='|'):
