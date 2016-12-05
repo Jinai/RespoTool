@@ -89,9 +89,10 @@ class RespoTool(tk.Tk):
         self.frame_respo = tk.Frame(self.main_frame)
         label_respo = ttk.Label(self.frame_respo, text="Respomap :")
         label_respo.pack(side="left")
-        dropdown_respo = ttk.Combobox(self.frame_respo, textvariable=self.current_respo)
-        dropdown_respo.pack(side="right")
-        dropdown_respo['values'] = self.respomaps['main'] # comptes principaux
+        self.dropdown_respo = ttk.Combobox(self.frame_respo, state='readonly', textvariable=self.current_respo)
+        self.dropdown_respo.pack(side="right")
+        self.dropdown_respo['values'] = self.respomaps['main'] # comptes principaux
+
         search_icon = tk.PhotoImage(file="resources/search.gif")
         self.entry_search = customentries.PlaceholderEntry(self.main_frame, placeholder=" Rechercher", icon=search_icon,
                                                            width=30)
