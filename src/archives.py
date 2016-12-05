@@ -1,39 +1,60 @@
 # -*- coding: utf-8 -*-
 # !python3
 
+import os
+import glob
+import datetime
+
 from signalement import Signalement
 
-ARCHIVES_PATH = "archives/archives.txt"
+ARCHIVES_DIR = "archives/"
 
 
 class Archives():
-    def __init__(self, path=None, open=False):
-        self.path = path
+    read_counter = 0
+    write_counter = 0
+
+    def __init__(self, dir_path, pattern):
+        self.dir_path = dir_path
+        self.pattern = pattern
         self.raw_text = ''
         self.signalements = []
-        self.access_counter = 0
-        if open:
-            self.open()
+        self.files = glob.glob(os.path.join(dir_path, pattern))
+        self.open()
 
-    def open(self, path=None):
-        if path:
-            self.path = path
-        elif not self.path:
-            return
+    def open(self):
+        self.raw_text = ''
+        opened = False
+        for file in self.files:
+            try:
+                f = open(file, 'r', encoding='utf-8')
+            except IOError as e:
+                print(e)
+            else:
+                try:
+                    self.raw_text += ''.join(f.readlines()[2:])
+                    Archives.read_counter += 1
+                    opened = True
+                except (IOError, IndexError) as e:
+                    print(e)
+                finally:
+                    f.close()
+        self.signalements = Archives.parse(self.raw_text)
+        return opened
+
 
         try:
-            f = open(self.path, 'r', encoding='utf-8')
         except IOError:
             pass
         else:
             try:
-                self.raw_text = ''.join(f.readlines()[2:])
-                self.signalements = Archives.parse(self.raw_text)
-                self.access_counter += 1
-            except (IOError, IndexError):
                 pass
             finally:
                 f.close()
+    def current_file(self):
+        if self.files:
+            return self.files[-1]
+        return None
 
     @staticmethod
     def parse(text, line_sep='\n', col_sep='|'):
