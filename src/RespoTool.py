@@ -12,7 +12,7 @@ import archives
 import pyperclip
 import sigparser
 import signalement
-from widgets import siglist, modaldialog, customentries
+from widgets import siglist, modaldialog, customentries, statusbar
 from _version import __version__
 
 __author__ = "Jinai"
@@ -60,6 +60,8 @@ class RespoTool(tk.Tk):
             modaldialog.InfoModal(self, "RespoTool v" + __version__, self.warning_msg, "J'ai compris")
 
     def _setup_widgets(self):
+        self.statusbar = statusbar.StatusBar(self)
+        self.statusbar.pack(side="bottom", fill="x")
         self.main_frame = tk.Frame(self)
         self.main_frame.pack(fill='both', expand=True, pady=5, padx=5)
 
@@ -157,10 +159,16 @@ class RespoTool(tk.Tk):
             with open(filename, "r", encoding="utf-8") as f:
                 self.signalements = sigparser.parse(f.read())
             self.refresh()
+            self.statusbar.set(
+                "Nouvelle session depuis '{}', {} signalements importés".format(filename, len(self.signalements))
+            )
 
     def new_clipboard(self):
         self.signalements = sigparser.parse(pyperclip.paste())
         self.refresh()
+        self.statusbar.set(
+            "Nouvelle session depuis le presse-papiers, {} signalements importés".format(len(self.signalements))
+        )
 
     def append_file(self):
         filename = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
@@ -169,17 +177,24 @@ class RespoTool(tk.Tk):
                 signalements = sigparser.parse(f.read())
             self.signalements.extend(signalements)
             self.refresh()
+            self.statusbar.set(
+                "{} signalements ajoutés à la session courante depuis '{}'".format(len(signalements), filename)
+            )
 
     def append_clipboard(self):
         signalements = sigparser.parse(pyperclip.paste())
         self.signalements.extend(signalements)
         self.refresh()
+        self.statusbar.set(
+            "{} signalements ajoutés à la session courante depuis le presse-papiers".format(len(signalements))
+        )
 
     def playlist(self):
         path = "playlist.txt"
         with open(path, "w", encoding="utf-8") as f:
             for sig in self.signalements:
                 f.write(str(sig) + "\n")
+        self.statusbar.set("Playlist créee dans '{}'".format(path))
 
     def archive_all(self):
         archived = []
@@ -195,6 +210,7 @@ class RespoTool(tk.Tk):
                     archived.append(self.signalements.pop(sig))
             if archived:
                 self.refresh(archives=True)
+                self.statusbar.set("{} signalements archivés".format(len(archived)))
 
     def archive_selection(self):
         indexes = self.tree_sig.selection_indexes()
@@ -215,6 +231,7 @@ class RespoTool(tk.Tk):
                 if archived:
                     self.signalements = [sig for sig in self.signalements if sig not in archived]
                     self.refresh(archives=True)
+                    self.statusbar.set("{} signalements archivés".format(len(archived)))
         else:
             msg = ("Votre sélection doit être d'un seul bloc (pas de trous) et doit commencer par le premier " +
                    "signalement afin de conserver l'ordre des archives")
@@ -231,6 +248,7 @@ class RespoTool(tk.Tk):
         for sig in self.signalements:
             res += sig.sigmdm() + "\n"
         pyperclip.copy(res.strip())
+        self.statusbar.set("Résultat /sigmdm copié dans le presse-papiers")
 
     def export_save(self, path=None):
         if path:
@@ -246,6 +264,7 @@ class RespoTool(tk.Tk):
                 dicts.append(d)
             with open(filename, "w", encoding="utf-8") as f:
                 f.write(json.dumps(dicts, indent=4, ensure_ascii=False))
+            self.statusbar.set("{} signalements exportés dans '{}'".format(len(self.signalements), filename))
 
     def import_save(self, path=None):
         if path:
@@ -261,6 +280,7 @@ class RespoTool(tk.Tk):
             for d in dicts:
                 self.signalements.append(signalement.Signalement.from_dict(d))
             self.refresh(auto_scroll=False)
+            self.statusbar.set("{} signalements importés depuis '{}'".format(len(self.signalements), filename))
 
     def search(self):
         self.entry_search.focus()
