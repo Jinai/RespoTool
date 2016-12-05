@@ -120,21 +120,25 @@ class Archives():
         for line in text.split(line_sep):
             if line.strip() != '':
                 values = [elem.strip() for elem in line.split(col_sep)]
-                values[4] = [respo.strip() for respo in values[4].split(',')] if values[4] else []
+                if "+" in values[4]:
+                    sep = "+"
+                else:
+                    sep = ","
+                values[4] = [respo.strip() for respo in values[4].split(sep)] if values[4] else []
                 respo = values.pop(4)
                 values.append(respo)
                 s = Signalement(*values)
                 signalements.append(s)
         return signalements
 
-    def get_sigs(self, key, *values, exact=False, func=None, source=None):
+    def filter_sigs(self, key, *values, exact=False, func=None, source=None):
         s = []
         if source is None:
             source = self
         for sig in source:
             for value in values:
                 if func:
-                    if func(sig.__dict__[key], value):
+                    if func(sig, value):
                         s.append(sig)
                         break
                 elif sig.__dict__[key] == value or (not exact and value in sig.__dict__[key]):
@@ -147,3 +151,9 @@ class Archives():
 
     def __iter__(self):
         return iter(self.signalements)
+
+    def __repr__(self):
+        return repr(self.signalements)
+
+    def __str__(self):
+        return "Sigs: {}".format(len(self.signalements))
