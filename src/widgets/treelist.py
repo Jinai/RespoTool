@@ -7,7 +7,7 @@ import tkinter.ttk as ttk
 
 class Treelist(tk.Frame):
     def __init__(self, master, headers, column_widths=None, height=15, alt_colors=None, sort_keys=None, stretch=None,
-                 sortable=True, auto_increment=True, **opts):
+                 sortable=True, auto_increment=True, search_excludes=None, **opts):
         tk.Frame.__init__(self, master, **opts)
         self.master = master
         self.headers = headers
@@ -23,6 +23,7 @@ class Treelist(tk.Frame):
         self.alt_colors = alt_colors if alt_colors else ["white", "grey96"]
         self.stretch = stretch if stretch else [False] * (len(headers) - 2) + [True]  # List of booleans telling which column are stretchable
         self.sortable = sortable  # Allows clicking on headers to sort columns alphabetically
+        self.search_exludes = search_excludes if search_excludes else []  # A list of words to ignore when search() is triggered
 
         # Internal variables
         self._search_key = tk.StringVar()
@@ -123,7 +124,9 @@ class Treelist(tk.Frame):
             self.search()
 
     def search(self, key=None):
-        key = key if key else self._search_key.get()
+        key = key if key is not None else self._search_key.get()
+        if key in self.search_exludes:
+            return
         self.clear(keep_data=True)
         for values in self._data:
             for item in values:
