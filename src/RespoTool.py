@@ -12,7 +12,7 @@ import archives
 import pyperclip
 import sigparser
 import signalement
-from widgets import siglist, modaldialog
+from widgets import siglist, modaldialog, customentries
 from _version import __version__
 
 __author__ = "Jinai"
@@ -84,7 +84,7 @@ class RespoTool(tk.Tk):
         button_export = ttk.Button(self.labelframe_session, text="Exporter", command=self.export_save)
         button_export.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
 
-        # --------------------------------------------- CURRENT RESPO ---------------------------------------------- #
+        # ----------------------------------------- CURRENT RESPO & SEARCH ------------------------------------------ #
 
         self.frame_respo = tk.Frame(self.main_frame)
         label_respo = ttk.Label(self.frame_respo, text="Respomap :")
@@ -92,6 +92,9 @@ class RespoTool(tk.Tk):
         dropdown_respo = ttk.Combobox(self.frame_respo, textvariable=self.current_respo)
         dropdown_respo.pack(side="right")
         dropdown_respo['values'] = self.respomaps['main'] # comptes principaux
+        search_icon = tk.PhotoImage(file="resources/search.gif")
+        self.entry_search = customentries.PlaceholderEntry(self.main_frame, placeholder=" Rechercher", icon=search_icon,
+                                                           width=30)
 
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
@@ -113,19 +116,6 @@ class RespoTool(tk.Tk):
                                         auto_increment=True)
 
         # ------------------------------------------------ ACTIONS ------------------------------------------------- #
-
-        # self.labelframe_stats = stats.Stats(self.main_frame, text="Archives")
-
-        self.labelframe_search = ttk.Labelframe(self.main_frame, text="Rechercher")
-        self.frame_searchbox = tk.Frame(self.labelframe_search, bg='white', bd=1, relief='sunken')
-        self.frame_searchbox.pack(fill='both', expand=True, padx=5, pady=(0, 6))
-        self.entry_search = tk.Entry(self.frame_searchbox, textvariable=self.tree_sig._search_key, width=10, bd=0,
-                                     highlightthickness=0)
-        self.entry_search.pack(fill='x', expand=True, side='left')
-        self.label_search = tk.Label(self.frame_searchbox, background='white', borderwidth=1, highlightthickness=1)
-        self.label_search.pack(side='left')
-        self.label_search.icon = tk.PhotoImage(file="resources/search.gif")
-        self.label_search.configure(image=self.label_search.icon)
 
         self.frame_actions = tk.Frame(self.main_frame)
         self.frame_act1 = tk.Frame(self.frame_actions)
