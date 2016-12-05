@@ -268,17 +268,21 @@ class RespoTool(tk.Tk):
             del self.signalements[:]
             for d in dicts:
                 self.signalements.append(signalement.Signalement.from_dict(d))
-            self.refresh()
+            self.refresh(auto_scroll=False)
 
     def search(self):
         self.entry_search.focus()
         self.entry_search.select_range(0, 'end')
 
     def refresh(self, archives=False):
+    def refresh(self, archives=False, auto_scroll=True):
         self.tree_sig.signalements = self.signalements
         self.tree_sig.refresh()
         if archives:
             self.archives.open()
+        self.tree_sig.search()
+        if auto_scroll:
+            self.tree_sig.scroll_down()
         self.button_playlist.configure(state="enabled")
         self.button_archive.configure(state="enabled")
         self.button_archive_selection.configure(state="enabled")
