@@ -7,7 +7,9 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.messagebox as mbox
 import tkinter.filedialog as fdialog
+import logging
 
+import utils
 import archives
 import pyperclip
 import sigparser
@@ -54,6 +56,8 @@ class RespoTool(tk.Tk):
         # Bindings
         self.bind('<Control-f>', lambda _: self.search())
         self.bind('<Control-q>', lambda _: self.quit())
+        self.current_respo.trace("w", lambda *_: logging.debug("Setting respo={}".format(self.current_respo.get())))
+        self.protocol("WM_DELETE_WINDOW", self.quit)
 
         # Warnings
         if self.warning:
@@ -256,6 +260,7 @@ class RespoTool(tk.Tk):
         else:
             filename = fdialog.asksaveasfilename(initialdir="saves", initialfile='session', defaultextension='.sig')
         if filename:
+            logging.info("Exporting '{}'".format(filename))
             dicts = []
             for i, sig in enumerate(self.signalements):
                 d = sig.ordered_dict()
@@ -273,6 +278,7 @@ class RespoTool(tk.Tk):
             filename = fdialog.askopenfilename(initialdir="saves",
                                                filetypes=(("Sig Files", "*.sig"), ("All Files", "*.*")))
         if filename:
+            logging.info("Importing '{}'".format(filename))
             self.session_path = filename
             with open(filename, "r", encoding="utf-8") as f:
                 dicts = json.load(f)
@@ -287,6 +293,7 @@ class RespoTool(tk.Tk):
         self.entry_search.select_range(0, 'end')
 
     def refresh(self, archives=False, auto_scroll=True):
+        logging.debug("Refreshing {} sigs".format(len(self.signalements)))
         self.tree_sig.signalements = self.signalements
         self.tree_sig.refresh()
         if archives:
@@ -300,14 +307,19 @@ class RespoTool(tk.Tk):
         self.button_sigmdm.configure(state="enabled")
 
     def quit(self):
+        logging.info("Exiting RespoTool\n")
+        logging.shutdown()
         raise SystemExit
 
 
 if __name__ == '__main__':
+    log_level = utils.init_logging("RespoTool", "respotool.log")
+    logging.info("Starting RespoTool v{} with log_level={}".format(__version__, log_level))
+
     msg = ""
     session = "saves/session.sig"
-    arch = "archives/"
+    arch_dir = "archives/"
     arch_pattern = "archives_{0}{0}{0}{0}.txt".format("[0-9]")
-    app = RespoTool(session_path=session, archives_dir=arch, archives_pattern=arch_pattern, auto_import=True,
+    app = RespoTool(session_path=session, archives_dir=arch_dir, archives_pattern=arch_pattern, auto_import=True,
                     warning=False, warning_msg=msg)
     app.mainloop()

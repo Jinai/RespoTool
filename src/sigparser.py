@@ -2,9 +2,11 @@
 # !python3
 
 import re
+import logging
 
 from signalement import Signalement
 
+logger = logging.getLogger(__name__)
 
 def parse(text, allow_duplicates=True, previous_sigs=None, sep="\n"):
     if previous_sigs is None:
@@ -33,5 +35,7 @@ def parse(text, allow_duplicates=True, previous_sigs=None, sep="\n"):
             if ((s in signalements) or (s in previous_sigs)) and (not allow_duplicates):
                 signalements.remove(s)
             signalements.append(s)
+        else:
+            logger.debug("Not a match : '{}'".format(line))
 
     return signalements

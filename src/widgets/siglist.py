@@ -2,6 +2,7 @@
 # !python3
 
 import json
+import logging
 import winsound
 
 import pyperclip
@@ -10,6 +11,8 @@ from widgets.treelist import Treelist
 from widgets.popup import Popup
 from widgets.editstatus import EditStatusDialog
 from signalement import Signalement
+
+logger = logging.getLogger(__name__)
 
 
 class Siglist(Treelist):
@@ -64,6 +67,7 @@ class Siglist(Treelist):
                 values[-1] = [respo.strip() for respo in values[-1].split(",")] if values[-1] else []
                 sig = Signalement(*values[1:])
                 self.signalements.remove(sig)
+                logger.debug("Deleting {}".format(sig))
             index = super().delete()
             self.refresh()
             if self._search_key.get() != '':
