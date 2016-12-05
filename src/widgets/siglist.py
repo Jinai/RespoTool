@@ -33,7 +33,7 @@ class Siglist(Treelist):
         self.tree.bind('<Double-1>', self.on_doubleclick)
         self.tree.bind('<Return>', self.on_enter)
         self.tree.bind('<Control-c>', self.copy)
-        self.tree.bind('<space>', self.search_archives)
+        self.tree.bind('<space>', self.on_space)
         self.tree.bind('<FocusOut>', self.remove_popup)
         self.tree.bind('<<TreeviewSelect>>', self.remove_popup)
         self.update_tags()
@@ -87,7 +87,7 @@ class Siglist(Treelist):
             super().sort(col, descending)
 
     def search(self, key=None):
-        key = key if key else self._search_key.get()
+        key = key.strip() if key is not None else self._search_key.get().strip()
         if key == '':
             self.refresh()
         else:
@@ -137,7 +137,7 @@ class Siglist(Treelist):
                 new_values[-1] = ", ".join(new_values[-1])
                 self._data[data_index] = new_values
                 self.signalements[sig_index] = sig
-                self.search()
+                self.search('')  # Todo : this shouldn't reset the search
                 self.focus_index(item_index)
             else:
                 self.focus_item(item)
@@ -159,24 +159,24 @@ class Siglist(Treelist):
             except ValueError:
                 pass
 
-    def search_archives(self, event):
+    def on_space(self, event):
         selection = self.tree.selection()
         if len(selection) == 1:
             item = selection[0]
             code = self.tree.item(item)['values'][3]
-            match_archives = self.archives.get_sigs("code", code)
-            match_session = self.archives.get_sigs("code", code, source=self.signalements)
+            match_archives = self.archives.filter_sigs("code", code)
+            match_session = self.archives.filter_sigs("code", code, source=self.signalements)
             if len(match_archives) != 0 or len(match_session) > 1:
                 self.remove_popup()
                 text = ""
                 if len(match_archives) != 0:
-                    text += "Cette map apparait dans les archives :"
+                    text += self.archives_templates["archives_msg"]
                     text += "\n    ".join(
                         [''] + [self.archives_templates["archives"].format(**s.__dict__) for s in match_archives])
                 if len(match_session) > 1:
                     if text:
                         text += "\n"
-                    text += "Cette map apparait dans la session courante :"
+                    text += self.archives_templates["session_msg"]
                     text += "\n    ".join(
                         [''] + [self.archives_templates["session"].format(**s.__dict__) for s in match_session])
                 x, y = self.tree.bbox(item, "code")[:2]
