@@ -142,6 +142,7 @@ class RespoTool(tk.Tk):
         self.labelframe_append.grid(row=0, column=1, sticky="nsew", padx=10)
         self.labelframe_session.grid(row=0, column=2, sticky="nsew")
         self.frame_respo.grid(row=1, column=0, sticky="nsw", pady=10)
+        self.entry_search.grid(row=1, column=2, sticky="se", padx=(0, 17), pady=10)
         self.tree_sig.grid(row=2, column=0, columnspan=3, sticky="nsew", pady=(0, 10))
         # self.labelframe_stats.grid(row=2, column=0, sticky="nw")
         self.labelframe_search.grid(row=3, column=0, sticky="new")
