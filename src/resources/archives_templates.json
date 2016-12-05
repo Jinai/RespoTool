@@ -1,5 +1,7 @@
 {
-    "archives": "[{date}] [{auteur}] {desc}",
-    "session": "[{date}] [{auteur}] {desc}",
+    "archives": "[{date}] [{auteur}] {desc} -> {statut}",
+    "session": "[{date}] [{auteur}] {desc} -> {statut}",
+    "archives_msg": "Cette map apparait dans les archives :",
+    "session_msg": "Cette map apparait dans la session courante :",
     "__comment": "Les différents accesseurs : {date} {auteur} {code} {flag} {desc} {statut} {respo}"
 }
