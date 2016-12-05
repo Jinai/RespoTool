@@ -19,11 +19,13 @@ __author__ = "Jinai"
 
 
 class RespoTool(tk.Tk):
-    def __init__(self, master=None, session_path=None, auto_import=False, warning=True, warning_msg=""):
+    def __init__(self, master=None, session_path=None, archives_dir=None, archives_pattern=None, auto_import=False,
+                 warning=True, warning_msg=""):
         # Init var
         tk.Tk.__init__(self, master)
         self.master = master
         self.session_path = session_path
+        self.archives_dir = archives_dir
         self.auto_import = auto_import
         self.warning = warning
         self.warning_msg = warning_msg
@@ -31,7 +33,7 @@ class RespoTool(tk.Tk):
         with open("resources/respomaps.json", 'r', encoding='utf-8') as f:
             self.respomaps = json.load(f)
         self.signalements = []
-        self.archives = archives.Archives(archives.ARCHIVES_PATH)
+        self.archives = archives.Archives(archives_dir, archives_pattern)
 
         # Rendering
         self._setup_widgets()
@@ -46,7 +48,6 @@ class RespoTool(tk.Tk):
 
         # Imports
         if self.auto_import:
-            self.archives.open()
             if self.session_path and os.path.exists(self.session_path):
                 self.import_save(self.session_path)
 
@@ -294,5 +295,9 @@ class RespoTool(tk.Tk):
 
 if __name__ == '__main__':
     msg = ""
-    app = RespoTool(session_path="saves/session.sig", auto_import=True, warning=False, warning_msg=msg)
+    session = "saves/session.sig"
+    arch = "archives/"
+    arch_pattern = "archives_{0}{0}{0}{0}.txt".format("[0-9]")
+    app = RespoTool(session_path=session, archives_dir=arch, archives_pattern=arch_pattern, auto_import=True,
+                    warning=False, warning_msg=msg)
     app.mainloop()
