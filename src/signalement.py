@@ -47,24 +47,14 @@ class Signalement():
         return Signalement(d['date'], d['auteur'], d['code'], d['flag'], d['desc'], d['statut'], d['respo'])
 
     def __str__(self):
-        return str(self.ordered_dict())
+        return str(self.fields())
+
+    def __repr__(self):
+        return str(self)
 
     def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+        return self.date == other.date and self.auteur == other.auteur and self.code == other.code and \
+               self.flag == other.flag and self.desc == other.desc
 
     def __ne__(self, other):
         return not self == other
-
-
-if __name__ == '__main__':
-    import json
-    s = Signalement("5/11", "Jinai", "@123456789", "Rally", "faille inf", "modifié", ["Jinai", "Krakas"])
-    print("__str__    : " + str(s))
-    print("fields     : " + str(s.fields()))
-    print("datetime   : " + str(s.datetime()))
-    print("archive    : " + s.archive())
-    print("sigmdm     : " + s.sigmdm())
-    print("playlister : " + s.playlister())
-    print()
-    print("from dict  : " + Signalement.from_dict(json.loads(json.dumps(s.__dict__))).archive())
-
