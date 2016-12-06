@@ -56,6 +56,7 @@ class RespoTool(tk.Tk):
         # Bindings
         self.bind('<Control-f>', lambda _: self.search())
         self.bind('<Control-q>', lambda _: self.quit())
+        self.main_frame.bind('<Button-1>', lambda _: self.main_frame.focus_set())
         self.current_respo.trace("w", lambda *_: logging.debug("Setting respo={}".format(self.current_respo.get())))
         self.protocol("WM_DELETE_WINDOW", self.quit)
 
