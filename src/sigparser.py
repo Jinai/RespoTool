@@ -4,10 +4,13 @@
 import re
 import logging
 
+from utils import log_args
 from signalement import Signalement
 
 logger = logging.getLogger(__name__)
 
+
+@log_args(logger=logger)
 def parse(text, allow_duplicates=True, previous_sigs=None, sep="\n"):
     if previous_sigs is None:
         previous_sigs = []

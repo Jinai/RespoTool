@@ -3,6 +3,7 @@
 
 import os
 import sys
+import inspect
 import logging
 import argparse
 from logging.handlers import TimedRotatingFileHandler
@@ -55,3 +56,38 @@ def log_level_string_to_int(log_level_string):
     assert isinstance(log_level_int, int)
 
     return log_level_int
+
+
+def log_args(logger=None):
+    def wrap(func):
+        # Unpack function's arg count, arg names, arg defaults
+        code = func.__code__
+        argcount = code.co_argcount
+        argnames = code.co_varnames[:argcount]
+        defaults = func.__defaults__ or list()
+        argdefs = dict(zip(argnames[-len(defaults):], defaults))
+
+        def wrapped(*v, **k):
+            # Collect function arguments by chaining together positional,
+            # defaulted, extra positional and keyword arguments.
+            positional = [format_arg_value((arg, val)) for arg, val in zip(argnames, v) if arg != "self"]
+            defaulted = [format_arg_value((a, argdefs[a])) for a in argnames[len(v):] if a not in k]
+            nameless = [repr(arg) for arg in v[argcount:]]
+            keyword = [format_arg_value(item) for item in k.items()]
+            args = positional + defaulted + nameless + keyword
+            loggr = logger
+            if loggr is None:
+                loggr = logging.getLogger()
+            loggr.debug("{}({}) called by {}.{}()".format(func.__name__, ", ".join(args),
+                                                          inspect.stack()[1][0].f_locals["self"].__class__.__name__,
+                                                          inspect.stack()[1][3]))
+            return func(*v, **k)
+
+        return wrapped
+
+    return wrap
+
+
+def format_arg_value(arg_val):
+    arg, val = arg_val
+    return "{}={!r}".format(arg, val)
