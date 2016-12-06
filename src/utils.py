@@ -91,3 +91,10 @@ def log_args(logger=None):
 def format_arg_value(arg_val):
     arg, val = arg_val
     return "{}={!r}".format(arg, val)
+
+
+def validate_indexes(indexes):
+    for pos, idx in enumerate(indexes):
+        if pos != idx:
+            return False
+    return len(indexes)

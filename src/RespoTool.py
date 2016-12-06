@@ -219,7 +219,7 @@ class RespoTool(tk.Tk):
     def archive_selection(self):
         indexes = self.tree_sig.selection_indexes()
         archived = []
-        if self.check_valid_selection(indexes):
+        if utils.validate_indexes(indexes):
             msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nIls seront retirés de la liste une fois fait !"
             if mbox.askokcancel("Archiver {} sig".format(len(indexes)), msg, icon="warning", parent=self):
                 for i in indexes:
@@ -240,12 +240,6 @@ class RespoTool(tk.Tk):
             msg = ("Votre sélection doit être d'un seul bloc (pas de trous) et doit commencer par le premier " +
                    "signalement afin de conserver l'ordre des archives")
             mbox.showwarning("Mauvais archivage", msg)
-
-    def check_valid_selection(self, indexes):
-        for pos, idx in enumerate(indexes):
-            if pos != idx:
-                return False
-        return len(indexes)
 
     def sigmdm(self):
         res = ""
