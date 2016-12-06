@@ -3,10 +3,12 @@
 
 import os
 import glob
+import logging
 import datetime
 
 from signalement import Signalement
 
+logger = logging.getLogger(__name__)
 ARCHIVES_DIR = "archives/"
 
 
@@ -26,17 +28,18 @@ class Archives():
         self.raw_text = ''
         opened = False
         for file in self.files:
+            logger.info("Reading \"{}\"".format(file))
             try:
                 f = open(file, 'r', encoding='utf-8')
             except IOError as e:
-                print(e)
+                logger.error(e)
             else:
                 try:
                     self.raw_text += ''.join(f.readlines()[2:])
                     Archives.read_counter += 1
                     opened = True
                 except (IOError, IndexError) as e:
-                    print(e)
+                    logger.error(e)
                 finally:
                     f.close()
         self.signalements = Archives.parse(self.raw_text)
@@ -49,17 +52,18 @@ class Archives():
             self.new_archive()  # New year => new file
 
         archived = False
+        logger.info("Writing {} to '{}'".format(sig.fields(), self.current_file()))
         try:
             f = open(self.current_file(), 'a', encoding='utf-8')
-        except IOError:
-            pass
+        except IOError as e:
+            logger.error(e)
         else:
             try:
                 f.write(sig.archive() + "\n")
                 Archives.write_counter += 1
                 archived = True
-            except IOError:
-                pass
+            except IOError as e:
+                logger.error(e)
             finally:
                 f.close()
         return archived
@@ -74,7 +78,7 @@ class Archives():
                 else:
                     filename = os.path.join(self.dir_path, "archives_{}.txt".format(datetime.datetime.now().year))
             except ValueError as e:
-                print(e)
+                logger.error(e)
                 filename = os.path.join(self.dir_path, "archives_tmp.txt")
         self.files.append(filename)
         return self.write_header(filename)
@@ -87,17 +91,18 @@ class Archives():
                  "------+--------------+----------------+-------------+--------------------------+------------" + \
                  "------------------------------------------------------------------------------------------+-" + \
                  "------------------------------------------------------------"
+        logger.info("Creating archive file \"{}\"".format(path))
         try:
             f = open(path, 'w', encoding='utf-8')
-        except IOError:
-            pass
+        except IOError as e:
+            logger.error(e)
         else:
             try:
                 f.write(header + "\n")
                 Archives.write_counter += 1
                 created = True
             except IOError as e:
-                print(e)
+                logger.error(e)
             finally:
                 f.close()
         return created
