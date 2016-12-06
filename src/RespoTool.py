@@ -45,8 +45,8 @@ class RespoTool(tk.Tk):
         try:
             self.tk.call('encoding', 'system', 'utf-8')
             self.iconbitmap("resources/respotool.ico")
-        except:
-            pass
+        except Exception as e:
+            logging.error(e)
 
         # Imports
         if self.auto_import:
