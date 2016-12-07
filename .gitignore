@@ -1,10 +1,11 @@
 .idea/
 bin/
+cemetery/
 debug/
 icon/
 stats/
 tcl/
 utils/
-*.sig
+src/archives/
+src/saves/
 *.pyc
-archives.txt
