@@ -52,7 +52,7 @@ class Siglist(Treelist):
         with open("resources/archives_templates.json", 'r', encoding='utf-8') as f:
             self.archives_templates = json.load(f)
 
-    def insert(self, values, update=True, tags=()):
+    def insert(self, values, update=True, tags=None):
         tags = []
         for key in self.tags:
             if key in values[-2]:
