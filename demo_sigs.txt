@@ -1,15 +1,15 @@
-[15/2] JoueurLambda a signalé 1234567890123 (Rally) : passage random
-[15/2] JoueurLambda a signalé 1234567891123 (Rally) : record inf
-[15/2] JoueurLambda a signalé 1234567892123 (Défilante) : départ trop lent
-[15/2] JoueurLambda a signalé 1234567893123 (Normal) : mono
-[15/2] JoueurLambda a signalé 1234567894123 (Rally) : à déclasser
-[15/2] JoueurLambda a signalé 1234567895123 (MutualShout) : 2e rattrapage trop dur 
-[15/2] JoueurLambda a signalé 1234567896123 (Fight) : bof bof
-[15/2] JoueurLambda a signalé 1234567897123 (Normal) : map injuriante
-[15/2] JoueurLambda a signalé 1234567898123 (No guide) : plutôt rally
-[15/2] JoueurLambda a signalé 1234567899123 (Rally) : à classer en ng
-[15/2] JoueurLambda a signalé 1234567801123 (Défilante) : 1:35 random
-[15/2] JoueurLambda a signalé 1234567802123 (Fight) : mdmdmdmdm
-[15/2] JoueurLambda a signalé 1234567803123 (Normal) : mono
-[15/2] JoueurLambda a signalé 1234567804123 (Normal) : mono
-[15/2] JoueurLambda a signalé 1234567805123 (Rally) : faille aff tout
+[14/01] JoueurLambda a signalé 1234567890123 (Rally) : passage random
+[14/01] JoueurLambda a signalé 1234567890124 (Rally) : record inf
+[14/01] JoueurLambda a signalé 1234567890125 (Défilante) : départ trop lent
+[14/01] JoueurLambda a signalé 1234567890126 (Normal) : mono
+[14/01] JoueurLambda a signalé 1234567890127 (Rally) : à déclasser
+[14/01] JoueurLambda a signalé 1234567890128 (MutualShout) : 2e rattrapage trop dur 
+[14/01] JoueurLambda a signalé 1234567890129 (Fight) : bof bof
+[14/01] JoueurLambda a signalé 1234567890130 (Normal) : map injuriante
+[14/01] JoueurLambda a signalé 1234567890131 (No guide) : plutôt rally
+[14/01] JoueurLambda a signalé 1234567890132 (Rally) : à classer en ng
+[14/01] JoueurLambda a signalé 1234567890133 (Défilante) : 1:35 random
+[14/01] JoueurLambda a signalé 1234567890134 (Fight) : mdmdmdmdm
+[14/01] JoueurLambda a signalé 1234567890135 (Normal) : mono
+[14/01] JoueurLambda a signalé 1234567890135 (Normal) : Monotrait
+[14/01] JoueurLambda a signalé 1234567890137 (Rally) : faille aff tout
