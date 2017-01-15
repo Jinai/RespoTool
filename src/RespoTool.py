@@ -157,6 +157,11 @@ class RespoTool(tk.Tk):
 
         self.main_frame.grid_rowconfigure(2, weight=1)
         self.main_frame.grid_columnconfigure((0, 1, 2), weight=1)
+        # Changes the widget stack order so that pressing Tab after setting the Respomap brings the focus directly to
+        # the table instead of giving the focus to the search bar. Not doing so would clear the selected items in the
+        # table upon entering the search bar, which is unwanted. This is particularly useful when one forgets to set
+        # the Respomap value and is prompted with it before being able to edit a status.
+        self.entry_search.lower()
 
     def new_file(self):
         filename = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
