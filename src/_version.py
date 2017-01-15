@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 # !python3
 
-__version__ = "1.3"
-__date__ = "22/09/2016"
+__version__ = "1.4"
+__date__ = "08/12/2016"
