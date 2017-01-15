@@ -162,6 +162,8 @@ class RespoTool(tk.Tk):
         # table upon entering the search bar, which is unwanted. This is particularly useful when one forgets to set
         # the Respomap value and is prompted with it before being able to edit a status.
         self.entry_search.lower()
+        # Needed to rewrite the placeholder because we hooked an empty StringVar that erased it
+        self.entry_search.focus_out(None)
 
     def new_file(self):
         filename = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
