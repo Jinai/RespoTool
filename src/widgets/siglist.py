@@ -45,8 +45,9 @@ class Siglist(Treelist):
     def update_tags(self):
         with open("resources/tags.json", 'r', encoding='utf-8') as f:
             self.tags = json.load(f)
-        for key in self.tags:
-            self.tree.tag_configure(key, background=self.tags[key])
+        for index in self.tags:
+            for keyword in self.tags[index]:
+                self.tree.tag_configure(keyword, background=self.tags[index][keyword])
 
     def update_templates(self):
         with open("resources/archives_templates.json", 'r', encoding='utf-8') as f:
@@ -54,9 +55,14 @@ class Siglist(Treelist):
 
     def insert(self, values, update=True, tags=None):
         tags = []
-        for key in self.tags:
-            if key in values[-2]:
-                tags.append(key)
+        try:
+            for index in sorted(self.tags):
+                for keyword in self.tags[index]:
+                    if keyword in values[-2]:
+                        tags.append(keyword)
+                        raise StopIteration
+        except StopIteration:
+            pass
         super().insert(values, update, tags)
 
     def delete(self):
@@ -142,7 +148,7 @@ class Siglist(Treelist):
                 new_values[-1] = ", ".join(new_values[-1])
                 self._data[data_index] = new_values
                 self.signalements[sig_index] = sig
-                self.search('')  # Todo : this shouldn't reset the search
+                self.search()  # Todo : looks like it works but might have side effects
                 self.focus_index(item_index)
             else:
                 self.focus_item(item)
