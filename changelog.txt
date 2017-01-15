@@ -1,3 +1,16 @@
+v1.4 [08/12/2016]
+=================
+	* Les archives sont maintenant séparées par années. Cela ne change rien du point de
+	  de vue de l'utilisateur, tout est géré par le programme
+	* Ajout d'une barre de statut indiquant le résultat des diverses actions
+	  réalisables dans le programme
+	* Déplacement de la barre de recherche et léger redesign de celle-ci
+	* Amélioration du parser de /sigmdm, il ne devrait plus y avoir de bugs à
+	  l'importation depuis le presse-papiers
+	* Scroll automatique en bas de liste quand on insère de nouveaux signalements
+	* Des logs sont maintenant enregistrés dans C:\Users\{user}\Documents\RespoTool\
+
+
 v1.3 [22/09/2016]
 =================
 	* Appuyer sur Espace lorsqu'un signalement est sélectionné affiche sous forme
