@@ -6,7 +6,7 @@
         "code": "@1234567890123",
         "flag": "Rally",
         "desc": "passage random",
-        "statut": "modifié // trait déplacé d'1 pixel",
+        "statut": "modifié // à tester au cas où",
         "respo": [
             "SuperRespo"
         ]
