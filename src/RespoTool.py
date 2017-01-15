@@ -56,7 +56,7 @@ class RespoTool(tk.Tk):
         # Bindings
         self.bind('<Control-f>', lambda _: self.search())
         self.bind('<Control-q>', lambda _: self.quit())
-        self.main_frame.bind('<Button-1>', lambda _: self.main_frame.focus_set())
+        self.main_frame.bind('<Button-1>', lambda _: self.clear_focus())
         self.current_respo.trace("w", lambda *_: logging.debug("Setting respo={}".format(self.current_respo.get())))
         self.protocol("WM_DELETE_WINDOW", self.quit)
 
@@ -300,6 +300,11 @@ class RespoTool(tk.Tk):
         self.button_archive.configure(state="enabled")
         self.button_archive_selection.configure(state="enabled")
         self.button_sigmdm.configure(state="enabled")
+
+    def clear_focus(self):
+        for item in self.tree_sig.tree.selection():
+            self.tree_sig.tree.selection_remove(item)
+        self.main_frame.focus_force()
 
     def quit(self):
         logging.info("Exiting RespoTool\n")
