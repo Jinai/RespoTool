@@ -20,7 +20,8 @@ def parse(text, allow_duplicates=True, previous_sigs=None, sep="\n"):
         return signalements
 
     for line in text.split(sep):
-        if line.strip() == '':
+        line = line.rstrip()
+        if line == '':
             continue
 
         matches = {
