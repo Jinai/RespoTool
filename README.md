@@ -1,8 +1,8 @@
 RespoTool
 =========
-Un outil de gestion et d'archivage de signalements de cartes sur [Aaaah !](http://www.extinction.fr/minijeux/)
+Un outil de gestion et d'archivage des signalements de cartes sur [Aaaah !](http://www.extinction.fr/minijeux/)
   
-![Demo](http://i.imgur.com/PW8No6S.png)
+![Demo](https://i.imgur.com/D1kg6YH.png)
 
 
 Utilisation
@@ -30,17 +30,25 @@ Importer / Exporter session
 
 Actions
 -------
-* __Archiver__ : 
-  Vide la liste des signalements pour les stocker à la fin d'un joli tableau dans archives/archives.txt. À ne
+* __Respomap__ :
+  Menu déroulant servant d'identifiant. Le pseudo choisi dans ce menu sera repris dans la colonne Respomap (il
+  s'ajoutera aux autres s'il y en a déjà).
+
+* __Rechercher__ :
+  Barre de recherche. Entrez n'importe quel mot et s'il apparait quelque part dans un signalement (code, auteur,
+  description, etc.), celui-ci apparaîtra. Accessible via __Ctrl + F__.
+
+* __Archiver__ :
+  Vide la liste des signalements pour les stocker à la fin d'un joli tableau dans archives/archives_année.txt. À ne
   faire qu'une fois les signalements entièrement traités.  
-  __Note__ : Penser à exporter la liste ainsi vidée après archivage pour que le prochain respo qui importe la
+  __Note__ : Pensez à exporter la liste ainsi vidée après archivage pour que le prochain respo qui importe la
   session ait une liste clean et ainsi lui éviter du travail inutile.
 
-* __Archiver sélection__ : 
+* __Archiver sélection__ :
   Archive uniquement les signalements sélectionnés. La sélection doit obligatoirement être d'un seul bloc (pas
   de trous) et doit commencer par le premier signalement afin de conserver l'ordre des archives.
 
-* __Playlist__ : 
+* __Playlist__ :
   Génère un fichier playlist.txt contenant les maps signalées, à charger via /playlist (décocher aléatoire).
   La playlist reprend aussi les infos de chaque colonne (date, auteur, description, etc.).  
   __Note__ : Cette fonction est obsolète, il est préférable d'utiliser les raccourcis clavier pour load
@@ -52,17 +60,24 @@ Actions
 
 Raccourcis pratiques
 ====================
+* __Ctrl + F__ :
+  Permet d'avoir le focus directement sur la barre de recherche et sélectionne le texte déjà présent.
+
 * __Double-clic sur une ligne__ : 
   Copie dans le presse-papiers le contenu de la cellule présente sous le curseur.
   Permet par exemple de copier la description d'un signalement.
 
-* __Sélectionner une ligne -> Ctrl + C__ :
+* __Sélectionner une ligne → Ctrl + C__ :
   Copie "/load @code" dans le presse-papiers où @code est le code correspondant au signalement
 
-* __Sélectionner une ligne -> Entrée__ :
+* __Sélectionner une ligne → Entrée__ :
   Ouvre une nouvelle fenêtre permettant d'éditer le statut du signalement. __Entrée__ pour valider,
   __Échap__ pour annuler. Voir statuts.txt pour la liste des statuts recommandés.
 
-* __Sélectionner une ligne -> Retour / Suppr__ :
+* __Sélectionner une ligne → Retour / Suppr__ :
   Supprime le signalement. Marche aussi avec une multi-sélection (Ctrl+clic et/ou Shift+clic pour sélectionner
-  plusieurs signalements à la fois).
+  plusieurs signalements à la fois). Normalement jamais utilisé car tous les signalements doivent être considérés.
+
+* __Sélectionner une ligne → Espace__ :
+  Affiche sous forme d'un popup les signalements des archives ou de la session courante qui correspondent à la même
+  map. Pratique pour retracer l'historique d'une map et voir ce qui a déjà été réalisé dessus.
