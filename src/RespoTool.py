@@ -173,36 +173,40 @@ class RespoTool(tk.Tk):
         if filename:
             with open(filename, "r", encoding="utf-8") as f:
                 self.signalements = sigparser.parse(f.read())
-            self.refresh()
-            self.statusbar.set(
-                "Nouvelle session depuis '{}', {} signalements importés".format(filename, len(self.signalements))
-            )
+            if self.signalements:
+                self.refresh()
+                self.statusbar.set(
+                    "Nouvelle session depuis '{}', {} signalements importés".format(filename, len(self.signalements))
+                )
 
     def new_clipboard(self):
         self.signalements = sigparser.parse(pyperclip.paste())
-        self.refresh()
-        self.statusbar.set(
-            "Nouvelle session depuis le presse-papiers, {} signalements importés".format(len(self.signalements))
-        )
+        if self.signalements:
+            self.refresh()
+            self.statusbar.set(
+                "Nouvelle session depuis le presse-papiers, {} signalements importés".format(len(self.signalements))
+            )
 
     def append_file(self):
         filename = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
         if filename:
             with open(filename, "r", encoding="utf-8") as f:
                 signalements = sigparser.parse(f.read())
-            self.signalements.extend(signalements)
-            self.refresh()
-            self.statusbar.set(
-                "{} signalements ajoutés à la session courante depuis '{}'".format(len(signalements), filename)
-            )
+            if signalements:
+                self.signalements.extend(signalements)
+                self.refresh()
+                self.statusbar.set(
+                    "{} signalements ajoutés à la session courante depuis '{}'".format(len(signalements), filename)
+                )
 
     def append_clipboard(self):
         signalements = sigparser.parse(pyperclip.paste())
-        self.signalements.extend(signalements)
-        self.refresh()
-        self.statusbar.set(
-            "{} signalements ajoutés à la session courante depuis le presse-papiers".format(len(signalements))
-        )
+        if signalements:
+            self.signalements.extend(signalements)
+            self.refresh()
+            self.statusbar.set(
+                "{} signalements ajoutés à la session courante depuis le presse-papiers".format(len(signalements))
+            )
 
     def playlist(self):
         path = "playlist.txt"
