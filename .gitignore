@@ -1,7 +1,9 @@
 .idea/
 bin/
+build/
 cemetery/
 debug/
+dist/
 icon/
 stats/
 tcl/
