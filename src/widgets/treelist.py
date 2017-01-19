@@ -7,7 +7,7 @@ import tkinter.ttk as ttk
 
 class Treelist(tk.Frame):
     def __init__(self, master, headers, column_widths=None, height=15, alt_colors=None, sort_keys=None, stretch=None,
-                 sortable=True, auto_increment=True, search_excludes=None, **opts):
+                 sortable=True, auto_increment=True, search_excludes=None, match_template=None, **opts):
         tk.Frame.__init__(self, master, **opts)
         self.master = master
         self.headers = headers
@@ -24,10 +24,12 @@ class Treelist(tk.Frame):
         self.stretch = stretch if stretch else [False] * (len(headers) - 2) + [True]  # List of booleans telling which column are stretchable
         self.sortable = sortable  # Allows clicking on headers to sort columns alphabetically
         self.search_exludes = search_excludes if search_excludes else []  # A list of words to ignore when search() is triggered
+        self.match_template = match_template if match_template else "{}/{}"  # A formatted string that can be used to display the number of matches yielded by a search query
 
         # Internal variables
-        self._search_key = tk.StringVar()
-        self._search_key.trace("w", lambda *x: self.search())
+        self._search_key = tk.StringVar()  # Contains the search query
+        self._search_key.trace("w", lambda *x: self.search())  # Everytime the query changes it triggers search()
+        self._matches_label = tk.StringVar()  # Contains the number of matches (formatted) yielded by the search query
         self._data = []  # Contains inserted values
         self._parity_check = 0  # For alt colors, incremented every insertion and resetted when the tree is cleared
 
@@ -133,11 +135,14 @@ class Treelist(tk.Frame):
         if key in self.search_exludes:
             return
         self.clear(keep_data=True)
+        matches = 0
         for values in self._data:
             for item in values:
                 if key.lower() in str(item).lower():
                     self.insert(values, update=False)
+                    matches += 1
                     break
+        self._matches_label.set(self.match_template.format(matches, len(self._data)))
 
     def select_all(self):
         self.tree.selection_set(self.tree.get_children())

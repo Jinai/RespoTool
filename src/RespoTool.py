@@ -103,9 +103,14 @@ class RespoTool(tk.Tk):
         self.dropdown_respo.pack(side="right")
         self.dropdown_respo['values'] = self.respomaps['main']  # comptes principaux
 
+        self.frame_search = tk.Frame(self.main_frame)
         search_icon = tk.PhotoImage(file="resources/search.gif")
-        self.entry_search = customentries.PlaceholderEntry(self.main_frame, placeholder=" Rechercher", icon=search_icon,
+        self.entry_search = customentries.PlaceholderEntry(self.frame_search, placeholder=" Rechercher",
+                                                           icon=search_icon,
                                                            width=30)
+        self.entry_search.pack(side="right")
+        self.label_matches = ttk.Label(self.frame_search, foreground="grey40")
+        self.label_matches.pack(side="right", padx=(0, 5))
 
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
@@ -124,8 +129,9 @@ class RespoTool(tk.Tk):
         stretch = [False, False, False, False, False, True, True, True]
         self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.current_respo, self.archives, headers,
                                         column_widths, sort_keys=sort_keys, stretch=stretch, sortable=False,
-                                        auto_increment=True, search_excludes=["Rechercher"])
+                                        auto_increment=True, search_excludes=["Rechercher"], match_template="{} sur {}")
         self.entry_search.entry.configure(textvariable=self.tree_sig._search_key)
+        self.label_matches.configure(textvariable=self.tree_sig._matches_label)
 
         # ------------------------------------------------ ACTIONS ------------------------------------------------- #
 
@@ -154,7 +160,7 @@ class RespoTool(tk.Tk):
         self.labelframe_append.grid(row=0, column=1, sticky="nsew", padx=5)
         self.labelframe_session.grid(row=0, column=2, sticky="nsew", padx=(5, 0))
         self.frame_respo.grid(row=1, column=0, sticky="w", pady=10)
-        self.entry_search.grid(row=1, column=2, sticky="e", padx=(0, 17), pady=10)
+        self.frame_search.grid(row=1, column=2, sticky="e", padx=(0, 17), pady=10)
         self.tree_sig.grid(row=2, column=0, columnspan=3, sticky="nsew", pady=(0, 10))
         self.frame_actions.grid(row=3, column=1, sticky="nsew")
 

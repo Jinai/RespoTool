@@ -123,7 +123,7 @@ class Siglist(Treelist):
                 winsound.PlaySound('SystemHand', winsound.SND_ASYNC)
                 x, y = self.master.winfo_rootx(), self.master.winfo_rooty()
                 Popup("<- Qui es-tu ? ^_^", x, y, offset=(220, 61), delay=50, txt_color='white', bg_color='#111111')
-                self.master.master.dropdown_respo.event_generate("<Button-1>")  # Hacky access the combobox of the main app
+                self.master.master.dropdown_respo.event_generate("<Button-1>")  # Hacky access to the combobox of the main app
                 return
             item = select[0]
             item_index = self.tree.get_children().index(item)
@@ -211,3 +211,4 @@ class Siglist(Treelist):
         self.populate()
         self.update_tags()
         self.update_templates()
+        self._matches_label.set('')
