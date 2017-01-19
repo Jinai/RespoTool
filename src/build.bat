@@ -1,2 +1,1 @@
-pyinstaller --specpath=../ --distpath=../dist/ --workpath=../build/ --clean --onefile --windowed --icon=resources/respotool.ico --log-level=WARN  RespoTool.py 
-PAUSE
+pyinstaller --distpath=../dist/ --workpath=../build/ --clean --log-level=WARN  RespoTool.spec
