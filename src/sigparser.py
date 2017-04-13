@@ -20,7 +20,7 @@ def parse(text, allow_duplicates=True, previous_sigs=None, sep="\n"):
         return signalements
 
     for line in text.split(sep):
-        line = line.rstrip()
+        line = line.rstrip('\r\n')
         if line == '':
             continue
 
@@ -39,6 +39,7 @@ def parse(text, allow_duplicates=True, previous_sigs=None, sep="\n"):
             if ((s in signalements) or (s in previous_sigs)) and (not allow_duplicates):
                 signalements.remove(s)
             signalements.append(s)
+            logger.debug("Parsed sig : {}".format(s))
         else:
             logger.debug("Not a match : '{}'".format(line))
 
