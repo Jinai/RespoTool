@@ -32,8 +32,10 @@ class Siglist(Treelist):
         }
         self._entry_edit = None
         self.archives = archives
-        self.last_popup = None
+        self.last_popup_space = None
+        self.last_popup_rightclick = None
         self.tree.bind('<Double-1>', self.on_doubleclick)
+        self.tree.bind('<Button-3>', self.on_rightclick)
         self.tree.bind('<Return>', self.on_enter)
         self.tree.bind('<Control-c>', self.copy)
         self.tree.bind('<space>', self.on_space)
@@ -115,6 +117,17 @@ class Siglist(Treelist):
             msg = value if len(value) <= 20 else value[:20] + "..."
             Popup('"{}" copié dans le presse-papiers'.format(msg), x, y, delay=50, txt_color="white",
                   bg_color="#111111")
+    def on_rightclick(self, event):
+        if self.tree.identify_region(event.x, event.y) == "cell":
+            item = self.tree.identify("item", event.x, event.y)
+            column = int(self.tree.identify("column", event.x, event.y)[1:]) - 1
+            value = str(self.tree.item(item)['values'][column])
+            x, y = self.tree.bbox(item, self.headers[column])[:2]
+            x = x + self.winfo_rootx()
+            y = y + self.winfo_rooty() - 2
+            self.remove_popup()
+            self.last_popup_rightclick = Popup(value, x, y, persistent=True, txt_color="black",
+                                               bg_color="white", border_color="#999999", border_width=1)
 
     def on_enter(self, event):
         select = self.tree.selection()
@@ -193,12 +206,13 @@ class Siglist(Treelist):
                 x, y = self.tree.bbox(item, "code")[:2]
                 x = x + self.winfo_rootx()
                 y = y + self.winfo_rooty() + 20
-                self.last_popup = Popup(text, x, y, delay=50, offset=(0, 0), persistent=True, max_alpha=0.90,
-                                        txt_color="white", bg_color="#111111")
+                self.last_popup_space = Popup(text, x, y, persistent=True, max_alpha=0.90)
 
     def remove_popup(self, *args):
-        if self.last_popup:
-            self.last_popup.destroy()
+        if self.last_popup_space:
+            self.last_popup_space.destroy()
+        if self.last_popup_rightclick:
+            self.last_popup_rightclick.destroy()
 
     def populate(self):
         for i, sig in enumerate(self.signalements):
