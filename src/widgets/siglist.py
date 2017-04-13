@@ -115,8 +115,8 @@ class Siglist(Treelist):
             # Popup
             x, y = self.master.winfo_pointerx(), self.master.winfo_pointery()
             msg = value if len(value) <= 20 else value[:20] + "..."
-            Popup('"{}" copié dans le presse-papiers'.format(msg), x, y, delay=50, txt_color="white",
-                  bg_color="#111111")
+            Popup('"{}" copié dans le presse-papiers'.format(msg), x, y, offset=(10, -20))
+
     def on_rightclick(self, event):
         if self.tree.identify_region(event.x, event.y) == "cell":
             item = self.tree.identify("item", event.x, event.y)
@@ -135,8 +135,9 @@ class Siglist(Treelist):
             if self.respomap.get() == '':
                 winsound.PlaySound('SystemHand', winsound.SND_ASYNC)
                 x, y = self.master.winfo_rootx(), self.master.winfo_rooty()
-                Popup("<- Qui es-tu ? ^_^", x, y, offset=(220, 61), delay=50, txt_color='white', bg_color='#111111')
-                self.master.master.dropdown_respo.event_generate("<Button-1>")  # Hacky access to the combobox of the main app
+                Popup("Qui es-tu ? ^_^", x, y, offset=(220, 61), delay=50, lifetime=3000)
+                # Pull down the respomap selection menu [dirty]
+                self.master.master.dropdown_respo.event_generate("<Button-1>")
                 return
             item = select[0]
             item_index = self.tree.get_children().index(item)
@@ -176,10 +177,8 @@ class Siglist(Treelist):
             try:
                 x, y = self.tree.bbox(item, "code")[:2]
                 x = x + self.winfo_rootx()
-                y = y + self.winfo_rooty() - 21
-                Popup('"{}" copié dans le presse-papiers'.format(load), x, y, delay=50, offset=(0, 0),
-                      txt_color="white",
-                      bg_color="#111111")
+                y = y + self.winfo_rooty()
+                Popup('"{}" copié dans le presse-papiers'.format(load), x, y, offset=(0, -21))
             except ValueError:
                 pass
 
