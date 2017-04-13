@@ -187,8 +187,8 @@ class Siglist(Treelist):
         if len(selection) == 1:
             item = selection[0]
             code = self.tree.item(item)['values'][3]
-            match_archives = self.archives.filter_sigs("code", code)
-            match_session = self.archives.filter_sigs("code", code, source=self.signalements)
+            match_archives = self.archives.filter_sigs("code", [code])
+            match_session = self.archives.filter_sigs("code", [code], source=self.signalements)
             if len(match_archives) != 0 or len(match_session) > 1:
                 self.remove_popup()
                 text = ""

@@ -6,6 +6,7 @@ import glob
 import logging
 import datetime
 
+from utils import log_args
 from signalement import Signalement
 
 logger = logging.getLogger(__name__)
@@ -136,7 +137,10 @@ class Archives():
                 signalements.append(s)
         return signalements
 
-    def filter_sigs(self, key, *values, exact=False, func=None, source=None):
+    @log_args(logger=logger)
+    def filter_sigs(self, key=None, values=None, exact=False, func=None, source=None):
+        if key is None or values is None:
+            return self.signalements
         s = []
         if source is None:
             source = self
