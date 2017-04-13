@@ -162,7 +162,7 @@ class Siglist(Treelist):
                 new_values[-1] = ", ".join(new_values[-1])
                 self._data[data_index] = new_values
                 self.signalements[sig_index] = sig
-                self.search()  # Todo : looks like it works but might have side effects
+                self.refresh(keep_search_query=True)
                 self.focus_index(item_index)
             else:
                 self.focus_item(item)
@@ -219,7 +219,12 @@ class Siglist(Treelist):
             f[-1] = ", ".join(f[-1])
             self.insert(f)
 
-    def refresh(self):
+    def refresh(self, keep_search_query=False):
+        if keep_search_query:
+            key = self._search_key.get().strip()
+            if key != '' and key not in self.search_exludes:
+                self.search()
+                return
         self.clear()
         self.populate()
         self.update_tags()
