@@ -13,10 +13,11 @@ LOG_LEVEL_STRINGS = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
 
 def init_logging(dirname, filename):
     log_dir = os.path.join(os.path.expanduser("~/Documents/"), dirname)
+    created_log_dir = True
     try:
         os.makedirs(log_dir)
     except OSError:
-        pass  # Directory already exists
+        created_log_dir = False  # Directory already exists
 
     log_level = get_log_level()
     logger = logging.getLogger()
@@ -31,6 +32,8 @@ def init_logging(dirname, filename):
     file_handler.setFormatter(fmt)
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
+    if created_log_dir:
+        logger.info("Creating {}".format(log_dir))
     return log_level
 
 
