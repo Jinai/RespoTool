@@ -93,10 +93,9 @@ class Treelist(tk.Frame):
         if not keep_data:
             del self._data[:]
 
-    def scroll_down(self):
-        # Wait 50ms before actually trying to change the y-view or it won't update correctly
-        self.after(50, lambda: self.tree.yview_moveto(1))
-
+    def scroll_down(self, event=None):
+        self.update()
+        self.tree.yview_moveto(1)
 
     def focus_index(self, index):
         if index < len(self.tree.get_children()):
