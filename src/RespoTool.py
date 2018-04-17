@@ -97,7 +97,10 @@ class RespoTool(tk.Tk):
         # ----------------------------------------- CURRENT RESPO & SEARCH ----------------------------------------- #
 
         self.frame_respo = tk.Frame(self.main_frame)
-        label_respo = ttk.Label(self.frame_respo, text="Respomap :")
+        self.icon_respo = tk.PhotoImage(file="resources/shield_respo.png")
+        lbl_icon_respo = tk.Label(self.frame_respo, image=self.icon_respo)
+        lbl_icon_respo.pack(side="left")
+        label_respo = ttk.Label(self.frame_respo, text="Respomap  :  ")
         label_respo.pack(side="left")
         self.dropdown_respo = ttk.Combobox(self.frame_respo, state='readonly', textvariable=self.current_respo)
         self.dropdown_respo.pack(side="right")
