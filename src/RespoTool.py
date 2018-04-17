@@ -32,7 +32,7 @@ class RespoTool(tk.Tk):
         self.warning = warning
         self.warning_msg = warning_msg
         self.current_respo = tk.StringVar()
-        with open("resources/respomaps.json", 'r', encoding='utf-8') as f:
+        with open("data/respomaps.json", 'r', encoding='utf-8') as f:
             self.respomaps = json.load(f)
         self.signalements = []
         self.archives = archives.Archives(archives_dir, archives_pattern)
@@ -44,7 +44,7 @@ class RespoTool(tk.Tk):
         self.minsize(742, self.winfo_reqheight())
         try:
             self.tk.call('encoding', 'system', 'utf-8')
-            self.iconbitmap("resources/respotool.ico")
+            self.iconbitmap("data/img/respotool.ico")
         except Exception as e:
             logging.error(e)
 
@@ -97,7 +97,7 @@ class RespoTool(tk.Tk):
         # ----------------------------------------- CURRENT RESPO & SEARCH ----------------------------------------- #
 
         self.frame_respo = tk.Frame(self.main_frame)
-        self.icon_respo = tk.PhotoImage(file="resources/shield_respo.png")
+        self.icon_respo = tk.PhotoImage(file="data/img/shield_respo.png")
         lbl_icon_respo = tk.Label(self.frame_respo, image=self.icon_respo)
         lbl_icon_respo.pack(side="left")
         label_respo = ttk.Label(self.frame_respo, text="Respomap  :  ")
@@ -107,7 +107,7 @@ class RespoTool(tk.Tk):
         self.dropdown_respo['values'] = self.respomaps['main']  # comptes principaux
 
         self.frame_search = tk.Frame(self.main_frame)
-        search_icon = tk.PhotoImage(file="resources/search.gif")
+        search_icon = tk.PhotoImage(file="data/img/search.gif")
         self.entry_search = customentries.PlaceholderEntry(self.frame_search, placeholder=" Rechercher",
                                                            icon=search_icon,
                                                            width=30)
