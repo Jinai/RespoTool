@@ -23,7 +23,6 @@ class Archives():
         self.raw_text = ''
         self.signalements = []
         self.files = glob.glob(os.path.join(dir_path, pattern))
-        self.open()
 
     def open(self):
         self.raw_text = ''
@@ -137,7 +136,6 @@ class Archives():
                 signalements.append(s)
         return signalements
 
-    @log_args(logger=logger)
     def filter_sigs(self, key=None, values=None, exact=False, func=None, source=None):
         if key is None or values is None:
             return self.signalements

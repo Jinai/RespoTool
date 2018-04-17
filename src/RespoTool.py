@@ -65,7 +65,7 @@ class RespoTool(tk.Tk):
 
         # Warnings
         if self.warning:
-            modaldialog.InfoModal(self, "RespoTool v" + __version__, self.warning_msg, "J'ai compris")
+            modaldialog.InfoModal(self, "RespoTool v" + __version__, self.warning_msg, "J'ai compris").spawn()
 
     def _setup_widgets(self):
         self.statusbar = statusbar.StatusBar(self)
@@ -303,7 +303,7 @@ class RespoTool(tk.Tk):
             del self.signalements[:]
             for d in dicts:
                 self.signalements.append(signalement.Signalement.from_dict(d))
-            self.refresh(auto_scroll=False)
+            self.refresh(archives=True)
             self.statusbar.set("{} signalements importés depuis '{}'".format(len(self.signalements), filename))
 
     def search(self):

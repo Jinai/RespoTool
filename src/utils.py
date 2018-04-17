@@ -22,7 +22,7 @@ def init_logging(dirname, filename):
     log_level = get_log_level()
     logger = logging.getLogger()
     logger.setLevel(log_level)
-    fmt = logging.Formatter(fmt="{asctime} :: {levelname:<5} :: {name} :: {message}", datefmt="%Y-%m-%d %H:%M:%S",
+    fmt = logging.Formatter(fmt="{asctime} :: {levelname:<5} :: {name:<9} :: {message}", datefmt="%Y-%m-%d %H:%M:%S",
                             style="{")
     console_handler = logging.StreamHandler(sys.stdout)
     file_handler = TimedRotatingFileHandler(filename=os.path.join(log_dir, filename),

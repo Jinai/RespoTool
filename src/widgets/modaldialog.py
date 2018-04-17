@@ -6,15 +6,21 @@ import tkinter.ttk as ttk
 
 
 class ModalDialog(tk.Toplevel):
-    def __init__(self, parent, title=None, can_resize=False):
+    def __init__(self, parent, dialog_title=None, can_resize=False):
         super(ModalDialog, self).__init__()
+        self.withdraw()
         self.parent = parent
-        if title:
-            self.title(title)
+        self.dialog_title = dialog_title
         self.can_resize = can_resize
         self.result = None
 
+    #
+    # construction hooks
+
+    def spawn(self):
         self.attributes('-alpha', 0.0)
+        self.deiconify()
+        self.title(self.dialog_title)
         body = tk.Frame(self)
         body.pack(fill="both", expand=True, padx=5, pady=5)
         self.initial_focus = self.body(body)
@@ -26,17 +32,13 @@ class ModalDialog(tk.Toplevel):
         self.protocol("WM_DELETE_WINDOW", self.cancel)
         self.bind("<Return>", self.ok)
         self.bind("<Escape>", self.cancel)
-        self.center(parent)
+        self.center(self.parent)
         self.update_idletasks()
         self.minsize(self.winfo_reqwidth(), self.winfo_reqheight())
         self.resizable(width=self.can_resize, height=self.can_resize)
         self.attributes('-alpha', 1.0)
-        # self.transient(parent)
         self.grab_set()
         self.wait_window(self)
-
-    #
-    # construction hooks
 
     def center(self, master):
         self.update_idletasks()
@@ -94,13 +96,16 @@ class ModalDialog(tk.Toplevel):
 
 
 class InfoModal(ModalDialog):
-    def __init__(self, parent, title=None, body_text='', button_text="OK"):
+    def __init__(self, parent, title=None, body_text='', button_text="OK", font=None, **opts):
+        ModalDialog.__init__(self, parent, title, **opts)
         self.body_text = body_text
-        self.button_text= button_text
-        ModalDialog.__init__(self, parent, title)
+        self.button_text = button_text
+        self.font = font
 
     def body(self, master):
-        self.msg = tk.Message(master, text=self.body_text, width=300)
+        self.msg = tk.Message(master, text=self.body_text, width=500)
+        if self.font:
+            self.msg.config(font=self.font)
         self.msg.pack()
         return self.msg
 

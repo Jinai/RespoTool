@@ -145,6 +145,7 @@ class Siglist(Treelist):
             values[0] = str(values[0])  # Treeviews force str to int if it's a digit
             data_index = self._data.index(values)
             dialog = EditStatusDialog(self, "Éditer statut #{} : {}".format(values[0], values[3]), values[-2])
+            dialog.spawn()
             new_statut = dialog.result
             if new_statut is not None and new_statut != values[-2]:
                 values[-1] = [respo.strip() for respo in values[-1].split(",")] if values[-1] else []
