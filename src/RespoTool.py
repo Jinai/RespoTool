@@ -15,9 +15,7 @@ import pyperclip
 import sigparser
 import signalement
 from widgets import siglist, modaldialog, customentries, statusbar
-from _version import __version__
-
-__author__ = "Jinai"
+from _meta import __version__
 
 
 class RespoTool(tk.Tk):

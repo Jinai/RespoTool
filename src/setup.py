@@ -3,7 +3,7 @@
 
 
 def py2exe():
-    from _version import __version__
+    from _meta import __version__
     from distutils.core import setup
     import py2exe
 
