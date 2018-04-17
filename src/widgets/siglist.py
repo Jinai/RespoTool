@@ -127,8 +127,8 @@ class Siglist(Treelist):
             x = x + self.winfo_rootx()
             y = y + self.winfo_rooty() - 2
             self.remove_popup()
-            self.last_popup_rightclick = Popup(value, x, y, persistent=True, txt_color="black",
-                                               bg_color="white", border_color="#999999", border_width=1)
+            self.last_popup_rightclick = Popup(value, x, y, persistent=True, txt_color="#575757",
+                                               bg_color="white", border_color="#767676", border_width=1)
 
     def on_enter(self, event):
         select = self.tree.selection()
