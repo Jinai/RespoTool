@@ -3,6 +3,7 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
+
 from .modaldialog import ModalDialog
 
 
@@ -24,7 +25,7 @@ class EditStatusDialog(ModalDialog):
         self.text.bind('<Right>', lambda _: self.text.mark_set(tk.INSERT, tk.END))
 
         self.text.insert(tk.INSERT, self.original_text)
-        self.text.edit_reset() # reset undo/redo stack so that ctrl+z doesn't delete the original status
+        self.text.edit_reset()  # reset undo/redo stack so that ctrl+z doesn't delete the original status
         self.select_all(None)
         return self.text
 

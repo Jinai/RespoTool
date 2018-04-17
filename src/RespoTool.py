@@ -1,21 +1,22 @@
 # -*- coding: utf-8 -*-
 # !python3
 
-import os
 import json
-import tkinter as tk
-import tkinter.ttk as ttk
-import tkinter.messagebox as mbox
-import tkinter.filedialog as fdialog
 import logging
+import os
+import tkinter as tk
+import tkinter.filedialog as fdialog
+import tkinter.messagebox as mbox
+import tkinter.ttk as ttk
 
-import utils
-import archives
 import pyperclip
-import sigparser
+
+import archives
 import signalement
-from widgets import siglist, modaldialog, customentries, statusbar
+import sigparser
+import utils
 from _meta import __version__
+from widgets import siglist, modaldialog, customentries, statusbar
 
 
 class RespoTool(tk.Tk):

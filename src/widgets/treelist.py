@@ -15,16 +15,25 @@ class Treelist(tk.Frame):
         if auto_increment:
             self.headers.insert(0, "#")
             self.column_widths = column_widths if column_widths else [30] + [90] * (len(headers) - 1)
-            self.sort_keys = sort_keys if sort_keys else [lambda x: int(x[0])] + [lambda x: str(x[0]).lower()] * (len(headers) - 1)
+            self.sort_keys = sort_keys if sort_keys else [lambda x: int(x[0])] + [lambda x: str(x[0]).lower()] * (
+                        len(headers) - 1)
         else:
             self.column_widths = column_widths if column_widths else [90] * len(headers)
             self.sort_keys = sort_keys if sort_keys else [[lambda x: str(x[0]).lower()] * len(headers)]
         self.height = height
         self.alt_colors = alt_colors if alt_colors else ["white", "grey96"]
-        self.stretch = stretch if stretch else [False] * (len(headers) - 2) + [True]  # List of booleans telling which column are stretchable
-        self.sortable = sortable  # Allows clicking on headers to sort columns alphabetically
-        self.search_exludes = search_excludes if search_excludes else []  # A list of words to ignore when search() is triggered
-        self.match_template = match_template if match_template else "{}/{}"  # A formatted string that can be used to display the number of matches yielded by a search query
+
+        # List of booleans telling which column are stretchable
+        self.stretch = stretch if stretch else [False] * (len(headers) - 2) + [True]
+
+        # Allows clicking on headers to sort columns alphabetically
+        self.sortable = sortable
+
+        # A list of words to ignore when search() is triggered
+        self.search_exludes = search_excludes if search_excludes else []
+
+        # A formatted string that can be used to display the number of matches yielded by a search query
+        self.match_template = match_template if match_template else "{}/{}"
 
         # Internal variables
         self._search_key = tk.StringVar()  # Contains the search query
@@ -118,7 +127,8 @@ class Treelist(tk.Frame):
 
     def sort(self, col, descending):
         if self.sortable:
-            tree_data = [(self.tree.set(child, col), self.tree.set(child, 0), child) for child in self.tree.get_children('')]
+            tree_data = [(self.tree.set(child, col), self.tree.set(child, 0), child) for child in
+                         self.tree.get_children('')]
             index = self.headers.index(col)
             tree_data.sort(reverse=descending, key=lambda x: (self.sort_keys[index](x), int(x[1])))
             self._data.sort(reverse=descending, key=lambda x: (self.sort_keys[index]([x[index]]), int(x[0])))

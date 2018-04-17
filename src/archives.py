@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 # !python3
 
-import os
+import datetime
 import glob
 import logging
-import datetime
+import os
 
-from utils import log_args
 from signalement import Signalement
 
 logger = logging.getLogger(__name__)

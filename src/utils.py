@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # !python3
 
-import os
-import sys
+import argparse
 import inspect
 import logging
-import argparse
+import os
+import sys
 from logging.handlers import TimedRotatingFileHandler
 
 LOG_LEVEL_STRINGS = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']

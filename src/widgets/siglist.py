@@ -7,10 +7,10 @@ import winsound
 
 import pyperclip
 
-from widgets.treelist import Treelist
-from widgets.popup import Popup
-from widgets.editstatus import EditStatusDialog
 from signalement import Signalement
+from widgets.editstatus import EditStatusDialog
+from widgets.popup import Popup
+from widgets.treelist import Treelist
 
 logger = logging.getLogger(__name__)
 

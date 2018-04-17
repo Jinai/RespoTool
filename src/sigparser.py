@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # !python3
 
-import re
 import logging
+import re
 
-from utils import log_args
 from signalement import Signalement
+from utils import log_args
 
 logger = logging.getLogger(__name__)
 
