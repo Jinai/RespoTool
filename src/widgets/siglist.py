@@ -37,7 +37,8 @@ class Siglist(Treelist):
         self.tree.bind('<Double-1>', self.on_doubleclick)
         self.tree.bind('<Button-3>', self.on_rightclick)
         self.tree.bind('<Return>', self.on_enter)
-        self.tree.bind('<Control-c>', self.copy)
+        self.tree.bind('<Control-c>', lambda _: self.copy(with_load=True))
+        self.tree.bind('<Control-x>', lambda _: self.copy())
         self.tree.bind('<space>', self.on_space)
         self.tree.bind('<FocusOut>', self.remove_popup)
         self.tree.bind('<<TreeviewSelect>>', self.remove_popup)
@@ -168,18 +169,18 @@ class Siglist(Treelist):
             else:
                 self.focus_item(item)
 
-    def copy(self, event):
+    def copy(self, with_load=False):
         selection = self.tree.selection()
         if len(selection) == 1:
             item = selection[0]
-            load = "/load "
-            load += self.tree.item(item)['values'][3]
-            pyperclip.copy(load)
+            cmd = "/load " if with_load else ""
+            cmd += self.tree.item(item)['values'][3]
+            pyperclip.copy(cmd)
             try:
                 x, y = self.tree.bbox(item, "code")[:2]
                 x = x + self.winfo_rootx()
                 y = y + self.winfo_rooty()
-                Popup('"{}" copié dans le presse-papiers'.format(load), x, y, offset=(0, -21))
+                Popup('"{}" copié dans le presse-papiers'.format(cmd), x, y, offset=(0, -21))
             except ValueError:
                 pass
 
