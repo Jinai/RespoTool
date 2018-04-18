@@ -7,6 +7,7 @@ import winsound
 
 import pyperclip
 
+import utils
 from signalement import Signalement
 from widgets.editstatus import EditStatusDialog
 from widgets.popup import Popup
