@@ -40,8 +40,8 @@ class Siglist(Treelist):
         self.tree.bind('<Control-c>', lambda _: self.copy(with_load=True))
         self.tree.bind('<Control-x>', lambda _: self.copy())
         self.tree.bind('<space>', self.on_space)
-        self.tree.bind('<FocusOut>', self.remove_popup)
-        self.tree.bind('<<TreeviewSelect>>', self.remove_popup)
+        self.tree.bind('<FocusOut>', self.remove_popups)
+        self.tree.bind('<<TreeviewSelect>>', self.remove_popups)
         self.update_tags()
         self.update_templates()
 
@@ -115,7 +115,7 @@ class Siglist(Treelist):
             pyperclip.copy(value)
             # Popup
             x, y = self.master.winfo_pointerx(), self.master.winfo_pointery()
-            msg = value if len(value) <= 20 else value[:20] + "..."
+            msg = utils.ellipsis(value, width=30)
             Popup('"{}" copié dans le presse-papiers'.format(msg), x, y, offset=(10, -20))
 
     def on_rightclick(self, event):
@@ -126,7 +126,7 @@ class Siglist(Treelist):
             x, y = self.tree.bbox(item, self.headers[column])[:2]
             x = x + self.winfo_rootx()
             y = y + self.winfo_rooty() - 2
-            self.remove_popup()
+            self.remove_popups()
             self.last_popup_rightclick = Popup(value, x, y, persistent=True, txt_color="#575757",
                                                bg_color="white", border_color="#767676", border_width=1)
 
@@ -192,7 +192,7 @@ class Siglist(Treelist):
             match_archives = self.archives.filter_sigs("code", [code])
             match_session = self.archives.filter_sigs("code", [code], source=self.signalements)
             if len(match_archives) != 0 or len(match_session) > 1:
-                self.remove_popup()
+                self.remove_popups()
                 text = ""
                 if len(match_archives) != 0:
                     text += self.archives_templates["archives_msg"]
@@ -209,7 +209,7 @@ class Siglist(Treelist):
                 y = y + self.winfo_rooty() + 20
                 self.last_popup_space = Popup(text, x, y, persistent=True, max_alpha=0.90)
 
-    def remove_popup(self, *args):
+    def remove_popups(self, event=None):
         if self.last_popup_space:
             self.last_popup_space.destroy()
         if self.last_popup_rightclick:

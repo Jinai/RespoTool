@@ -101,3 +101,11 @@ def validate_indexes(indexes):
         if pos != idx:
             return False
     return len(indexes)
+
+
+def ellipsis(text, *, width, placeholder="..."):
+    if not isinstance(text, str) or width < len(placeholder):
+        raise ValueError
+    if len(text) <= width:
+        return text
+    return text[:width - len(placeholder)] + placeholder
