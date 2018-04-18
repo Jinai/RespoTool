@@ -1,1 +1,1 @@
-pyinstaller --distpath=../dist/ --workpath=../build/ --clean --log-level=WARN  RespoTool.spec
+python34 -m PyInstaller --distpath=../dist/ --workpath=../build/ --clean --log-level=INFO  RespoTool.spec
