@@ -1,22 +1,36 @@
+v1.6 [19/04/2018]
+=================
+    * Correction d'un bug provoquant parfois des effets indésirables lors de l'édition
+      d'un signalement si une recherche est en cours
+    * Correction du scrolling automatique en fin de liste ne marchant pas toujours
+    * Correction d'un bug avec l'import de signalemements via Ctrl+V
+    * Correction d'un bug avec le Ctrl+Espace
+    * Ctrl+X pour copier le code d'un signalement dans le presse-papiers
+    * Clic droit sur une cellule du tableau pour en afficher le contenu complet
+    * Ajout du logo respomap à gauche du menu déroulant d'« authentification »
+    * Léger changement d'apparence pour certains popups
+    * Changements dans l'organisation des fichiers ressources (images, données)
+    * Refactor de certaines parties du code (léger)
+
+
 v1.5 [08/02/2017]
 =================
     * Correction du placeholder ne s'affichant pas directement dans la barre de
       recherche
     * Correction d'un bug qui laissait passer des retours à la ligne dans les
-      descriptions de signalements, brisant l'affichage du ctrl + espace
+      descriptions de signalements, brisant l'affichage du Ctrl+Espace
     * Correction d'un bug qui faisait que les boutons d'import/export n'étaient pas de
       largeur égale. Cela affectait aussi le positionnement de la barre de recherche et
       des 4 boutons du bas
     * Les tags (mots-clés) apparaissant dans les statuts et donnant lieu à une couleur
       particulière sont maintenant ordonnés. Un statut avec le mot-clé "todo" sera par
       exemple toujours en rouge même si un autre mot-clé apparait
-    * Ajout de raccourcis clavier pour importer/exporter une session (ctrl+o et ctrl+s)
-      et pour coller des signalements depuis le presse-papiers (ctrl+v)
+    * Ajout de raccourcis clavier pour importer/exporter une session (Ctrl+O et Ctrl+S)
+      et pour coller des signalements depuis le presse-papiers (Ctrl+V)
     * Ajout du nombre d'occurrences trouvées à gauche de la barre de recherche  
     * Petite optimisation lors de l'ajout de signalements via fichier / presse-papiers,
       l'interface n'est rafraîchie et la barre d'état n'affiche pas de message si aucun
       signalements n'a effectivement été ajouté
-
 
 
 v1.4 [08/12/2016]
@@ -38,12 +52,12 @@ v1.3 [22/09/2016]
       d'un popup les signalements des archives / session courante qui correspondent
       à la même map. Le template d'affichage de ce popup est stocké dans un fichier
       JSON. Modifiable pendant que le programme est ouvert
-    * Correction du popup de ctrl+c apparaissant au mauvais endroit
+    * Correction du popup de Ctrl+C apparaissant au mauvais endroit
 
 
 v1.2 [09/09/2016]
 =================
-    * Possibilité de filtrer la liste par une recherche (ctrl+f)
+    * Possibilité de filtrer la liste par une recherche (Ctrl+F)
     * Correction de nombreux bugs liés à l'affichage des signalements et au mauvais
       indexage de ceux-ci dans la liste
     * Correction d'un bug possible dans l'alternance des couleurs des lignes paires /
