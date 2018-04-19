@@ -1,19 +1,19 @@
 [
     {
         "#": 1,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890123",
         "flag": "Rally",
         "desc": "passage random",
-        "statut": "modifié // à tester au cas où",
+        "statut": "modifié",
         "respo": [
             "SuperRespo"
         ]
     },
     {
         "#": 2,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890124",
         "flag": "Rally",
@@ -25,7 +25,7 @@
     },
     {
         "#": 3,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890125",
         "flag": "Défilante",
@@ -37,7 +37,7 @@
     },
     {
         "#": 4,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890126",
         "flag": "Normal",
@@ -49,7 +49,7 @@
     },
     {
         "#": 5,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890127",
         "flag": "Rally",
@@ -61,19 +61,19 @@
     },
     {
         "#": 6,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890128",
         "flag": "MutualShout",
         "desc": "2e rattrapage trop dur ",
-        "statut": "mappeur contacté",
+        "statut": "contacté // mp envoyé à AuteurLambda",
         "respo": [
             "SuperRespo"
         ]
     },
     {
         "#": 7,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890129",
         "flag": "Fight",
@@ -85,19 +85,19 @@
     },
     {
         "#": 8,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890130",
         "flag": "Normal",
         "desc": "map injuriante",
-        "statut": "modo contacté + supprimé",
+        "statut": "modo + supprimé",
         "respo": [
             "SuperRespo"
         ]
     },
     {
         "#": 9,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890131",
         "flag": "No guide",
@@ -109,7 +109,7 @@
     },
     {
         "#": 10,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890132",
         "flag": "Rally",
@@ -121,19 +121,19 @@
     },
     {
         "#": 11,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890133",
         "flag": "Défilante",
         "desc": "1:35 random",
-        "statut": "mappeur contacté",
+        "statut": "contacté",
         "respo": [
             "SuperRespo"
         ]
     },
     {
         "#": 12,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890134",
         "flag": "Fight",
@@ -145,7 +145,7 @@
     },
     {
         "#": 13,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890135",
         "flag": "Normal",
@@ -157,7 +157,7 @@
     },
     {
         "#": 14,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890135",
         "flag": "Normal",
@@ -169,7 +169,7 @@
     },
     {
         "#": 15,
-        "date": "14/01",
+        "date": "19/04",
         "auteur": "JoueurLambda",
         "code": "@1234567890137",
         "flag": "Rally",

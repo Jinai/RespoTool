@@ -1,0 +1,30 @@
+Les différents statuts possibles :
+
+ * todo
+ * ignoré
+ * modifié
+ * supprimé
+ * record
+ * votes
+ * déclassé
+ * reclassé
+ * contacté
+ * modo
+
+Précisions : 
+déclassé = De n'importe quel flag vers le flag 'Normal' = en offi
+reclassé = De n'importe quel flag vers n'importe quel flag sauf 'Normal'
+		   Donc Normal -> Rally compte comme reclassé
+contacté = Mappeur contacté via chucho/messagerie
+modo 	 = Modo contacté car rec chelou ou autre
+
+Si plusieurs statuts à la fois : statut1 + statut2 + statut3 + ...
+Exemple : reclassé + modifié + record
+L'ordre n'a pas d'importance.
+
+Pour mettre un commentaire : // commentaire
+Exemple : ignoré // testé, ça passe en 100% sup
+Le commentaire se met obligatoirement en fin de phrase.
+
+N'hésitez pas à compléter si besoin, du moment que c'est cohérent et standardisé.
+Le but c'est qu'on ait tous les mêmes mots-clés pour s'y retrouver plus facilement et automatiser plus facilement la génération de statistiques.

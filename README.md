@@ -1,83 +1,66 @@
 RespoTool
 =========
-Un outil de gestion et d'archivage des signalements de cartes sur [Aaaah !](http://www.extinction.fr/minijeux/)
+L'outil de gestion et d'archivage des signalements de cartes sur [Aaaah !](http://www.extinction.fr/minijeux/)
   
-![Demo](https://i.imgur.com/D1kg6YH.png)
+![Demo](https://i.imgur.com/iWnOkzX.png)
 
 
 Utilisation
 ===========
 Nouvelle session
 ----------------
-* __Fichier__ : Importe un fichier texte avec le contenu de /sigmdm et écrase les signalements déjà présents.
+* __Fichier__ : Importe un fichier texte avec le contenu de `/sigmdm` et écrase les signalements déjà présents.
 
 * __Presse-papiers__ : Idem mais depuis le presse-papiers.
 
 Ajouter nouveaux sigs
 ---------------------
-* __Fichier__ : Importe un fichier texte avec le contenu de /sigmdm et ajoute les signalements en fin de liste.
+* __Fichier__ : Importe un fichier texte avec le contenu de `/sigmdm` et ajoute les signalements en fin de liste.
 
-* __Presse-papiers__ : Idem mais depuis le presse-papiers.
+* __Presse-papiers__ : Idem mais depuis le presse-papiers. Accessible directement via <kbd>Ctrl</kbd>+<kbd>V</kbd>.
 
 Importer / Exporter session
 ---------------------------
-* __Importer__ : Permet de restaurer l'état du programme (signalements + statuts) depuis un fichier session
-  _.sig_.
+* __Importer__ : Permet de restaurer l'état du programme (signalements + statuts) depuis un fichier session _.sig_.
 
 * __Exporter__ : Permet de stocker l'état du programme dans un fichier session _.sig_.  
-  __Note__ : Les sessions sont enregistrées au format JSON. Elles sont lisibles et peut éventuellement être
-  modifiées à la main.
+  __Note__ : Les sessions sont enregistrées au format JSON. Elles sont lisibles et peuvent être modifiées à la main.
 
 Actions
 -------
-* __Respomap__ :
-  Menu déroulant servant d'identifiant. Le pseudo choisi dans ce menu sera repris dans la colonne Respomap (il
-  s'ajoutera aux autres s'il y en a déjà).
+* __Respomap__ : Menu déroulant servant d'identifiant. Le pseudo choisi dans ce menu sera repris dans la colonne Respomap (il s'ajoutera aux autres s'il y en a déjà).
 
-* __Rechercher__ :
-  Barre de recherche. Entrez n'importe quel mot et s'il apparait quelque part dans un signalement (code, auteur,
-  description, etc.), celui-ci apparaîtra. Accessible via __Ctrl + F__.
+* __Rechercher__ : La recherche est effectuée sur tous les champs d'un signalement (code, auteur, description, etc.) et est insensible à la casse. Accessible directement via <kbd>Ctrl</kbd>+<kbd>F</kbd>.
 
-* __Archiver__ :
-  Vide la liste des signalements pour les stocker à la fin d'un joli tableau dans archives/archives_année.txt. À ne
-  faire qu'une fois les signalements entièrement traités.  
-  __Note__ : Pensez à exporter la liste ainsi vidée après archivage pour que le prochain respo qui importe la
-  session ait une liste clean et ainsi lui éviter du travail inutile.
+* __Archiver__ : Vide la liste des signalements pour les stocker à la fin d'un joli tableau. À ne faire qu'une fois les signalements entièrement traités.  
+  __Note__ : La session n'est pas sauvegardée automatiquement après archivage.
 
-* __Archiver sélection__ :
-  Archive uniquement les signalements sélectionnés. La sélection doit obligatoirement être d'un seul bloc (pas
-  de trous) et doit commencer par le premier signalement afin de conserver l'ordre des archives.
+* __Archiver sélection__ : Archive uniquement les signalements sélectionnés. La sélection doit obligatoirement être d'un seul bloc (pas de trous) et doit commencer par le premier signalement afin de conserver l'ordre des archives.  
+  __Note__ : La session n'est pas sauvegardée automatiquement après archivage.
 
-* __Playlist__ :
-  Génère un fichier playlist.txt contenant les maps signalées, à charger via /playlist (décocher aléatoire).
-  La playlist reprend aussi les infos de chaque colonne (date, auteur, description, etc.).  
-  __Note__ : Cette fonction est obsolète, il est préférable d'utiliser les raccourcis clavier pour load
-  rapidement une carte.
+* __Playlist__ : Génère un fichier _playlist.txt_ contenant les maps signalées, à charger via `/playlist` (décocher aléatoire). La playlist reprend aussi les infos de chaque colonne (date, auteur, description, etc.).  
+  __Note__ : Cette fonction est obsolète, il est préférable d'utiliser les raccourcis clavier pour load rapidement une carte.
 
-* __Obtenir sigmdm__ :
-  Copie dans le presse-papiers l'équivalent /sigmdm des signalements se trouvant dans la liste. Les statuts
-  sont perdus lors de la conversion.
+* __Obtenir sigmdm__ : Copie dans le presse-papiers l'équivalent `/sigmdm` des signalements se trouvant dans la liste.  
+  __Note__ : Les statuts/respomaps sont perdus lors de la conversion. Cette fonction est utile pour débugger mais ne devrait pas être utilisée en temps normal.
 
 Raccourcis pratiques
 ====================
-* __Ctrl + F__ :
-  Permet d'avoir le focus directement sur la barre de recherche et sélectionne le texte déjà présent.
+* <kbd>Ctrl</kbd>+<kbd>C</kbd> : Copie dans le presse-papiers la commande `/load @code` correspondant au signalement sélectionné.
 
-* __Double-clic sur une ligne__ : 
-  Copie dans le presse-papiers le contenu de la cellule présente sous le curseur.
-  Permet par exemple de copier la description d'un signalement.
+* <kbd>Ctrl</kbd>+<kbd>X</kbd> : Idem que <kbd>Ctrl</kbd>+<kbd>C</kbd> mais sans le `/load`.
 
-* __Sélectionner une ligne → Ctrl + C__ :
-  Copie "/load @code" dans le presse-papiers où @code est le code correspondant au signalement
+* <kbd>Ctrl</kbd>+<kbd>F</kbd> : Met le focus sur la barre de recherche.
 
-* __Sélectionner une ligne → Entrée__ :
-  Ouvre une nouvelle fenêtre permettant d'éditer le statut du signalement. __Entrée__ pour valider,
-  __Échap__ pour annuler. Voir statuts.txt pour la liste des statuts recommandés.
+* <kbd>Ctrl</kbd>+<kbd>V</kbd> : Ajoute les signalements du presse-papiers en fin de liste.
 
-* __Sélectionner une ligne → Retour / Suppr__ :
-  Supprime le signalement. Marche aussi avec une multi-sélection (Ctrl+clic et/ou Shift+clic pour sélectionner
-  plusieurs signalements à la fois). Normalement jamais utilisé car tous les signalements doivent être considérés.
+* __Double-clic sur une ligne__ : Copie dans le presse-papiers le contenu de la cellule présente sous le curseur. Permet par exemple de copier la description d'un signalement.
 
-* __Sélectionner une ligne → Espace__ :
-  Affiche sous forme d'un popup les signalements des archives ou de la session courante qui correspondent à la même
-  map. Pratique pour retracer l'historique d'une map et voir ce qui a déjà été réalisé dessus.
+* __Clic droit sur une ligne__ : Affiche le contenu complet de la cellule présente sous le curseur. Permet par exemple d'afficher une description trop longue sans devoir la copier-coller ailleurs.
+
+* __Sélectionner une ligne →__ <kbd>⏎ Entrée</kbd> : Ouvre une nouvelle fenêtre permettant d'éditer le statut du signalement. <kbd>⏎ Entrée</kbd> pour valider, <kbd>Échap</kbd> pour annuler. Voir _Utilisation des statuts.txt_ pour la syntaxe des statuts.
+
+* __Sélectionner une ligne →__ <kbd>⌫ Arrière</kbd> / <kbd>Suppr</kbd> : Supprime le signalement. Marche aussi avec une multi-sélection (<kbd>Ctrl</kbd>+clic et/ou <kbd>⇧ Maj</kbd>+clic pour sélectionner plusieurs signalements à la fois).  
+  __Note__ : Normalement jamais utilisé car tous les signalements doivent être considérés. Un troll doit être marqué comme `ignoré` et non être supprimé.
+
+* __Sélectionner une ligne →__ <kbd>Espace</kbd> : Affiche les signalements des archives ou de la session courante qui correspondent à la même map. Permet de retracer l'historique d'une map et d'identifier les doublons.
