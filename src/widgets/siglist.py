@@ -3,6 +3,7 @@
 
 import json
 import logging
+import webbrowser
 import winsound
 
 import pyperclip
@@ -40,6 +41,7 @@ class Siglist(Treelist):
         self.tree.bind('<Return>', self.on_enter)
         self.tree.bind('<Control-c>', lambda _: self.copy(with_load=True))
         self.tree.bind('<Control-x>', lambda _: self.copy())
+        self.tree.bind('<Control-l>', lambda _: self.open_urls())
         self.tree.bind('<space>', self.on_space)
         self.tree.bind('<FocusOut>', self.remove_popups)
         self.tree.bind('<<TreeviewSelect>>', self.remove_popups)
@@ -86,8 +88,7 @@ class Siglist(Treelist):
 
     def selection_indexes(self):
         indexes = []
-        selection = self.tree.selection()
-        for item in selection:
+        for item in self.tree.selection():
             indexes.append(int(self.tree.item(item)['values'][0]) - 1)
         return indexes
 
@@ -184,6 +185,11 @@ class Siglist(Treelist):
                 Popup('"{}" copié dans le presse-papiers'.format(cmd), x, y, offset=(0, -21))
             except ValueError:
                 pass
+
+    def open_urls(self):
+        for item in self.tree.selection():
+            for url in utils.extract_urls(self.tree.item(item)['values'][-2]):
+                webbrowser.open_new_tab(url)
 
     def on_space(self, event):
         selection = self.tree.selection()

@@ -30,7 +30,7 @@ def py2exe():
                     '_lzma', '_ssl', 'netbios', 'netrc', 'pkgutil', 'plistlib', 'pprint',
                     'py_compile', 'runpy', 'ssl', 'win32wnet', 'zipfile', '_multiprocessing',
                     '_osx_support', '_strptime', '_threading_local', 'lzma', 'gzip', 'getopt',
-                    'getpass', 'hmac', 'webbrowser', 'urllib', 'operators',
+                    'getpass', 'hmac', 'urllib', 'operators',
                 ],
             }
         },

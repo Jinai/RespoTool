@@ -5,8 +5,11 @@ import argparse
 import inspect
 import logging
 import os
+import re
 import sys
 from logging.handlers import TimedRotatingFileHandler
+
+import urlmarker
 
 LOG_LEVEL_STRINGS = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
 
@@ -109,3 +112,7 @@ def ellipsis(text, *, width, placeholder="..."):
     if len(text) <= width:
         return text
     return text[:width - len(placeholder)] + placeholder
+
+
+def extract_urls(text):
+    return re.findall(urlmarker.URL_REGEX, text)
