@@ -184,7 +184,7 @@ class RespoTool(tk.Tk):
             if self.signalements:
                 self.refresh()
                 self.statusbar.set(
-                    "Nouvelle session depuis '{}', {} signalements importés".format(filename, len(self.signalements))
+                    "Nouvelle session depuis '{}', {} signalements importés.".format(filename, len(self.signalements))
                 )
 
     def new_clipboard(self):
@@ -192,7 +192,7 @@ class RespoTool(tk.Tk):
         if self.signalements:
             self.refresh()
             self.statusbar.set(
-                "Nouvelle session depuis le presse-papiers, {} signalements importés".format(len(self.signalements))
+                "Nouvelle session depuis le presse-papiers, {} signalements importés.".format(len(self.signalements))
             )
 
     def append_file(self):
@@ -204,7 +204,7 @@ class RespoTool(tk.Tk):
                 self.signalements.extend(signalements)
                 self.refresh()
                 self.statusbar.set(
-                    "{} signalements ajoutés à la session courante depuis '{}'".format(len(signalements), filename)
+                    "{} signalements ajoutés à la session courante depuis '{}'.".format(len(signalements), filename)
                 )
 
     def append_clipboard(self):
@@ -213,7 +213,7 @@ class RespoTool(tk.Tk):
             self.signalements.extend(signalements)
             self.refresh()
             self.statusbar.set(
-                "{} signalements ajoutés à la session courante depuis le presse-papiers".format(len(signalements))
+                "{} signalements ajoutés à la session courante depuis le presse-papiers.".format(len(signalements))
             )
 
     def playlist(self):
@@ -221,23 +221,24 @@ class RespoTool(tk.Tk):
         with open(path, "w", encoding="utf-8") as f:
             for sig in self.signalements:
                 f.write(str(sig) + "\n")
-        self.statusbar.set("Playlist créee dans '{}'".format(path))
+        self.statusbar.set("Playlist créee dans '{}'.".format(path))
 
     def archive_all(self):
         archived = []
         msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nIls seront retirés de la liste une fois fait !"
-        if mbox.askokcancel("Archiver {} sig".format(len(self.signalements)), msg, icon="warning", parent=self):
+        if mbox.askokcancel("Archiver {} signalements".format(len(self.signalements)), msg, icon="warning",
+                            parent=self):
             for sig in self.signalements:
                 if "todo" in sig.statut:
-                    msg = "Chaque signalement doit être traité !\nSignalement : {}".format(sig.sigmdm())
+                    msg = "Chaque signalement doit être traité !\nSignalement : {}.".format(sig.sigmdm())
                     mbox.showerror("Archiver [{}] {}".format(sig.date, sig.code), msg, parent=self)
                     break
                 else:
                     self.archives.archive_sig(sig)
                     archived.append(self.signalements.pop(sig))
             if archived:
-                self.refresh(archives=True)
-                self.statusbar.set("{} signalements archivés".format(len(archived)))
+                self.refresh(archives=True, auto_scroll=False)
+                self.statusbar.set("{} signalements archivés.".format(len(archived)))
 
     def archive_selection(self):
         indexes = self.tree_sig.selection_indexes()
@@ -257,19 +258,19 @@ class RespoTool(tk.Tk):
                         break
                 if archived:
                     self.signalements = [sig for sig in self.signalements if sig not in archived]
-                    self.refresh(archives=True)
-                    self.statusbar.set("{} signalements archivés".format(len(archived)))
+                    self.refresh(archives=True, auto_scroll=False)
+                    self.statusbar.set("{} signalements archivés.".format(len(archived)))
         else:
             msg = ("Votre sélection doit être d'un seul bloc (pas de trous) et doit commencer par le premier " +
-                   "signalement afin de conserver l'ordre des archives")
-            mbox.showwarning("Mauvais archivage", msg)
+                   "signalement afin de conserver l'ordre des archives.")
+            mbox.showerror("Mauvais archivage", msg)
 
     def sigmdm(self):
         res = ""
         for sig in self.signalements:
             res += sig.sigmdm() + "\n"
         pyperclip.copy(res.strip())
-        self.statusbar.set("Résultat /sigmdm copié dans le presse-papiers")
+        self.statusbar.set("Résultat /sigmdm copié dans le presse-papiers.")
 
     def export_save(self, path=None):
         if path:
@@ -286,7 +287,7 @@ class RespoTool(tk.Tk):
                 dicts.append(d)
             with open(filename, "w", encoding="utf-8") as f:
                 f.write(json.dumps(dicts, indent=4, ensure_ascii=False))
-            self.statusbar.set("{} signalements exportés dans '{}'".format(len(self.signalements), filename))
+            self.statusbar.set("{} signalements exportés dans '{}'.".format(len(self.signalements), filename))
 
     def import_save(self, path=None):
         if path:
@@ -303,7 +304,7 @@ class RespoTool(tk.Tk):
             for d in dicts:
                 self.signalements.append(signalement.Signalement.from_dict(d))
             self.refresh(archives=True)
-            self.statusbar.set("{} signalements importés depuis '{}'".format(len(self.signalements), filename))
+            self.statusbar.set("{} signalements importés depuis '{}'.".format(len(self.signalements), filename))
 
     def search(self):
         self.entry_search.focus()
