@@ -16,7 +16,7 @@ class Treelist(tk.Frame):
             self.headers.insert(0, "#")
             self.column_widths = column_widths if column_widths else [30] + [90] * (len(headers) - 1)
             self.sort_keys = sort_keys if sort_keys else [lambda x: int(x[0])] + [lambda x: str(x[0]).lower()] * (
-                len(headers) - 1)
+                    len(headers) - 1)
         else:
             self.column_widths = column_widths if column_widths else [90] * len(headers)
             self.sort_keys = sort_keys if sort_keys else [[lambda x: str(x[0]).lower()] * len(headers)]

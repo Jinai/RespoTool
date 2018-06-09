@@ -24,9 +24,9 @@ class Signalement():
         y, m, d = date.today().year, int(self.date.split("/")[1]), int(self.date.split("/")[0])
         return date(y, m, d)
 
-    def archive(self, separator=" | "):
+    def archive(self, separator="|"):
         # Format d'archives
-        template = separator.join(Signalement.TEMPLATE.split(" "))
+        template = " {} ".format(separator).join(Signalement.TEMPLATE.split(" "))
         d = dict(self.__dict__)
         d['respo'] = ", ".join(d['respo'])
         return template.format(**d)

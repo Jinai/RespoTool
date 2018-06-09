@@ -75,23 +75,26 @@ class RespoTool(tk.Tk):
         # -------------------------------------------- IMPORT / EXPORT --------------------------------------------- #
 
         self.labelframe_new = ttk.Labelframe(self.main_frame, text="Nouvelle session")
-        button_file = ttk.Button(self.labelframe_new, text="Fichier", command=self.new_file)
-        button_file.pack(fill="both", expand=True, side="left", padx=(7, 0), pady=(0, 7))
-        button_clipboard = ttk.Button(self.labelframe_new, text="Presse-papiers", command=self.new_clipboard)
-        button_clipboard.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
+        button_new_file = ttk.Button(self.labelframe_new, text="Fichier", command=self.new_file)
+        button_new_file.pack(fill="both", expand=True, side="left", padx=(7, 0), pady=(0, 7))
+        button_new_cb = ttk.Button(self.labelframe_new, text="Presse-papiers", command=self.new_clipboard)
+        button_new_cb.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
 
         self.labelframe_append = ttk.Labelframe(self.main_frame, text="Ajouter nouveaux sigs")
         button_append_file = ttk.Button(self.labelframe_append, text="Fichier", command=self.append_file)
         button_append_file.pack(fill="both", expand=True, side="left", padx=(7, 0), pady=(0, 7))
-        button_append_clipboard = ttk.Button(self.labelframe_append, text="Presse-papiers",
-                                             command=self.append_clipboard)
-        button_append_clipboard.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
+        button_append_cb = ttk.Button(self.labelframe_append, text="Presse-papiers", command=self.append_clipboard)
+        button_append_cb.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
 
         self.labelframe_session = ttk.Labelframe(self.main_frame, text="Importer / Exporter session")
         button_import = ttk.Button(self.labelframe_session, text="Importer", command=self.import_save)
         button_import.pack(fill="both", expand=True, side="left", padx=(7, 0), pady=(0, 7))
         button_export = ttk.Button(self.labelframe_session, text="Exporter", command=self.export_save)
         button_export.pack(fill="both", expand=True, side="right", padx=(0, 7), pady=(0, 7))
+
+        button_new_file.configure(state="disabled")
+        button_new_cb.configure(state="disabled")
+        button_append_file.configure(state="disabled")
 
         # ----------------------------------------- CURRENT RESPO & SEARCH ----------------------------------------- #
 
@@ -140,21 +143,23 @@ class RespoTool(tk.Tk):
         self.frame_actions = tk.Frame(self.main_frame)
         self.frame_act1 = tk.Frame(self.frame_actions)
         self.frame_act1.pack()
-        self.button_archive = ttk.Button(self.frame_act1, text="Archiver", command=self.archive_all, state="disabled",
-                                         width=16)
+        self.button_archive = ttk.Button(self.frame_act1, text="Archiver", command=self.archive_all, width=16)
         self.button_archive.pack(side="left")
-        self.button_archive_selection = ttk.Button(self.frame_act1, text="Archiver sélection", state="disabled",
+        self.button_archive_selection = ttk.Button(self.frame_act1, text="Archiver sélection",
                                                    command=self.archive_selection, width=16)
         self.button_archive_selection.pack(side="right")
 
         self.frame_act2 = tk.Frame(self.frame_actions)
         self.frame_act2.pack()
-        self.button_playlist = ttk.Button(self.frame_act2, text="Playlist", command=self.playlist, state="disabled",
-                                          width=16)
+        self.button_playlist = ttk.Button(self.frame_act2, text="Playlist", command=self.playlist, width=16)
         self.button_playlist.pack(side="left")
-        self.button_sigmdm = ttk.Button(self.frame_act2, text="Obtenir sigmdm", state="disabled", command=self.sigmdm,
-                                        width=16)
+        self.button_sigmdm = ttk.Button(self.frame_act2, text="Obtenir sigmdm", command=self.sigmdm, width=16)
         self.button_sigmdm.pack(side="right")
+
+        self.button_archive.configure(state="disabled")
+        self.button_archive_selection.configure(state="disabled")
+        self.button_playlist.configure(state="disabled")
+        self.button_sigmdm.configure(state="disabled")
 
         # ------------------------------------------- WIDGETS PLACEMENT -------------------------------------------- #
 
@@ -309,10 +314,10 @@ class RespoTool(tk.Tk):
             self.tree_sig.scroll_down()
         elif scroll == "up":
             self.tree_sig.scroll_up()
-        self.button_playlist.configure(state="enabled")
-        self.button_archive.configure(state="enabled")
-        self.button_archive_selection.configure(state="enabled")
-        self.button_sigmdm.configure(state="enabled")
+        # self.button_playlist.configure(state="enabled")
+        # self.button_archive.configure(state="enabled")
+        # self.button_archive_selection.configure(state="enabled")
+        # self.button_sigmdm.configure(state="enabled")
 
     def clear_focus(self):
         for item in self.tree_sig.tree.selection():
