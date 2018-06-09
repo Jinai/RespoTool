@@ -16,7 +16,7 @@ import signalement
 import sigparser
 import utils
 from _meta import __version__
-from widgets import siglist, modaldialog, customentries, statusbar
+from widgets import customentries, modaldialog, siglist, statusbar
 
 
 class RespoTool(tk.Tk):
@@ -182,7 +182,7 @@ class RespoTool(tk.Tk):
             with open(filename, "r", encoding="utf-8") as f:
                 self.signalements = sigparser.parse(f.read())
             if self.signalements:
-                self.refresh()
+                self.refresh(scroll="up")
                 self.statusbar.set(
                     "Nouvelle session depuis '{}', {} signalements importés.".format(filename, len(self.signalements))
                 )
@@ -190,7 +190,7 @@ class RespoTool(tk.Tk):
     def new_clipboard(self):
         self.signalements = sigparser.parse(pyperclip.paste())
         if self.signalements:
-            self.refresh()
+            self.refresh(scroll="up")
             self.statusbar.set(
                 "Nouvelle session depuis le presse-papiers, {} signalements importés.".format(len(self.signalements))
             )
@@ -202,7 +202,7 @@ class RespoTool(tk.Tk):
                 signalements = sigparser.parse(f.read())
             if signalements:
                 self.signalements.extend(signalements)
-                self.refresh()
+                self.refresh(scroll="down")
                 self.statusbar.set(
                     "{} signalements ajoutés à la session courante depuis '{}'.".format(len(signalements), filename)
                 )
@@ -211,7 +211,7 @@ class RespoTool(tk.Tk):
         signalements = sigparser.parse(pyperclip.paste())
         if signalements:
             self.signalements.extend(signalements)
-            self.refresh()
+            self.refresh(scroll="down")
             self.statusbar.set(
                 "{} signalements ajoutés à la session courante depuis le presse-papiers.".format(len(signalements))
             )
@@ -224,33 +224,21 @@ class RespoTool(tk.Tk):
         self.statusbar.set("Playlist créee dans '{}'.".format(path))
 
     def archive_all(self):
-        archived = []
-        msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nIls seront retirés de la liste une fois fait !"
-        if mbox.askokcancel("Archiver {} signalements".format(len(self.signalements)), msg, icon="warning",
-                            parent=self):
-            for sig in self.signalements:
-                if "todo" in sig.statut:
-                    msg = "Chaque signalement doit être traité !\nSignalement : {}.".format(sig.sigmdm())
-                    mbox.showerror("Archiver [{}] {}".format(sig.date, sig.code), msg, parent=self)
-                    break
-                else:
-                    self.archives.archive_sig(sig)
-                    archived.append(self.signalements.pop(sig))
-            if archived:
-                self.refresh(archives=True, auto_scroll=False)
-                self.statusbar.set("{} signalements archivés.".format(len(archived)))
+        self.tree_sig.select_all()
+        self.archive_selection()
 
     def archive_selection(self):
         indexes = self.tree_sig.selection_indexes()
-        archived = []
         if utils.validate_indexes(indexes):
-            msg = "Êtes-vous sûr de vouloir archiver ces signalements ?\nIls seront retirés de la liste une fois fait !"
-            if mbox.askokcancel("Archiver {} sig".format(len(indexes)), msg, icon="warning", parent=self):
+            archived = []
+            msg = "Êtes-vous sûr de vouloir archiver {} signalements ?".format(len(indexes))
+            if mbox.askokcancel("Archiver sélection", msg, parent=self):
                 for i in indexes:
                     sig = self.signalements[i]
                     if "todo" in sig.statut:
-                        msg = "Chaque signalement doit être traité !\nSignalement : {}".format(sig.sigmdm())
-                        mbox.showerror("Archiver [{}] {}".format(sig.date, sig.code), msg, parent=self)
+                        msg = "{} signalements sur {} ont été archivés car il en reste un non traité :\n{}"
+                        mbox.showwarning("Archivage incomplet", msg.format(i, indexes[-1] + 1, sig.sigmdm()),
+                                         parent=self)
                         break
                     elif self.archives.archive_sig(sig):
                         archived.append(sig)
@@ -258,7 +246,7 @@ class RespoTool(tk.Tk):
                         break
                 if archived:
                     self.signalements = [sig for sig in self.signalements if sig not in archived]
-                    self.refresh(archives=True, auto_scroll=False)
+                    self.refresh(archives=True, scroll="up")
                     self.statusbar.set("{} signalements archivés.".format(len(archived)))
         else:
             msg = ("Votre sélection doit être d'un seul bloc (pas de trous) et doit commencer par le premier " +
@@ -303,22 +291,24 @@ class RespoTool(tk.Tk):
             del self.signalements[:]
             for d in dicts:
                 self.signalements.append(signalement.Signalement.from_dict(d))
-            self.refresh(archives=True)
+            self.refresh(archives=True, scroll="down")
             self.statusbar.set("{} signalements importés depuis '{}'.".format(len(self.signalements), filename))
 
     def search(self):
         self.entry_search.focus()
         self.entry_search.select_range(0, 'end')
 
-    def refresh(self, archives=False, auto_scroll=True):
+    def refresh(self, archives=False, scroll=None):
         logging.debug("Refreshing {} sigs".format(len(self.signalements)))
         self.tree_sig.signalements = self.signalements
         self.tree_sig.refresh()
         if archives:
             self.archives.open()
         self.tree_sig.search()
-        if auto_scroll:
+        if scroll == "down":
             self.tree_sig.scroll_down()
+        elif scroll == "up":
+            self.tree_sig.scroll_up()
         self.button_playlist.configure(state="enabled")
         self.button_archive.configure(state="enabled")
         self.button_archive_selection.configure(state="enabled")
