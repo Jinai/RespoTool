@@ -59,6 +59,7 @@ class RespoTool(tk.Tk):
         self.bind('<Control-q>', lambda _: self.quit())
         self.main_frame.bind('<Control-v>', lambda _: self.append_clipboard())
         self.main_frame.bind('<Button-1>', lambda _: self.clear_focus())
+        self.tree_sig.tree.bind('<<TreeviewSelect>>', lambda _: self.selection_handler(), add="+")
         self.current_respo.trace("w", lambda *_: logging.debug("Setting respo={}".format(self.current_respo.get())))
         self.protocol("WM_DELETE_WINDOW", self.quit)
 
@@ -180,6 +181,13 @@ class RespoTool(tk.Tk):
         self.frame_search.lower()
         # Needed to rewrite the placeholder because we hooked an empty StringVar that erased it
         self.entry_search.focus_out(None)
+
+    def selection_handler(self):
+        selection = self.tree_sig.tree.selection()
+        if len(selection) == 0:
+            self.button_archive_selection.configure(state="disabled")
+        if len(selection) >= 1:
+            self.button_archive_selection.configure(state="enabled")
 
     def new_file(self):
         filename = fdialog.askopenfilename(filetypes=(("Text Files", "*.txt"), ("All Files", "*.*")))
