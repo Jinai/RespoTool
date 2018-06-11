@@ -38,7 +38,7 @@ class RespoTool(tk.Tk):
 
         # Rendering
         self._setup_widgets()
-        self.title("RespoTool v" + __version__)
+        self.title("RespoTool " + __version__)
         self.update_idletasks()
         self.minsize(742, self.winfo_reqheight())
         try:
@@ -65,7 +65,7 @@ class RespoTool(tk.Tk):
 
         # Warnings
         if self.warning:
-            modaldialog.InfoModal(self, "RespoTool v" + __version__, self.warning_msg, "J'ai compris").spawn()
+            modaldialog.InfoModal(self, "RespoTool " + __version__, self.warning_msg, "J'ai compris").spawn()
 
     def _setup_widgets(self):
         self.statusbar = statusbar.StatusBar(self)
@@ -328,8 +328,7 @@ class RespoTool(tk.Tk):
         # self.button_sigmdm.configure(state="enabled")
 
     def clear_focus(self):
-        for item in self.tree_sig.tree.selection():
-            self.tree_sig.tree.selection_remove(item)
+        self.tree_sig.deselect_all()
         self.main_frame.focus_force()
 
     def quit(self):
@@ -340,7 +339,7 @@ class RespoTool(tk.Tk):
 
 if __name__ == '__main__':
     log_level = utils.init_logging("RespoTool", "respotool.log")
-    logging.info("Starting RespoTool v{} with log_level={}".format(__version__, log_level))
+    logging.info("Starting RespoTool {} with log_level={}".format(__version__, log_level))
 
     msg = ""
     session = "saves/session.sig"

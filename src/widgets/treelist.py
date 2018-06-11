@@ -120,15 +120,6 @@ class Treelist(tk.Frame):
         self.tree.focus_set()
         self.tree.focus(item)
 
-    def selection_indexes(self):
-        indexes = []
-        selection = self.tree.selection()
-        for item in selection:
-            values = self.tree.item(item)['values']
-            values[0] = str(values[0])
-            indexes.append(self._data.index(values))
-        return indexes
-
     def sort(self, col, descending):
         if self.sortable:
             tree_data = [(self.tree.set(child, col), self.tree.set(child, 0), child) for child in
@@ -159,3 +150,6 @@ class Treelist(tk.Frame):
 
     def select_all(self):
         self.tree.selection_set(self.tree.get_children())
+
+    def deselect_all(self):
+        self.tree.selection_remove(self.tree.get_children())

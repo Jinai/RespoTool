@@ -133,8 +133,8 @@ class Siglist(Treelist):
                                                bg_color="white", border_color="#767676", border_width=1)
 
     def on_enter(self, event):
-        select = self.tree.selection()
-        if select:
+        selection = self.tree.selection()
+        if selection:
             if self.respomap.get() == '':
                 winsound.PlaySound('SystemHand', winsound.SND_ASYNC)
                 x, y = self.master.winfo_rootx(), self.master.winfo_rooty()
@@ -142,7 +142,7 @@ class Siglist(Treelist):
                 # Pull down the respomap selection menu [dirty]
                 self.master.master.dropdown_respo.event_generate("<Button-1>")
                 return
-            item = select[0]
+            item = selection[0]
             item_index = self.tree.get_children().index(item)
             values = self.tree.item(item)['values']
             values[0] = str(values[0])  # Treeviews force str to int if it's a digit
