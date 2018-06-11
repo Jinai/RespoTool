@@ -33,6 +33,8 @@ class RespoTool(tk.Tk):
         self.current_respo = tk.StringVar()
         with open("data/respomaps.json", 'r', encoding='utf-8') as f:
             self.respomaps = json.load(f)
+        with open("data/contact.json", 'r', encoding='utf-8') as f:
+            self.contact = json.load(f)
         self.signalements = []
         self.archives = archives.Archives(archives_dir, archives_pattern)
 
@@ -142,25 +144,13 @@ class RespoTool(tk.Tk):
         # ------------------------------------------------ ACTIONS ------------------------------------------------- #
 
         self.frame_actions = tk.Frame(self.main_frame)
-        self.frame_act1 = tk.Frame(self.frame_actions)
-        self.frame_act1.pack()
-        self.button_archive = ttk.Button(self.frame_act1, text="Archiver", command=self.archive_all, width=16)
-        self.button_archive.pack(side="left")
-        self.button_archive_selection = ttk.Button(self.frame_act1, text="Archiver sélection",
-                                                   command=self.archive_selection, width=16)
+        self.button_generate_mp = ttk.Button(self.frame_actions, command=self.generate_contact_message)
+        self.button_generate_mp.pack(side="left")
+        self.button_archive_selection = ttk.Button(self.frame_actions, command=self.archive_selection)
         self.button_archive_selection.pack(side="right")
 
-        self.frame_act2 = tk.Frame(self.frame_actions)
-        self.frame_act2.pack()
-        self.button_playlist = ttk.Button(self.frame_act2, text="Playlist", command=self.playlist, width=16)
-        self.button_playlist.pack(side="left")
-        self.button_sigmdm = ttk.Button(self.frame_act2, text="Obtenir sigmdm", command=self.sigmdm, width=16)
-        self.button_sigmdm.pack(side="right")
-
-        self.button_archive.configure(state="disabled")
-        self.button_archive_selection.configure(state="disabled")
-        self.button_playlist.configure(state="disabled")
-        self.button_sigmdm.configure(state="disabled")
+        self.button_generate_mp.configure(text="Générer MP", width=16, state="disabled")
+        self.button_archive_selection.configure(text="Archiver sélection", width=16, state="disabled")
 
         # ------------------------------------------- WIDGETS PLACEMENT -------------------------------------------- #
 
@@ -170,7 +160,7 @@ class RespoTool(tk.Tk):
         self.frame_respo.grid(row=1, column=0, sticky="w", pady=10)
         self.frame_search.grid(row=1, column=2, sticky="e", padx=(0, 17), pady=10)
         self.tree_sig.grid(row=2, column=0, columnspan=3, sticky="nsew", pady=(0, 10))
-        self.frame_actions.grid(row=3, column=1, sticky="nsew")
+        self.frame_actions.grid(row=3, column=1)
 
         self.main_frame.grid_rowconfigure(2, weight=1)
         self.main_frame.grid_columnconfigure((0, 1, 2), weight=1, uniform="_")
@@ -185,8 +175,13 @@ class RespoTool(tk.Tk):
     def selection_handler(self):
         selection = self.tree_sig.tree.selection()
         if len(selection) == 0:
+            self.button_generate_mp.configure(state="disabled")
             self.button_archive_selection.configure(state="disabled")
-        if len(selection) >= 1:
+        elif len(selection) == 1:
+            self.button_generate_mp.configure(state="enabled")
+            self.button_archive_selection.configure(state="enabled")
+        elif len(selection) > 1:
+            self.button_generate_mp.configure(state="disabled")
             self.button_archive_selection.configure(state="enabled")
 
     def new_file(self):
@@ -229,16 +224,12 @@ class RespoTool(tk.Tk):
                 "{} signalements ajoutés à la session courante depuis le presse-papiers.".format(len(signalements))
             )
 
-    def playlist(self):
-        path = "playlist.txt"
-        with open(path, "w", encoding="utf-8") as f:
-            for sig in self.signalements:
-                f.write(str(sig) + "\n")
-        self.statusbar.set("Playlist créee dans '{}'.".format(path))
-
-    def archive_all(self):
-        self.tree_sig.select_all()
-        self.archive_selection()
+    def generate_contact_message(self):
+        sig = self.tree_sig.get_selected_sigs()[0]
+        template = "\n".join(self.contact['message'])
+        message = template.format(**sig.__dict__)
+        pyperclip.copy(message)
+        self.statusbar.set("MP copié dans le presse-papiers.")
 
     def archive_selection(self):
         indexes = self.tree_sig.selection_indexes()
@@ -265,13 +256,6 @@ class RespoTool(tk.Tk):
             msg = ("Votre sélection doit être d'un seul bloc (pas de trous) et doit commencer par le premier " +
                    "signalement afin de conserver l'ordre des archives.")
             mbox.showerror("Mauvais archivage", msg)
-
-    def sigmdm(self):
-        res = ""
-        for sig in self.signalements:
-            res += sig.sigmdm() + "\n"
-        pyperclip.copy(res.strip())
-        self.statusbar.set("Résultat /sigmdm copié dans le presse-papiers.")
 
     def export_save(self, path=None):
         if path:
@@ -322,10 +306,6 @@ class RespoTool(tk.Tk):
             self.tree_sig.scroll_down()
         elif scroll == "up":
             self.tree_sig.scroll_up()
-        # self.button_playlist.configure(state="enabled")
-        # self.button_archive.configure(state="enabled")
-        # self.button_archive_selection.configure(state="enabled")
-        # self.button_sigmdm.configure(state="enabled")
 
     def clear_focus(self):
         self.tree_sig.deselect_all()
