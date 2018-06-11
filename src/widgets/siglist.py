@@ -92,6 +92,13 @@ class Siglist(Treelist):
             indexes.append(int(self.tree.item(item)['values'][0]) - 1)
         return indexes
 
+    def get_selected_sigs(self):
+        selected = []
+        for item in self.tree.selection():
+            index = int(self.tree.item(item)['values'][0]) - 1
+            selected.append(self.signalements[index])
+        return selected
+
     def sort(self, col, descending):
         if self.sortable:
             index = self.headers.index(col)
@@ -187,8 +194,8 @@ class Siglist(Treelist):
                 pass
 
     def open_urls(self):
-        for item in self.tree.selection():
-            for url in utils.extract_urls(self.tree.item(item)['values'][-2]):
+        for sig in self.get_selected_sigs():
+            for url in utils.extract_urls(str(sig)):
                 webbrowser.open_new_tab(url)
 
     def on_space(self, event):
