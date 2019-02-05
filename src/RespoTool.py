@@ -62,7 +62,7 @@ class RespoTool(tk.Tk):
         self.main_frame.bind('<Control-v>', lambda _: self.append_clipboard())
         self.main_frame.bind('<Button-1>', lambda _: self.clear_focus())
         self.tree_sig.tree.bind('<<TreeviewSelect>>', lambda _: self.selection_handler(), add="+")
-        self.current_respo.trace("w", lambda *_: logging.debug("Setting respo={}".format(self.current_respo.get())))
+        self.current_respo.trace("w", lambda *_: logging.debug("Setting respomap={}".format(self.current_respo.get())))
         self.protocol("WM_DELETE_WINDOW", self.quit)
 
         # Warnings
@@ -110,6 +110,7 @@ class RespoTool(tk.Tk):
         self.dropdown_respo = ttk.Combobox(self.frame_respo, state='readonly', textvariable=self.current_respo)
         self.dropdown_respo.pack(side="right")
         self.dropdown_respo['values'] = self.respomaps['main']  # comptes principaux
+        self.dropdown_respo.textvariable = self.current_respo
 
         self.frame_search = tk.Frame(self.main_frame)
         search_icon = tk.PhotoImage(file="data/img/search.gif")
@@ -135,7 +136,7 @@ class RespoTool(tk.Tk):
             lambda x: x[0].lower(),
         ]
         stretch = [False, False, False, False, False, True, True, True]
-        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.current_respo, self.archives, headers,
+        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.archives, self.dropdown_respo, headers,
                                         column_widths, sort_keys=sort_keys, stretch=stretch, sortable=False,
                                         auto_increment=True, search_excludes=["Rechercher"], match_template="{} sur {}")
         self.entry_search.entry.configure(textvariable=self.tree_sig._search_key)

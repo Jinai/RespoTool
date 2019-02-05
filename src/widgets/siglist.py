@@ -18,10 +18,10 @@ logger = logging.getLogger(__name__)
 
 
 class Siglist(Treelist):
-    def __init__(self, master, signalements, respomap, archives, *args, **kwargs):
+    def __init__(self, master, signalements, archives, respomap_widget, *args, **kwargs):
         Treelist.__init__(self, master, *args, **kwargs)
         self.signalements = signalements
-        self.respomap = respomap
+        self.respomap_widget = respomap_widget
         self._keys = {
             0: lambda x: 0,
             1: lambda x: x.datetime(),
@@ -143,28 +143,28 @@ class Siglist(Treelist):
     def on_enter(self, event):
         selection = self.tree.selection()
         if selection:
-            if self.respomap.get() == '':
+            respo = self.respomap_widget.textvariable.get()
+            if respo == "":
                 winsound.PlaySound('SystemHand', winsound.SND_ASYNC)
                 x, y = self.master.winfo_rootx(), self.master.winfo_rooty()
-                Popup("Qui es-tu ? ^_^", x, y, offset=(220, 61), delay=50, lifetime=3000)
-                # Pull down the respomap selection menu [dirty]
-                self.master.master.dropdown_respo.event_generate("<Button-1>")
+                Popup("Qui es-tu ? ^_^", x, y, offset=(243, 61), delay=50, lifetime=3000)  # Magic offset
+                # Pull down the respomap selection menu
+                self.respomap_widget.event_generate("<Button-1>")
                 return
             item = selection[0]
             item_index = self.tree.get_children().index(item)
             values = self.tree.item(item)['values']
             values[0] = str(values[0])  # Treeviews force str to int if it's a digit
             data_index = self._data.index(values)
-            dialog = EditStatusDialog(self, self.statuses, values[-2],
-                                      "Éditer statut #{} : {}".format(values[0], values[3]))
+            title = "Éditer statut #{num} : {code}".format(num=values[0], code=values[3])
+            dialog = EditStatusDialog(self, self.statuses, values[-2], title)
             dialog.spawn()
             new_statut = dialog.result
-            if new_statut is not None and new_statut != values[-2]:
+            if isinstance(new_statut, str) and new_statut != values[-2]:
                 values[-1] = [respo.strip() for respo in values[-1].split(",")] if values[-1] else []
                 sig = Signalement(*values[1:])
                 sig_index = self.signalements.index(sig)
-                respo = self.respomap.get()
-                if respo != '' and respo not in sig.respo:
+                if respo not in sig.respo:
                     sig.respo.append(respo)
                 if new_statut == "/reset":
                     sig.respo = []
