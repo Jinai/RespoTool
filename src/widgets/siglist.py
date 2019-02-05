@@ -51,9 +51,9 @@ class Siglist(Treelist):
     def update_tags(self):
         with open("data/tags.json", 'r', encoding='utf-8') as f:
             self.tags = json.load(f)
-        for index in self.tags:
-            for keyword in self.tags[index]:
-                self.tree.tag_configure(keyword, background=self.tags[index][keyword])
+        for tag in self.tags:
+            keyword, color = tag
+            self.tree.tag_configure(keyword, background=color)
 
     def update_templates(self):
         with open("data/duplicates_msg.json", 'r', encoding='utf-8') as f:
@@ -61,14 +61,11 @@ class Siglist(Treelist):
 
     def insert(self, values, update=True, tags=None):
         tags = []
-        try:
-            for index in sorted(self.tags):
-                for keyword in self.tags[index]:
-                    if keyword in values[-2]:
-                        tags.append(keyword)
-                        raise StopIteration
-        except StopIteration:
-            pass
+        for tag in self.tags:
+            keyword = tag[0]
+            if keyword in values[-2]:
+                tags.append(keyword)
+                break
         super().insert(values, update, tags)
 
     def delete(self):

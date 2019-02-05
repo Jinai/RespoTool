@@ -1,17 +1,22 @@
-{
-    "1": {
-        "todo":      "#FFB9B9"
-    },
-    "2": {
-        "refaire":   "#B9B9FF"
-    },
-    "3": {
-        "tester":    "#FFFFB9"
-    },
-    "4": {
-        "contacter": "#FFB9FF"
-    },
-    "5": {
-        "contacté":  "#B9FFB9"
-    }
-}
+[
+    [
+        "todo",
+        "#FFB9B9"
+    ],
+    [
+        "refaire",
+        "#B9B9FF"
+    ],
+    [
+        "tester",
+        "#FFFFB9"
+    ],
+    [
+        "contacter",
+        "#FFB9FF"
+    ],
+    [
+        "contacté",
+        "#B9FFB9"
+    ]
+]
