@@ -14,7 +14,7 @@ def py2exe():
         version=__version__,
         description="Outil de gestion de signalements de cartes pour le jeu Aaaah !",
         author="Jinai",
-        author_email="jinai.extinction@gmail.com",
+        author_email="jinai.git@gmail.com",
         url="http://www.extinction.fr/minijeux/",
         options={
             "py2exe": {
@@ -42,7 +42,7 @@ def py2exe():
             }
         ],
         data_files=[
-            ('data', ['data/duplicates_msg.json', 'data/respomaps.json', 'data/tags.json']),
+            ('data', ['data/duplicates_msg.json', 'data/respomaps.json', 'data/tags.json', 'data/statuses.json']),
             ('data/img', ['data/img/respotool.ico', 'data/img/search.gif', 'data/img/shield_respo.png'])]
     )
 

@@ -6,10 +6,10 @@ import tkinter.ttk as ttk
 
 
 class ModalDialog(tk.Toplevel):
-    def __init__(self, parent, dialog_title=None, can_resize=False):
-        super(ModalDialog, self).__init__()
+    def __init__(self, master, dialog_title=None, can_resize=False):
+        super().__init__()
         self.withdraw()
-        self.parent = parent
+        self.master = master
         self.dialog_title = dialog_title
         self.can_resize = can_resize
         self.result = None
@@ -21,18 +21,18 @@ class ModalDialog(tk.Toplevel):
         self.attributes('-alpha', 0.0)
         self.deiconify()
         self.title(self.dialog_title)
-        body = tk.Frame(self)
-        body.pack(fill="both", expand=True, padx=5, pady=5)
-        self.initial_focus = self.body(body)
+        main_frame = tk.Frame(self)
+        main_frame.pack(fill="both", expand=True, padx=5, pady=(5, 0))
+        self.initial_focus = self.body(main_frame)
         self.buttonbox()
         if not self.initial_focus:
             self.initial_focus = self
         self.initial_focus.focus_set()
         self.initial_focus.focus_force()
-        self.protocol("WM_DELETE_WINDOW", self.cancel)
-        self.bind("<Return>", self.ok)
-        self.bind("<Escape>", self.cancel)
-        self.center(self.parent)
+        self.protocol("WM_DELETE_WINDOW", lambda *_: self.cancel())
+        self.bind("<Return>", lambda *_: self.ok())
+        self.bind("<Escape>", lambda *_: self.cancel())
+        self.center(self.master)
         self.update_idletasks()
         self.minsize(self.winfo_reqwidth(), self.winfo_reqheight())
         self.resizable(width=self.can_resize, height=self.can_resize)
@@ -64,32 +64,32 @@ class ModalDialog(tk.Toplevel):
         box.pack()
         w = ttk.Button(box, text="OK", width=10, command=self.ok, default=tk.ACTIVE)
         w.pack(side=tk.LEFT, padx=5, pady=5)
-        w = ttk.Button(box, text="Cancel", width=10, command=self.cancel)
+        w = ttk.Button(box, text="Annuler", width=10, command=self.cancel)
         w.pack(side=tk.LEFT, padx=5, pady=5)
 
     #
     # standard button semantics
 
-    def ok(self, event=None):
+    def ok(self):
         if not self.validate():
             self.initial_focus.focus_set()  # put focus back
             return
 
+        self.apply()
         self.withdraw()
         self.update_idletasks()
-        self.apply()
         self.cancel()
 
-    def cancel(self, event=None):
+    def cancel(self):
         # put focus back to the parent window
-        self.parent.focus_set()
+        self.master.focus_set()
         self.destroy()
 
     #
     # command hooks
 
     def validate(self):
-        return 1  # override
+        return True  # override
 
     def apply(self):
         pass  # override
@@ -102,8 +102,8 @@ class InfoModal(ModalDialog):
         self.button_text = button_text
         self.font = font
 
-    def body(self, master):
-        self.msg = tk.Message(master, text=self.body_text, width=500)
+    def body(self, main_frame):
+        self.msg = tk.Message(main_frame, text=self.body_text, width=500)
         if self.font:
             self.msg.config(font=self.font)
         self.msg.pack()

@@ -106,7 +106,7 @@ def validate_indexes(indexes):
     return len(indexes)
 
 
-def ellipsis(text, *, width, placeholder="..."):
+def text_ellipsis(text, *, width, placeholder="..."):
     if not isinstance(text, str) or width < len(placeholder):
         raise ValueError
     if len(text) <= width:
@@ -116,3 +116,7 @@ def ellipsis(text, *, width, placeholder="..."):
 
 def extract_urls(text):
     return re.findall(urlmarker.URL_REGEX, text)
+
+
+def sequence_chunker(seq, size):
+    return (seq[pos:pos + size] for pos in range(0, len(seq), size))

@@ -4,4 +4,4 @@
 __version__ = "1.6"
 __date__ = "19/04/2018"
 __author__ = "Jinai"
-__email__ = "jinai.extinction@gmail.com"
+__email__ = "jinai.git@gmail.com"

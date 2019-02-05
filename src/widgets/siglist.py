@@ -59,6 +59,10 @@ class Siglist(Treelist):
         with open("data/duplicates_msg.json", 'r', encoding='utf-8') as f:
             self.archives_templates = json.load(f)
 
+    def update_statuses(self):
+        with open("data/statuses.json", 'r', encoding='utf-8') as f:
+            self.statuses = json.load(f)
+
     def insert(self, values, update=True, tags=None):
         tags = []
         for tag in self.tags:
@@ -121,7 +125,7 @@ class Siglist(Treelist):
             pyperclip.copy(value)
             # Popup
             x, y = self.master.winfo_pointerx(), self.master.winfo_pointery()
-            msg = utils.ellipsis(value, width=30)
+            msg = utils.text_ellipsis(value, width=30)
             Popup('"{}" copié dans le presse-papiers'.format(msg), x, y, offset=(10, -20))
 
     def on_rightclick(self, event):
@@ -151,7 +155,8 @@ class Siglist(Treelist):
             values = self.tree.item(item)['values']
             values[0] = str(values[0])  # Treeviews force str to int if it's a digit
             data_index = self._data.index(values)
-            dialog = EditStatusDialog(self, "Éditer statut #{} : {}".format(values[0], values[3]), values[-2])
+            dialog = EditStatusDialog(self, self.statuses, values[-2],
+                                      "Éditer statut #{} : {}".format(values[0], values[3]))
             dialog.spawn()
             new_statut = dialog.result
             if new_statut is not None and new_statut != values[-2]:
@@ -161,7 +166,7 @@ class Siglist(Treelist):
                 respo = self.respomap.get()
                 if respo != '' and respo not in sig.respo:
                     sig.respo.append(respo)
-                if "/reset" in new_statut.lower():
+                if new_statut == "/reset":
                     sig.respo = []
                 else:
                     sig.statut = new_statut
@@ -242,4 +247,5 @@ class Siglist(Treelist):
         self.populate()
         self.update_tags()
         self.update_templates()
+        self.update_statuses()
         self._matches_label.set('')
