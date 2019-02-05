@@ -7,7 +7,7 @@ name = "pypi"
 pyperclip = "*"
 
 [dev-packages]
-"py2exe" = "*"
+"py2exe" = "==0.9.2.2"
 
 [requires]
 python_version = "3.4"
