@@ -56,7 +56,7 @@ class Siglist(Treelist):
                 self.tree.tag_configure(keyword, background=self.tags[index][keyword])
 
     def update_templates(self):
-        with open("data/archives_templates.json", 'r', encoding='utf-8') as f:
+        with open("data/duplicates_msg.json", 'r', encoding='utf-8') as f:
             self.archives_templates = json.load(f)
 
     def insert(self, values, update=True, tags=None):

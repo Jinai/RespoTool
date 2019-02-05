@@ -42,7 +42,7 @@ def py2exe():
             }
         ],
         data_files=[
-            ('data', ['data/archives_templates.json', 'data/respomaps.json', 'data/tags.json']),
+            ('data', ['data/duplicates_msg.json', 'data/respomaps.json', 'data/tags.json']),
             ('data/img', ['data/img/respotool.ico', 'data/img/search.gif', 'data/img/shield_respo.png'])]
     )
 
