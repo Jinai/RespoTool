@@ -3,6 +3,7 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
+from collections import OrderedDict
 
 import utils
 from .modaldialog import ModalDialog
@@ -11,9 +12,9 @@ from .modaldialog import ModalDialog
 class EditStatusDialog(ModalDialog):
     def __init__(self, master, statuses, original_text, title=None):
         ModalDialog.__init__(self, master, title)
-        self.statuses = statuses
+        self.statuses = statuses  # Defined in data/statuses.json
         self.original_text = original_text
-        self.checkbuttons_state = {}
+        self.parsed_state = OrderedDict()
         self.comment = ""
         self.parse_original_text()
 
@@ -25,11 +26,11 @@ class EditStatusDialog(ModalDialog):
             column = tk.Frame(checkbuttons_frame)
             column.pack(fill="both", expand=True, side="left")
             for status in chunk:
-                if status in self.checkbuttons_state:
-                    var = self.checkbuttons_state[status]
+                if status in self.parsed_state:
+                    var = self.parsed_state[status]
                 else:
                     var = tk.IntVar(master=self, value=0)
-                    self.checkbuttons_state[status] = var
+                    self.parsed_state[status] = var
 
                 var.trace("w", lambda *_, var=var, name=status: self.checkbutton_callback(var, name))
                 cb = ttk.Checkbutton(column, text=status.title(), variable=var, takefocus=False)
@@ -51,7 +52,7 @@ class EditStatusDialog(ModalDialog):
         self.comment_field.bind('<Control-Key-a>', lambda *_: self.select_all())
 
         self.comment_field.insert(tk.INSERT, self.comment)
-        self.comment_field.edit_reset()  # reset undo/redo stack so that ctrl+z doesn't delete the original status
+        self.comment_field.edit_reset()  # reset undo/redo stack so that ctrl+z doesn't delete the original comment
         self.select_all()
         return self.comment_field
 
@@ -63,21 +64,21 @@ class EditStatusDialog(ModalDialog):
         self.comment = comment
         for status in tmp.pop().split(status_sep):
             var = tk.IntVar(master=self, value=1)
-            self.checkbuttons_state[status.strip()] = var
+            self.parsed_state[status.strip()] = var
 
     def checkbutton_callback(self, current_var, name):
         if name == "todo" and current_var.get():
-            for status, var in self.checkbuttons_state.items():
+            for status, var in self.parsed_state.items():
                 if status != "todo" and var.get():
                     var.set(0)
         elif name != "todo" and current_var.get():
-            todo = self.checkbuttons_state["todo"]
+            todo = self.parsed_state["todo"]
             if todo.get():
                 todo.set(0)
 
     def apply(self):
         self.comment = self.comment_field.get("1.0", tk.END).strip()
-        self.result = " + ".join([status for status in self.statuses if self.checkbuttons_state[status].get()])
+        self.result = " + ".join([status for status, var in self.parsed_state.items() if var.get()])
         if self.comment:
             self.result += " // " + self.comment
 
