@@ -4,7 +4,6 @@
 import json
 import logging
 import webbrowser
-import winsound
 
 import pyperclip
 
@@ -145,7 +144,7 @@ class Siglist(Treelist):
         if selection:
             respo = self.respomap_widget.textvariable.get()
             if respo == "":
-                winsound.PlaySound('SystemHand', winsound.SND_ASYNC)
+                utils.play_alert()
                 x, y = self.master.winfo_rootx(), self.master.winfo_rooty()
                 Popup("Qui es-tu ? ^_^", x, y, offset=(243, 61), delay=50, lifetime=3000)  # Magic offset
                 # Pull down the respomap selection menu
