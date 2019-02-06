@@ -1,26 +1,23 @@
 # -*- mode: python -*-
 
-import sys
-
-sys.dont_write_bytecode = True
 block_cipher = None
+
 
 a = Analysis(
     ['RespoTool.py'],
-    pathex=['../'],
     binaries=[],
     datas=[],
     hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],
     excludes=[
-        'doctest', 'unittest', 'xml', 'xmlrpc', 'difflib', 'optparse', 'dis', 'bz2',
+        'doctest', 'unittest', 'xml', 'xmlrpc', 'difflib', 'optparse', 'bz2',
         'bdb', 'ftplib', 'optparse', 'pdb', 'pydoc', 'pyexpat', 'pywintypes',
-        'selectors', 'socketserver', 'win32api', 'win32con', '_bz2', '_hashlib',
+        'socketserver', 'win32api', 'win32con', '_bz2', '_hashlib',
         '_lzma', '_ssl', 'netbios', 'netrc', 'pkgutil', 'plistlib', 'pprint',
         'py_compile', 'runpy', 'ssl', 'win32wnet', 'zipfile', '_multiprocessing',
         '_osx_support', '_strptime', '_threading_local', 'lzma', 'gzip', 'getopt',
-        'getpass', 'hmac', 'webbrowser', 'urllib', 'operators',
+        'getpass', 'hmac', 'urllib', 'operators',
     ],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
@@ -41,8 +38,10 @@ exe = EXE(
     a.datas,
     name='RespoTool',
     debug=False,
+    bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
+    runtime_tmpdir=None,
     console=True,
     icon='data\\img\\respotool.ico'
 )
