@@ -1,3 +1,18 @@
+v1.7 [08/02/2019]
+=================
+    * Utilisation d'une liste de cases à cocher et d'une zone à commentaires pour
+      indiquer quelles actions ont été menées lors du traitement d'un signalement.
+      Plus besoin de formatter à la main le statut (ex. "modifié + record // pas ouf").
+    * Ctrl+L pour ouvrir toutes les URLs trouvées dans la sélection courante
+    * Ajout d'un bouton pour générer un message automatique reprenant toutes les infos
+      du signalement sélectionné. Le message est copié dans le presse-papiers et est
+      destiné a être envoyé par MP à l'auteur de la map
+    * Plusieurs boutons inutilisés ont été désactivés pour le moment (nouvelle session
+      et ajout de signalements via fichier). L'interface devrait être revue plus tard
+    * Petites modifications pour améliorer l'affichage sur Mac. Il y a encore pas mal
+      de fonctionnalités manquantes cela dit (notamment les raccourcis clavier)
+
+
 v1.6 [19/04/2018]
 =================
     * Correction d'un bug provoquant parfois des effets indésirables lors de l'édition
