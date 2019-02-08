@@ -72,7 +72,7 @@ class RespoTool(tk.Tk):
     def _setup_widgets(self):
         self.statusbar = statusbar.StatusBar(self)
         self.statusbar.pack(side="bottom", fill="x")
-        self.main_frame = tk.Frame(self)
+        self.main_frame = ttk.Frame(self)
         self.main_frame.pack(fill='both', expand=True, pady=5, padx=5)
 
         # -------------------------------------------- IMPORT / EXPORT --------------------------------------------- #
@@ -101,9 +101,9 @@ class RespoTool(tk.Tk):
 
         # ----------------------------------------- CURRENT RESPO & SEARCH ----------------------------------------- #
 
-        self.frame_respo = tk.Frame(self.main_frame)
+        self.frame_respo = ttk.Frame(self.main_frame)
         self.icon_respo = tk.PhotoImage(file="data/img/shield_respo.png")
-        lbl_icon_respo = tk.Label(self.frame_respo, image=self.icon_respo)
+        lbl_icon_respo = ttk.Label(self.frame_respo, image=self.icon_respo)
         lbl_icon_respo.pack(side="left")
         label_respo = ttk.Label(self.frame_respo, text="Respomap  :  ")
         label_respo.pack(side="left")
@@ -112,7 +112,7 @@ class RespoTool(tk.Tk):
         self.dropdown_respo['values'] = self.respomaps['main']  # comptes principaux
         self.dropdown_respo.textvariable = self.current_respo
 
-        self.frame_search = tk.Frame(self.main_frame)
+        self.frame_search = ttk.Frame(self.main_frame)
         search_icon = tk.PhotoImage(file="data/img/search.gif")
         self.entry_search = customentries.PlaceholderEntry(self.frame_search, placeholder=" Rechercher",
                                                            icon=search_icon,
@@ -144,7 +144,7 @@ class RespoTool(tk.Tk):
 
         # ------------------------------------------------ ACTIONS ------------------------------------------------- #
 
-        self.frame_actions = tk.Frame(self.main_frame)
+        self.frame_actions = ttk.Frame(self.main_frame)
         self.button_generate_mp = ttk.Button(self.frame_actions, command=self.generate_contact_message)
         self.button_generate_mp.pack(side="left")
         self.button_archive_selection = ttk.Button(self.frame_actions, command=self.archive_selection)

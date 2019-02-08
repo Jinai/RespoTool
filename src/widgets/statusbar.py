@@ -2,13 +2,14 @@
 # !python3
 
 import tkinter as tk
+from tkinter import ttk
 
 from widgets.customborder import CustomBorder
 
 
-class StatusBar(tk.Frame):
+class StatusBar(ttk.Frame):
     def __init__(self, master, text='', **opts):
-        tk.Frame.__init__(self, master, **opts)
+        ttk.Frame.__init__(self, master, **opts)
         self.master = master
         self.text = text
         self._textvar = tk.StringVar()

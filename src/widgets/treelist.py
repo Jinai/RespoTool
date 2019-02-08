@@ -5,10 +5,10 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 
-class Treelist(tk.Frame):
+class Treelist(ttk.Frame):
     def __init__(self, master, headers, column_widths=None, height=15, alt_colors=None, sort_keys=None, stretch=None,
                  sortable=True, auto_increment=True, search_excludes=None, match_template=None, **opts):
-        tk.Frame.__init__(self, master, **opts)
+        ttk.Frame.__init__(self, master, **opts)
         self.master = master
         self.headers = headers
         self.auto_increment = auto_increment  # Allows automatic handling of # column
@@ -40,12 +40,12 @@ class Treelist(tk.Frame):
         self._search_key.trace("w", lambda *x: self.search())  # Everytime the query changes it triggers search()
         self._matches_label = tk.StringVar()  # Contains the number of matches (formatted) yielded by the search query
         self._data = []  # Contains inserted values
-        self._parity_check = 0  # For alt colors, incremented every insertion and resetted when the tree is cleared
+        self._parity_check = 0  # For colored odd rows, incremented on each insert and reset when the tree is cleared
 
         self._setup_widgets()
 
     def _setup_widgets(self):
-        frame_tree = tk.Frame(self)
+        frame_tree = ttk.Frame(self)
         frame_tree.pack(fill='both', expand=True)
         vsb = ttk.Scrollbar(frame_tree, orient="vertical")
         vsb.pack(side='right', fill='y')

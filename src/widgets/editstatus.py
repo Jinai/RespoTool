@@ -20,10 +20,10 @@ class EditStatusDialog(ModalDialog):
 
     def body(self, main_frame):
         # Checkbuttons for statuses
-        checkbuttons_frame = tk.Frame(main_frame)
+        checkbuttons_frame = ttk.Frame(main_frame)
         checkbuttons_frame.pack(fill="both", expand=True, side="top")
         for chunk in utils.sequence_chunker(self.statuses, 3):
-            column = tk.Frame(checkbuttons_frame)
+            column = ttk.Frame(checkbuttons_frame)
             column.pack(fill="both", expand=True, side="left")
             for status in chunk:
                 if status in self.parsed_state:
@@ -37,7 +37,7 @@ class EditStatusDialog(ModalDialog):
                 cb.pack(side="top", anchor="w")
 
         # Text area for comments
-        comment_frame = tk.Frame(main_frame)
+        comment_frame = ttk.Frame(main_frame)
         comment_frame.pack(fill="both", expand=True, pady=5)
         comment_label = ttk.Label(comment_frame, text="Commentaire :")
         comment_label.pack(anchor="w")

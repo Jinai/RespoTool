@@ -21,7 +21,7 @@ class ModalDialog(tk.Toplevel):
         self.attributes('-alpha', 0.0)
         self.deiconify()
         self.title(self.dialog_title)
-        main_frame = tk.Frame(self)
+        main_frame = ttk.Frame(self)
         main_frame.pack(fill="both", expand=True, padx=5, pady=(5, 0))
         self.initial_focus = self.body(main_frame)
         self.buttonbox()

@@ -6,12 +6,12 @@ import tkinter.font as tkfont
 
 
 class CustomEntry(tk.Frame):
-    # This class emulates the graphical behaviour of a ttk.Entry widget
-    # using a frame as a colored border, embedding a normal tk.Entry widget
+    # This widget emulates the graphical behaviour of a ttk.Entry widget (on Windows),
+    # using a frame as a colored border and a normal tk.Entry widget embedded inside
 
-    light_bue = "#7EB4EA"
-    dark_blue = "#569DE5"
-    dark_grey = "#ABADB3"
+    LIGHT_BLUE = "#7EB4EA"
+    DARK_BLUE = "#569DE5"
+    DARK_GREY = "#ABADB3"
 
     def __init__(self, master, *args, **kwargs):
         tk.Frame.__init__(self, master)
@@ -20,12 +20,12 @@ class CustomEntry(tk.Frame):
         self.entry = tk.Entry(self, *args, **kwargs)
         self.entry.configure(insertwidth=1, bd=0, highlightthickness=0)
         self.entry.pack(fill="both", expand=True, ipady=1, pady=1, padx=1)
-        self.configure(background=CustomEntry.dark_grey)
+        self.configure(background=CustomEntry.DARK_GREY)
 
         self.entry.bind("<FocusIn>", self.focus_in)
         self.entry.bind("<FocusOut>", self.focus_out)
-        self.entry.bind("<Enter>", lambda e: None if self.has_focus else self.set_border_color(CustomEntry.light_bue))
-        self.entry.bind("<Leave>", lambda e: None if self.has_focus else self.set_border_color(CustomEntry.dark_grey))
+        self.entry.bind("<Enter>", lambda e: None if self.has_focus else self.set_border_color(CustomEntry.LIGHT_BLUE))
+        self.entry.bind("<Leave>", lambda e: None if self.has_focus else self.set_border_color(CustomEntry.DARK_GREY))
 
         self.focus = self.entry.focus  # Focusing the frame should focus the entry instead
 
@@ -42,15 +42,15 @@ class CustomEntry(tk.Frame):
 
     def focus_in(self, event):
         self.has_focus = True
-        self.set_border_color(CustomEntry.dark_blue)
+        self.set_border_color(CustomEntry.DARK_BLUE)
 
     def focus_out(self, event):
         self.has_focus = False
-        self.set_border_color(CustomEntry.light_bue)
+        self.set_border_color(CustomEntry.LIGHT_BLUE)
         if self.winfo_containing(*self.winfo_pointerxy()) != self.entry:
             # Only go back to a grey border when focusing out if the
             # mouse pointer isn't over the entry
-            self.set_border_color(CustomEntry.dark_grey)
+            self.set_border_color(CustomEntry.DARK_GREY)
 
     def __getattr__(self, item):
         # Delegates attributes/methods to the entry
