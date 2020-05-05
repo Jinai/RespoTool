@@ -136,9 +136,10 @@ class RespoTool(tk.Tk):
             lambda x: x[0].lower(),
         ]
         stretch = [False, False, False, False, False, True, True, True]
-        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.archives, self.dropdown_respo, headers,
-                                        column_widths, sort_keys=sort_keys, stretch=stretch, sortable=False,
-                                        auto_increment=True, search_excludes=["Rechercher"], match_template="{} sur {}")
+        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.archives, self.dropdown_respo,
+                                        self.statusbar, headers, column_widths, sort_keys=sort_keys, stretch=stretch,
+                                        sortable=False, auto_increment=True, search_excludes=["Rechercher"],
+                                        match_template="{} sur {}")
         self.entry_search.entry.configure(textvariable=self.tree_sig._search_key)
         self.label_matches.configure(textvariable=self.tree_sig._matches_label)
 

@@ -17,10 +17,11 @@ logger = logging.getLogger(__name__)
 
 
 class Siglist(Treelist):
-    def __init__(self, master, signalements, archives, respomap_widget, *args, **kwargs):
+    def __init__(self, master, signalements, archives, respomap_widget, statusbar, *args, **kwargs):
         Treelist.__init__(self, master, *args, **kwargs)
         self.signalements = signalements
         self.respomap_widget = respomap_widget
+        self.statusbar = statusbar
         self._keys = {
             0: lambda x: 0,
             1: lambda x: x.datetime(),
@@ -44,6 +45,7 @@ class Siglist(Treelist):
         self.tree.bind('<space>', self.on_space)
         self.tree.bind('<FocusOut>', self.remove_popups)
         self.tree.bind('<<TreeviewSelect>>', self.remove_popups)
+        self.tree.bind('<<TreeviewSelect>>', lambda _: self.selection_handler())
         self.update_tags()
         self.update_templates()
 
@@ -229,6 +231,15 @@ class Siglist(Treelist):
             self.last_popup_space.destroy()
         if self.last_popup_rightclick:
             self.last_popup_rightclick.destroy()
+
+    def selection_handler(self):
+        self.remove_popups()
+        sel = self.tree.selection()
+        if sel:
+            plural = "" if len(sel) == 1 else "s"
+            self.statusbar.set("{0} signalement{1} sélectionné{1}".format(len(sel), plural), clear_after=0)
+        else:
+            self.statusbar.clear()
 
     def populate(self):
         for i, sig in enumerate(self.signalements):
