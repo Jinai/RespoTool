@@ -85,7 +85,7 @@ class Siglist(Treelist):
                 logger.debug("Deleting {}".format(sig))
             index = super().delete()
             self.refresh()
-            if self._search_key.get() != '':
+            if self._search_query.get() != '':
                 self.search()
             self.focus_index(index)
 
@@ -110,13 +110,6 @@ class Siglist(Treelist):
             else:
                 self.signalements.sort(reverse=descending, key=self._keys[index])
             super().sort(col, descending)
-
-    def search(self, key=None):
-        key = key if key is not None else self._search_key.get()
-        if key == '':
-            self.refresh()
-        else:
-            super().search(key)
 
     def on_doubleclick(self, event):
         if self.tree.identify_region(event.x, event.y) == "cell":
@@ -257,8 +250,8 @@ class Siglist(Treelist):
     def refresh(self, keep_search_query=False):
         self.close_dialogs()
         if keep_search_query:
-            key = self._search_key.get()
-            if key != '' and key not in self.search_exludes:
+            key = self._search_query.get()
+            if key != '' and key not in self.search_excludes:
                 self.search()
                 return
         self.clear()

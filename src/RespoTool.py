@@ -148,7 +148,7 @@ class RespoTool(tk.Tk):
                                         self.statusbar, headers, column_widths, sort_keys=sort_keys, stretch=stretch,
                                         sortable=False, auto_increment=True, search_excludes=[" Rechercher"],
                                         match_template="{} sur {}")
-        self.searchbar.entry.configure(textvariable=self.tree_sig._search_key)
+        self.searchbar.entry.configure(textvariable=self.tree_sig._search_query)
         self.label_matches.configure(textvariable=self.tree_sig._matches_label)
 
         # ------------------------------------------------ ACTIONS ------------------------------------------------- #

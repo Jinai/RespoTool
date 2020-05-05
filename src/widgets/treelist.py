@@ -7,8 +7,9 @@ import tkinter.ttk as ttk
 
 class Treelist(ttk.Frame):
     def __init__(self, master, headers, column_widths=None, height=15, alt_colors=None, sort_keys=None, stretch=None,
-                 sortable=True, auto_increment=True, search_excludes=None, match_template=None, **opts):
-        ttk.Frame.__init__(self, master, **opts)
+                 sortable=True, auto_increment=True, debounce_time=300, search_excludes=None, match_template=None,
+                 **kwargs):
+        ttk.Frame.__init__(self, master, **kwargs)
         self.master = master
         self.headers = headers
         self.auto_increment = auto_increment  # Allows automatic handling of # column
@@ -29,16 +30,22 @@ class Treelist(ttk.Frame):
         # Allows clicking on headers to sort columns alphabetically
         self.sortable = sortable
 
+        # In milliseconds. Delays calls to search() until the user has finished typing his query
+        # Use debounce_time <= 0 for instant feedback
+        self.debounce_time = debounce_time
+
         # A list of words to ignore when search() is triggered
-        self.search_exludes = search_excludes if search_excludes else []
+        self.search_excludes = search_excludes if search_excludes else []
 
         # A formatted string that can be used to display the number of matches yielded by a search query
         self.match_template = match_template if match_template else "{}/{}"
 
         # Internal variables
-        self._search_key = tk.StringVar()  # Contains the search query
-        self._search_key.trace("w", lambda *x: self.search())  # Everytime the query changes it triggers search()
+        self._search_query = tk.StringVar()
+        self._search_query.trace("w", lambda *x: self.search())
+        self._last_search_query = ""
         self._matches_label = tk.StringVar()  # Contains the number of matches (formatted) yielded by the search query
+        self._debounce_after_id = None
         self._data = []  # Contains inserted values
         self._parity_check = 0  # For colored odd rows, incremented on each insert and reset when the tree is cleared
 
@@ -134,19 +141,38 @@ class Treelist(ttk.Frame):
             # In case the user is in the middle of a search
             self.search()
 
-    def search(self, key=None):
-        key = key if key is not None else self._search_key.get()
-        if key in self.search_exludes:
+    def search(self, query=None, debounced=False):
+        if self.debounce_time > 0 and not debounced:
+            id = self._debounce_after_id
+            self._debounce_after_id = None
+            if id:
+                self.after_cancel(id)
+            self._debounce_after_id = self.after(self.debounce_time, lambda: self.search(query, debounced=True))
             return
+
+        query = query if query is not None else self._search_query.get()
+        if query in self.search_excludes:
+            query = ""
+
+        if query == "" and self._last_search_query == "":
+            return
+
         self.clear(keep_data=True)
-        matches = 0
-        for values in self._data:
-            for item in values:
-                if key.lower() in str(item).lower():
-                    self.insert(values, update=False)
-                    matches += 1
-                    break
-        self._matches_label.set(self.match_template.format(matches, len(self._data)))
+        if query == "":
+            for values in self._data:
+                self.insert(values, update=False)
+            self._matches_label.set('')
+        else:
+            matches = 0
+            for values in self._data:
+                for item in values:
+                    if query.lower() in str(item).lower():
+                        self.insert(values, update=False)
+                        matches += 1
+                        break
+            self._matches_label.set(self.match_template.format(matches, len(self._data)))
+        self._last_search_query = query
+        self.scroll_up()
 
     def select_all(self):
         self.tree.selection_set(self.tree.get_children())
