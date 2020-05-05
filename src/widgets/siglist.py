@@ -36,6 +36,7 @@ class Siglist(Treelist):
         self.archives = archives
         self.last_popup_space = None
         self.last_popup_rightclick = None
+        self.dialogs = []
         self.tree.bind('<Double-1>', self.on_doubleclick)
         self.tree.bind('<Button-3>', self.on_rightclick)
         self.tree.bind('<Return>', self.on_enter)
@@ -157,8 +158,9 @@ class Siglist(Treelist):
             values = self.tree.item(item)['values']
             values[0] = str(values[0])  # Treeviews force str to int if it's a digit
             data_index = self._data.index(values)
-            title = "Éditer statut #{num} : {code}".format(num=values[0], code=values[3])
-            dialog = EditStatusDialog(self, self.statuses, values[-2], title)
+            title = "Signalement #{num} ({auteur})".format(num=values[0], auteur=values[2])
+            dialog = EditStatusDialog(self, statuses=self.statuses, original_text=values[-2], dialog_title=title)
+            self.dialogs.append(dialog)
             dialog.spawn()
             new_statut = dialog.result
             if isinstance(new_statut, str) and new_statut != values[-2]:
@@ -241,6 +243,11 @@ class Siglist(Treelist):
         else:
             self.statusbar.clear()
 
+    def close_dialogs(self):
+        for dialog in self.dialogs:
+            dialog.cancel()
+        self.dialogs = []
+
     def populate(self):
         for i, sig in enumerate(self.signalements):
             f = list(sig.fields())
@@ -248,6 +255,7 @@ class Siglist(Treelist):
             self.insert(f)
 
     def refresh(self, keep_search_query=False):
+        self.close_dialogs()
         if keep_search_query:
             key = self._search_key.get()
             if key != '' and key not in self.search_exludes:

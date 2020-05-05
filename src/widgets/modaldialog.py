@@ -6,12 +6,16 @@ import tkinter.ttk as ttk
 
 
 class ModalDialog(tk.Toplevel):
-    def __init__(self, master, dialog_title=None, can_resize=False):
-        super().__init__()
+    def __init__(self, master, *, dialog_title=None, can_resize=True, centered=True, is_modal=True, is_transient=True,
+                 **kwargs):
+        super().__init__(master, **kwargs)
         self.withdraw()
         self.master = master
         self.dialog_title = dialog_title
         self.can_resize = can_resize
+        self.centered = centered
+        self.is_modal = is_modal
+        self.is_transient = is_transient
         self.result = None
 
     #
@@ -21,10 +25,14 @@ class ModalDialog(tk.Toplevel):
         self.attributes('-alpha', 0.0)
         self.deiconify()
         self.title(self.dialog_title)
-        main_frame = ttk.Frame(self)
-        main_frame.pack(fill="both", expand=True, padx=5, pady=(5, 0))
-        self.initial_focus = self.body(main_frame)
-        self.buttonbox()
+        self.main_frame = ttk.Frame(self)
+        self.main_frame.pack(fill="both", expand=True, padx=5, pady=5)
+        self.body_frame = ttk.Frame(self.main_frame)
+        self.body_frame.pack(fill="both", expand=True)
+        self.buttonbox_frame = ttk.Frame(self.main_frame)
+        self.buttonbox_frame.pack(fill="both", expand=True)
+        self.initial_focus = self.body(self.body_frame)
+        self.buttonbox(self.buttonbox_frame)
         if not self.initial_focus:
             self.initial_focus = self
         self.initial_focus.focus_set()
@@ -32,13 +40,20 @@ class ModalDialog(tk.Toplevel):
         self.protocol("WM_DELETE_WINDOW", lambda *_: self.cancel())
         self.bind("<Return>", lambda *_: self.ok())
         self.bind("<Escape>", lambda *_: self.cancel())
-        self.center(self.master)
-        self.update_idletasks()
+        if self.centered:
+            self.center(self.master)
+        else:
+            self.update_idletasks()
         self.minsize(self.winfo_reqwidth(), self.winfo_reqheight())
         self.resizable(width=self.can_resize, height=self.can_resize)
         self.attributes('-alpha', 1.0)
-        self.grab_set()
-        self.wait_window(self)
+        if self.is_transient:
+            self.transient(self.master)
+        if self.is_modal:
+            self.master_window = self.master.winfo_toplevel()
+            self.master_window.wm_attributes("-disabled", True)
+            self.grab_set()
+            self.wait_window(self)
 
     def center(self, master):
         self.update_idletasks()
@@ -52,20 +67,20 @@ class ModalDialog(tk.Toplevel):
         y = master.winfo_rooty() + (master.winfo_height() // 2) - (win_height // 2) - 9
         self.geometry('{}x{}+{}+{}'.format(width, height, x, y))
 
-    def body(self, master):
+    def body(self, container):
         # create dialog body.  return widget that should have
         # initial focus.  this method should be overridden
         pass
 
-    def buttonbox(self):
+    def buttonbox(self, container):
         # add standard button box. override if you don't want the
         # standard buttons
-        box = tk.Frame(self)
-        box.pack()
-        w = ttk.Button(box, text="OK", width=10, command=self.ok, default=tk.ACTIVE)
-        w.pack(side=tk.LEFT, padx=5, pady=5)
-        w = ttk.Button(box, text="Annuler", width=10, command=self.cancel)
-        w.pack(side=tk.LEFT, padx=5, pady=5)
+        wrap = ttk.Frame(container)
+        wrap.pack(padx=10, pady=(10, 5))
+        self.button_ok = ttk.Button(wrap, text="OK", width=13, command=self.ok, default="active")
+        self.button_ok.pack(side="left", padx=3)
+        self.button_cancel = ttk.Button(wrap, text="Annuler", width=13, command=self.cancel)
+        self.button_cancel.pack(side="right", padx=3)
 
     #
     # standard button semantics
@@ -76,13 +91,12 @@ class ModalDialog(tk.Toplevel):
             return
 
         self.apply()
-        self.withdraw()
-        self.update_idletasks()
         self.cancel()
 
     def cancel(self):
         # put focus back to the parent window
-        self.master.focus_set()
+        if self.is_modal:
+            self.master_window.wm_attributes("-disabled", False)
         self.destroy()
 
     #
@@ -95,22 +109,24 @@ class ModalDialog(tk.Toplevel):
         pass  # override
 
 
-class InfoModal(ModalDialog):
-    def __init__(self, parent, title=None, body_text='', button_text="OK", font=None, **opts):
-        ModalDialog.__init__(self, parent, title, **opts)
+class InfoDialog(ModalDialog):
+    def __init__(self, master, *, body_text, button_text="OK", font=None, can_resize=False, **kwargs):
+        super().__init__(master, can_resize=can_resize, **kwargs)
         self.body_text = body_text
         self.button_text = button_text
         self.font = font
 
-    def body(self, main_frame):
-        self.msg = tk.Message(main_frame, text=self.body_text, width=500)
+    def body(self, container):
+        wrap = ttk.Frame(container)
+        wrap.pack(fill="both", expand=True, padx=15, pady=15)
+        self.message = ttk.Label(wrap, text=self.body_text)
         if self.font:
-            self.msg.config(font=self.font)
-        self.msg.pack()
-        return self.msg
+            self.message.config(font=self.font)
+        self.message.pack(fill="both", expand=True)
+        return self.message
 
-    def buttonbox(self):
-        box = tk.Frame(self)
-        box.pack()
-        w = ttk.Button(box, text=self.button_text, command=self.ok, default=tk.ACTIVE)
-        w.pack(side=tk.LEFT, padx=5, pady=5)
+    def buttonbox(self, container):
+        wrap = ttk.Frame(container)
+        wrap.pack(padx=10, pady=(10, 5))
+        btn = ttk.Button(wrap, text=self.button_text, command=self.ok, default="active", width=13)
+        btn.pack(padx=10, pady=(10, 5))

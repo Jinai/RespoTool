@@ -68,7 +68,9 @@ class RespoTool(tk.Tk):
 
         # Warnings
         if self.warning:
-            modaldialog.InfoModal(self, "RespoTool " + __version__, self.warning_msg, "J'ai compris").spawn()
+            dialog_title = "RespoTool " + __version__
+            info = modaldialog.InfoDialog(self, dialog_title=dialog_title, body_text=self.warning_msg)
+            info.spawn()
 
     def _setup_widgets(self):
         self.statusbar = statusbar.StatusBar(self)
