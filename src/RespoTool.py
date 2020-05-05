@@ -53,6 +53,7 @@ class RespoTool(tk.Tk):
         if self.auto_import:
             if self.session_path and os.path.exists(self.session_path):
                 self.import_save(self.session_path)
+        self.archives.open()
 
         # Bindings
         self.bind('<Control-s>', lambda _: self.export_save())
@@ -290,7 +291,7 @@ class RespoTool(tk.Tk):
             del self.signalements[:]
             for d in dicts:
                 self.signalements.append(signalement.Signalement.from_dict(d))
-            self.refresh(archives=True, scroll="down")
+            self.refresh(scroll="down")
             self.statusbar.set("{} signalements importés depuis '{}'.".format(len(self.signalements), filename))
 
     def search(self):
@@ -302,7 +303,7 @@ class RespoTool(tk.Tk):
         self.tree_sig.signalements = self.signalements
         self.tree_sig.refresh()
         if archives:
-            self.archives.open()
+            self.archives.refresh()
         self.tree_sig.search()
         if scroll == "down":
             self.tree_sig.scroll_down()

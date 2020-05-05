@@ -6,10 +6,10 @@ import glob
 import logging
 import os
 
+import utils
 from signalement import Signalement
 
 logger = logging.getLogger(__name__)
-ARCHIVES_DIR = "archives/"
 
 
 class Archives():
@@ -19,30 +19,32 @@ class Archives():
     def __init__(self, dir_path, pattern):
         self.dir_path = dir_path
         self.pattern = pattern
-        self.raw_text = ''
         self.signalements = []
         self.files = glob.glob(os.path.join(dir_path, pattern))
+        self.current_file = None
+
+    def refresh(self):
+        self.files = glob.glob(os.path.join(self.dir_path, self.pattern))
+        self.open()
 
     def open(self):
-        self.raw_text = ''
-        opened = False
+        self.signalements = []
         for file in self.files:
             logger.info("Reading \"{}\"".format(file))
+            self.current_file = file
             try:
                 f = open(file, 'r', encoding='utf-8')
             except IOError as e:
                 logger.error(e)
             else:
                 try:
-                    self.raw_text += ''.join(f.readlines()[2:])
+                    raw_text = "".join(f.readlines()[2:])
+                    self.signalements.extend(self.parse(raw_text))
                     Archives.read_counter += 1
-                    opened = True
                 except (IOError, IndexError) as e:
                     logger.error(e)
                 finally:
                     f.close()
-        self.signalements = Archives.parse(self.raw_text)
-        return opened
 
     def archive_sig(self, sig):
         if not self.files:
@@ -51,14 +53,15 @@ class Archives():
             self.new_archive()  # New year => new file
 
         archived = False
-        logger.info("Writing {} to '{}'".format(sig.fields(), self.current_file()))
+        logger.info("Writing {} to '{}'".format(sig.fields(), self.current_file))
         try:
-            f = open(self.current_file(), 'a', encoding='utf-8')
+            f = open(self.current_file, 'a', encoding='utf-8')
         except IOError as e:
             logger.error(e)
         else:
             try:
                 f.write(sig.archive() + "\n")
+                self.signalements.append(sig)
                 Archives.write_counter += 1
                 archived = True
             except IOError as e:
@@ -69,18 +72,12 @@ class Archives():
 
     def new_archive(self, filename=None):
         if filename is None:
-            try:
-                current = self.current_file()
-                if current:
-                    increment = int(os.path.splitext(current)[0][-4:]) + 1
-                    filename = os.path.join(self.dir_path, "archives_{}.txt".format(increment))
-                else:
-                    filename = os.path.join(self.dir_path, "archives_{}.txt".format(datetime.datetime.now().year))
-            except ValueError as e:
-                logger.error(e)
-                filename = os.path.join(self.dir_path, "archives_tmp.txt")
-        self.files.append(filename)
-        return self.write_header(filename)
+            filename = os.path.join(self.dir_path, "archives_{}.txt".format(datetime.datetime.now().year))
+
+        if filename not in self.files:
+            self.files.append(filename)
+            self.current_file = filename
+            return self.write_header(filename)
 
     def write_header(self, path):
         created = False
@@ -106,29 +103,21 @@ class Archives():
                 f.close()
         return created
 
-    def current_file(self):
-        if self.files:
-            return self.files[-1]
-        return None
-
     def strip_comments(self):
         for sig in self.signalements:
             if '//' in sig.statut:
                 sig.statut = sig.statut[:sig.statut.find('//')].strip()
 
-    @staticmethod
-    def parse(text, line_sep='\n', col_sep='|'):
+    def parse(self, text, col_sep='|'):
         signalements = []
+        year = utils.extract_numbers(self.current_file)[0]
         if not isinstance(text, str):
             return signalements
-        for line in text.split(line_sep):
+        for line in text.splitlines():
             if line.strip() != '':
                 values = [elem.strip() for elem in line.split(col_sep)]
-                if "+" in values[4]:
-                    sep = "+"
-                else:
-                    sep = ","
-                values[4] = [respo.strip() for respo in values[4].split(sep)] if values[4] else []
+                values[0] = values[0] + "/" + year[2:]
+                values[4] = [respo.strip() for respo in values[4].split(",")] if values[4] else []
                 respo = values.pop(4)
                 values.append(respo)
                 s = Signalement(*values)
@@ -162,4 +151,9 @@ class Archives():
         return repr(self.signalements)
 
     def __str__(self):
-        return "Sigs: {}".format(len(self.signalements))
+        n = len(self.signalements)
+        s = "Sigs : {}".format(n)
+        if n > 0:
+            first, last = self.signalements[0], self.signalements[-1]
+            s += "\nFrom {} to {}".format(first.date, last.date)
+        return s

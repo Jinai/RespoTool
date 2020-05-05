@@ -119,6 +119,10 @@ def extract_urls(text):
     return re.findall(urlmarker.URL_REGEX, text)
 
 
+def extract_numbers(text):
+    return re.findall("\d+", text)
+
+
 def sequence_chunker(seq, size):
     return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
