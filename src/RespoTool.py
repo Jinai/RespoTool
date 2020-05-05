@@ -58,7 +58,7 @@ class RespoTool(tk.Tk):
         # Bindings
         self.bind('<Control-s>', lambda _: self.export_save())
         self.bind('<Control-o>', lambda _: self.import_save())
-        self.bind('<Control-f>', lambda _: self.search())
+        self.bind('<Control-f>', lambda _: self.focus_searchbar())
         self.bind('<Control-q>', lambda _: self.quit())
         self.main_frame.bind('<Control-v>', lambda _: self.append_clipboard())
         self.main_frame.bind('<Button-1>', lambda _: self.clear_focus())
@@ -114,13 +114,18 @@ class RespoTool(tk.Tk):
         self.dropdown_respo.textvariable = self.current_respo
 
         self.frame_search = ttk.Frame(self.main_frame)
-        search_icon = tk.PhotoImage(file="data/img/search.gif")
-        self.entry_search = customentries.PlaceholderEntry(self.frame_search, placeholder=" Rechercher",
-                                                           icon=search_icon,
-                                                           width=30)
-        self.entry_search.pack(side="right")
         self.label_matches = ttk.Label(self.frame_search, foreground="grey40")
-        self.label_matches.pack(side="right", padx=(0, 5))
+        self.label_matches.pack(side="left", padx=(0, 5))
+        placeholder_options = {
+            "text": " Rechercher"
+        }
+        icon_options = {
+            "path": "data/img/search1.png",
+            "alt": "data/img/search2.png",
+        }
+        self.searchbar = customentries.SearchBar(self.frame_search, placeholder_options=placeholder_options,
+                                                 icon_options=icon_options, width=30)
+        self.searchbar.pack(side="right")
 
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
@@ -139,9 +144,9 @@ class RespoTool(tk.Tk):
         stretch = [False, False, False, False, False, True, True, True]
         self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.archives, self.dropdown_respo,
                                         self.statusbar, headers, column_widths, sort_keys=sort_keys, stretch=stretch,
-                                        sortable=False, auto_increment=True, search_excludes=["Rechercher"],
+                                        sortable=False, auto_increment=True, search_excludes=[" Rechercher"],
                                         match_template="{} sur {}")
-        self.entry_search.entry.configure(textvariable=self.tree_sig._search_key)
+        self.searchbar.entry.configure(textvariable=self.tree_sig._search_key)
         self.label_matches.configure(textvariable=self.tree_sig._matches_label)
 
         # ------------------------------------------------ ACTIONS ------------------------------------------------- #
@@ -173,7 +178,7 @@ class RespoTool(tk.Tk):
         # the Respomap value and is prompted with it before being able to edit a status.
         self.frame_search.lower()
         # Needed to rewrite the placeholder because we hooked an empty StringVar that erased it
-        self.entry_search.focus_out(None)
+        self.searchbar.focus_out(None)
 
     def selection_handler(self):
         selection = self.tree_sig.tree.selection()
@@ -294,9 +299,9 @@ class RespoTool(tk.Tk):
             self.refresh(scroll="down")
             self.statusbar.set("{} signalements importés depuis '{}'.".format(len(self.signalements), filename))
 
-    def search(self):
-        self.entry_search.focus()
-        self.entry_search.select_range(0, 'end')
+    def focus_searchbar(self):
+        self.searchbar.focus()
+        self.searchbar.select_range(0, 'end')
 
     def refresh(self, archives=False, scroll=None):
         logging.debug("Refreshing {} sigs".format(len(self.signalements)))

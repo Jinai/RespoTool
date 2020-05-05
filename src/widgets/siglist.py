@@ -111,7 +111,7 @@ class Siglist(Treelist):
             super().sort(col, descending)
 
     def search(self, key=None):
-        key = key.strip() if key is not None else self._search_key.get().strip()
+        key = key if key is not None else self._search_key.get()
         if key == '':
             self.refresh()
         else:
@@ -249,7 +249,7 @@ class Siglist(Treelist):
 
     def refresh(self, keep_search_query=False):
         if keep_search_query:
-            key = self._search_key.get().strip()
+            key = self._search_key.get()
             if key != '' and key not in self.search_exludes:
                 self.search()
                 return
