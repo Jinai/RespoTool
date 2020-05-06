@@ -131,10 +131,9 @@ class RespoTool(tk.Tk):
 
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
-        headers = ['date', 'auteur', 'code', 'flag', 'description', 'statut', 'respomap']
-        column_widths = [30, 40, 85, 100, 80, 350, 300, 100]
+        headers = ["Date", "Auteur", "Code", "Flag", "Description", "Statut", "Respomap(s)"]
+        column_widths = [40, 85, 100, 80, 350, 300, 100]
         sort_keys = [
-            lambda x: int(x[0]),
             lambda x: (int(x[0].split("/")[1]), int(x[0].split("/")[0])),
             lambda x: x[0].lower(),
             lambda x: x[0].lower(),
@@ -143,11 +142,20 @@ class RespoTool(tk.Tk):
             lambda x: x[0].lower(),
             lambda x: x[0].lower(),
         ]
-        stretch = [False, False, False, False, False, True, True, True]
-        self.tree_sig = siglist.Siglist(self.main_frame, self.signalements, self.archives, self.dropdown_respo,
-                                        self.statusbar, headers, column_widths, sort_keys=sort_keys, stretch=stretch,
-                                        sortable=False, auto_increment=True, search_excludes=[" Rechercher"],
-                                        match_template="{} sur {}")
+        stretch_bools = [False, False, False, False, True, True, True]
+        index_options = {
+            "show": True,
+            "header": "#",
+            "width": 35,
+            "sort": lambda x: int(x[0]),
+            "stretch": False
+        }
+        exclude = [placeholder_options["text"]]
+        self.tree_sig = siglist.Siglist(self.main_frame, signalements=self.signalements, archives=self.archives,
+                                        respomap_widget=self.dropdown_respo, statusbar=self.statusbar,
+                                        headers=headers, sort_keys=sort_keys, stretch_bools=stretch_bools, height=15,
+                                        index_options=index_options, sortable=False, column_widths=column_widths,
+                                        match_template="{} sur {}", search_excludes=exclude)
         self.searchbar.entry.configure(textvariable=self.tree_sig._search_query)
         self.label_matches.configure(textvariable=self.tree_sig._matches_label)
 

@@ -17,22 +17,21 @@ logger = logging.getLogger(__name__)
 
 
 class Siglist(Treelist):
-    def __init__(self, master, signalements, archives, respomap_widget, statusbar, *args, **kwargs):
-        Treelist.__init__(self, master, *args, **kwargs)
+    def __init__(self, master, signalements, archives, respomap_widget, statusbar, **kwargs):
+        super().__init__(master, **kwargs)
         self.signalements = signalements
         self.respomap_widget = respomap_widget
         self.statusbar = statusbar
-        self._keys = {
-            0: lambda x: 0,
-            1: lambda x: x.datetime(),
-            2: lambda x: x.auteur.lower(),
-            3: lambda x: x.code,
-            4: lambda x: x.flag.lower(),
-            5: lambda x: x.desc.lower(),
-            6: lambda x: x.statut.lower(),
-            7: lambda x: str(x.respo)
-        }
-        self._entry_edit = None
+        self._keys = [
+            lambda x: 0,
+            lambda x: x.datetime(),
+            lambda x: x.auteur.lower(),
+            lambda x: x.code,
+            lambda x: x.flag.lower(),
+            lambda x: x.desc.lower(),
+            lambda x: x.statut.lower(),
+            lambda x: str(x.respo)
+        ]
         self.archives = archives
         self.last_popup_space = None
         self.last_popup_rightclick = None
@@ -184,7 +183,7 @@ class Siglist(Treelist):
             cmd += self.tree.item(item)['values'][3]
             pyperclip.copy(cmd)
             try:
-                x, y = self.tree.bbox(item, "code")[:2]
+                x, y = self.tree.bbox(item, "Code")[:2]
                 x = x + self.winfo_rootx()
                 y = y + self.winfo_rooty()
                 Popup('"{}" copié dans le presse-papiers'.format(cmd), x, y, offset=(0, -21))
@@ -200,7 +199,7 @@ class Siglist(Treelist):
         selection = self.tree.selection()
         if len(selection) == 1:
             item = selection[0]
-            code = self.tree.item(item)['values'][3]
+            code = self.tree.item(item)["values"][3]
             match_archives = self.archives.filter_sigs("code", [code])
             match_session = self.archives.filter_sigs("code", [code], source=self.signalements)
             if len(match_archives) != 0 or len(match_session) > 1:
@@ -209,14 +208,14 @@ class Siglist(Treelist):
                 if len(match_archives) != 0:
                     text += self.archives_templates["archives_msg"]
                     text += "\n    ".join(
-                        [''] + [self.archives_templates["archives"].format(**s.__dict__) for s in match_archives])
+                        [""] + [self.archives_templates["archives"].format(**s.__dict__) for s in match_archives])
                 if len(match_session) > 1:
                     if text:
                         text += "\n"
                     text += self.archives_templates["session_msg"]
                     text += "\n    ".join(
-                        [''] + [self.archives_templates["session"].format(**s.__dict__) for s in match_session])
-                x, y = self.tree.bbox(item, "code")[:2]
+                        [""] + [self.archives_templates["session"].format(**s.__dict__) for s in match_session])
+                x, y = self.tree.bbox(item, "Code")[:2]
                 x = x + self.winfo_rootx()
                 y = y + self.winfo_rooty() + 20
                 self.last_popup_space = Popup(text, x, y, persistent=True, max_alpha=0.90)
@@ -229,10 +228,10 @@ class Siglist(Treelist):
 
     def selection_handler(self):
         self.remove_popups()
-        sel = self.tree.selection()
-        if sel:
-            plural = "" if len(sel) == 1 else "s"
-            self.statusbar.set("{0} signalement{1} sélectionné{1}".format(len(sel), plural), clear_after=0)
+        selection = self.tree.selection()
+        if selection:
+            plural = "" if len(selection) == 1 else "s"
+            self.statusbar.set("{0} signalement{1} sélectionné{1}".format(len(selection), plural), clear_after=0)
         else:
             self.statusbar.clear()
 
@@ -259,4 +258,4 @@ class Siglist(Treelist):
         self.update_tags()
         self.update_templates()
         self.update_statuses()
-        self._matches_label.set('')
+        self._matches_label.set("")

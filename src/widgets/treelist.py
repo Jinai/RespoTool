@@ -6,28 +6,39 @@ import tkinter.ttk as ttk
 
 
 class Treelist(ttk.Frame):
-    def __init__(self, master, headers, column_widths=None, height=15, alt_colors=None, sort_keys=None, stretch=None,
-                 sortable=True, auto_increment=True, debounce_time=300, search_excludes=None, match_template=None,
+    def __init__(self, master, headers, column_widths=None, height=15, alt_colors=None, sortable=True, sort_keys=None,
+                 stretch_bools=None, index_options=None, debounce_time=300, search_excludes=None, match_template=None,
                  **kwargs):
         ttk.Frame.__init__(self, master, **kwargs)
         self.master = master
         self.headers = headers
-        self.auto_increment = auto_increment  # Allows automatic handling of # column
-        if auto_increment:
-            self.headers.insert(0, "#")
-            self.column_widths = column_widths if column_widths else [30] + [90] * (len(headers) - 1)
-            self.sort_keys = sort_keys if sort_keys else [lambda x: int(x[0])] + [lambda x: str(x[0]).lower()] * (
-                    len(headers) - 1)
-        else:
-            self.column_widths = column_widths if column_widths else [90] * len(headers)
-            self.sort_keys = sort_keys if sort_keys else [[lambda x: str(x[0]).lower()] * len(headers)]
+        self.column_widths = column_widths if column_widths else [90] * (len(headers))
         self.height = height
-        self.alt_colors = alt_colors if alt_colors else ["white", "grey96"]
 
-        # List of booleans telling which column are stretchable
-        self.stretch = stretch if stretch else [False] * (len(headers) - 2) + [True]
+        # x[0] == cell value ; x[1] == list of all values of the row (can be used to compare against index)
+        self.sort_keys = sort_keys if sort_keys else [lambda x: str(x[0]).lower()] * (len(headers))
+        # List of booleans telling which columns are stretchable
+        self.stretch_bools = stretch_bools if stretch_bools else [False] * (len(headers) - 1) + [True]
 
-        # Allows clicking on headers to sort columns alphabetically
+        # Options for the special column showing row index (starting at 1)
+        index_options = index_options if index_options else {}
+        self.index_show = index_options.get("show", True)
+        self.index_header = index_options.get("header", "#")
+        self.index_width = index_options.get("width", 30)
+        self.index_sort = index_options.get("sort", lambda x: int(x[0]))
+        self.index_stretch = index_options.get("stretch", False)
+        self.headers.insert(0, self.index_header)
+        self.column_widths.insert(0, self.index_width)
+        self.sort_keys.insert(0, self.index_sort)
+        self.stretch_bools.insert(0, self.index_stretch)
+
+        # Configure colors for even/odd rows
+        alt_colors = alt_colors if alt_colors else {}
+        even_row = alt_colors.get("even", "grey98")  # ttk.Style().lookup("TFrame", "background")
+        odd_row = alt_colors.get("odd", "grey93")
+        self.alt_colors = [even_row, odd_row]
+
+        # Allows clicking on headers to sort columns according to `sort_keys`
         self.sortable = sortable
 
         # In milliseconds. Delays calls to search() until the user has finished typing his query
@@ -47,49 +58,48 @@ class Treelist(ttk.Frame):
         self._matches_label = tk.StringVar()  # Contains the number of matches (formatted) yielded by the search query
         self._debounce_after_id = None
         self._data = []  # Contains inserted values
-        self._parity_check = 0  # For colored odd rows, incremented on each insert and reset when the tree is cleared
+        self._row_count = 0  # Used for colored odd rows
 
         self._setup_widgets()
 
     def _setup_widgets(self):
         frame_tree = ttk.Frame(self)
         frame_tree.pack(fill='both', expand=True)
-        vsb = ttk.Scrollbar(frame_tree, orient="vertical")
-        vsb.pack(side='right', fill='y')
-        # hsb = ttk.Scrollbar(frame_tree, orient="horizontal")
-        # hsb.pack(side='bottom', fill='x')
-        self.tree = ttk.Treeview(frame_tree, columns=self.headers, displaycolumns=self.headers, show="headings",
+        scrollbar = ttk.Scrollbar(frame_tree, orient="vertical")
+        scrollbar.pack(side='right', fill='y')
+
+        display = self.headers if self.index_show else self.headers[1:]
+        self.tree = ttk.Treeview(frame_tree, columns=self.headers, displaycolumns=display, show="headings",
                                  height=self.height, selectmode="extended")
         self.tree.pack(side='top', fill='both', expand=True)
-        self.tree.configure(yscrollcommand=vsb.set)  # , xscrollcommand=hsb.set)
-        vsb.configure(command=self.tree.yview)
-        # hsb.configure(command=self.tree.xview)
+        self.tree.configure(yscrollcommand=scrollbar.set)
+        scrollbar.configure(command=self.tree.yview)
+
         # Tags
         self.tree.tag_configure("even_row", background=self.alt_colors[0])
         self.tree.tag_configure("odd_row", background=self.alt_colors[1])
+
         # Bindings
-        self.tree.bind('<BackSpace>', lambda _: self.delete())
-        self.tree.bind('<Delete>', lambda _: self.delete())
-        self.tree.bind('<Control-a>', lambda _: self.select_all())
+        self.tree.event_add("<<TreelistDelete>>", "<BackSpace>", "<Delete>")
+        self.tree.bind("<Control-a>", lambda _: self.select_all())
 
         self._build_tree()
 
     def _build_tree(self):
         for i, header in enumerate(self.headers):
-            self.tree.heading(header, text=header.title(), anchor="w", command=lambda h=header: self.sort(h, True))
-            self.tree.column(self.headers[i], width=self.column_widths[i], stretch=self.stretch[i])
+            self.tree.heading(header, text=header, anchor="w", command=lambda h=header: self.sort(h, True))
+            self.tree.column(self.headers[i], width=self.column_widths[i], stretch=self.stretch_bools[i])
 
     def insert(self, values, update=True, tags=None):
+        self._row_count += 1
         values = list(values)
         tags = tags if tags else []
-        if self.auto_increment and update:
-            values.insert(0, str(len(self._data) + 1))
-        if not tags:
-            tags.append(["even_row", "odd_row"][self._parity_check % 2])
-        self.tree.insert('', 'end', values=values, tags=tags)
-        self._parity_check += 1
         if update:
+            values.insert(0, str(self._row_count))
             self._data.append(values)
+        if not tags:
+            tags.append(["even_row", "odd_row"][self._row_count % 2])
+        self.tree.insert('', 'end', values=values, tags=tags)
 
     def delete(self):
         selection = self.tree.selection()
@@ -101,25 +111,27 @@ class Treelist(ttk.Frame):
             values[0] = str(values[0])
             self._data.remove(values)
             self.tree.delete(item)
+            self._row_count -= 1
         return index
 
     def clear(self, keep_data=False):
-        self._parity_check = 0
+        self._row_count = 0
         self.tree.delete(*self.tree.get_children())
         if not keep_data:
             del self._data[:]
 
-    def scroll_up(self, event=None):
+    def scroll_up(self):
         self.update()
         self.tree.yview_moveto(0)
 
-    def scroll_down(self, event=None):
+    def scroll_down(self):
         self.update()
         self.tree.yview_moveto(1)
 
     def focus_index(self, index):
-        if index < len(self.tree.get_children()):
-            item = self.tree.get_children()[index]
+        rows = self.tree.get_children()
+        if 0 <= index < len(rows):
+            item = rows[index]
             self.focus_item(item)
 
     def focus_item(self, item):
@@ -136,6 +148,7 @@ class Treelist(ttk.Frame):
             self._data.sort(reverse=descending, key=lambda x: (self.sort_keys[index]([x[index]]), int(x[0])))
             for index, item in enumerate(tree_data):
                 self.tree.move(item[2], '', index)
+                self.tree.item(item[2], tags=[["even_row", "odd_row"][(index + 1) % 2]])
             # Switch heading command to reverse the sort next time
             self.tree.heading(col, command=lambda col=col: self.sort(col, not descending))
             # In case the user is in the middle of a search
