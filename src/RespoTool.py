@@ -19,6 +19,17 @@ from _meta import __version__
 from widgets import customentries, modaldialog, siglist, statusbar
 
 
+def fix_treeview():
+    def fixed_map(option):
+        # Fix for setting text colour for Tkinter 8.6.9
+        # From: https://bugs.python.org/issue36468
+        return [elm for elm in style.map('Treeview', query_opt=option) if
+                elm[:2] != ('!disabled', '!selected')]
+
+    style = ttk.Style()
+    style.map('Treeview', foreground=fixed_map('foreground'), background=fixed_map('background'))
+
+
 class RespoTool(tk.Tk):
     def __init__(self, master=None, session_path=None, archives_dir=None, archives_pattern=None, auto_import=False,
                  warning=True, warning_msg=""):
@@ -39,6 +50,7 @@ class RespoTool(tk.Tk):
         self.archives = archives.Archives(archives_dir, archives_pattern)
 
         # Rendering
+        fix_treeview()
         self._setup_widgets()
         self.title("RespoTool " + __version__)
         self.update_idletasks()
