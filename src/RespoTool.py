@@ -143,7 +143,7 @@ class RespoTool(tk.Tk):
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
 
         headers = ["Date", "Auteur", "Code", "Flag", "Description", "Statut", "Respomap(s)"]
-        column_widths = [40, 85, 100, 80, 350, 300, 100]
+        column_widths = [55, 85, 100, 80, 400, 350, 100]
         sort_keys = [
             lambda x: (int(x[0].split("/")[1]), int(x[0].split("/")[0])),
             lambda x: x[0].lower(),
@@ -164,7 +164,7 @@ class RespoTool(tk.Tk):
         exclude = [placeholder_options["text"]]
         self.tree_sig = siglist.Siglist(self.main_frame, signalements=self.signalements, archives=self.archives,
                                         respomap_widget=self.dropdown_respo, statusbar=self.statusbar,
-                                        headers=headers, sort_keys=sort_keys, stretch_bools=stretch_bools, height=15,
+                                        headers=headers, sort_keys=sort_keys, stretch_bools=stretch_bools, height=20,
                                         index_options=index_options, sortable=False, column_widths=column_widths,
                                         match_template="{} sur {}", search_excludes=exclude)
         self.searchbar.entry.configure(textvariable=self.tree_sig._search_query)
