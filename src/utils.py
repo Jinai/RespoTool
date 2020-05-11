@@ -11,58 +11,49 @@ import sys
 from logging.handlers import TimedRotatingFileHandler
 
 import urlmarker
+from _meta import __appname__
 
-LOG_LEVEL_STRINGS = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
 
 
-def init_logging(dirname, filename):
-    log_dir = os.path.join(os.path.expanduser("~/Documents/"), dirname)
-    created_log_dir = True
-    try:
-        os.makedirs(log_dir)
-    except OSError:
-        created_log_dir = False  # Directory already exists
 
+def init_logging(file=True):
     log_level = get_log_level()
     logger = logging.getLogger()
     logger.setLevel(log_level)
-    fmt = logging.Formatter(fmt="{asctime} :: {levelname:<5} :: {name:<9} :: {message}", datefmt="%Y-%m-%d %H:%M:%S",
-                            style="{")
+    fmt = "{asctime} :: {levelname:<5} :: {name:<9} :: {message}"
+    datefmt = "%d/%m/%Y %H:%M:%S"
+    fmt = logging.Formatter(fmt=fmt, datefmt=datefmt, style="{")
     console_handler = logging.StreamHandler(sys.stdout)
-    file_handler = TimedRotatingFileHandler(filename=os.path.join(log_dir, filename),
-                                            when="midnight",
-                                            encoding="utf-8")
     console_handler.setFormatter(fmt)
-    file_handler.setFormatter(fmt)
     logger.addHandler(console_handler)
-    logger.addHandler(file_handler)
-    if created_log_dir:
-        logger.info("Creating {}".format(log_dir))
-    return log_level
+
+    if file:
+        log_dir = os.path.join(os.path.expanduser(os.path.join("~", "Documents")), __appname__)
+        created_log_dir = True
+        try:
+            os.makedirs(log_dir)
+        except OSError:
+            created_log_dir = False  # Directory already exists
+
+        path = os.path.join(log_dir, __appname__.lower() + ".log")
+        file_handler = TimedRotatingFileHandler(filename=path, when="midnight", encoding="utf-8")
+        file_handler.setFormatter(fmt)
+        logger.addHandler(file_handler)
+        if created_log_dir:
+            logger.info("Creating {}".format(log_dir))
+    return logging._levelToName[log_level]
 
 
 def get_log_level():
     parser = argparse.ArgumentParser(__name__)
     parser.add_argument('--log-level',
-                        default='DEBUG',
+                        default=logging.DEBUG,
                         dest='log_level',
-                        type=log_level_string_to_int,
+                        type=lambda arg: logging._checkLevel(arg.upper()),
                         nargs='?',
-                        help='Set the logging output level. {0}'.format(LOG_LEVEL_STRINGS))
+                        help='Set the logging output level. {0}'.format([key for key in logging._nameToLevel]))
     parsed_args = parser.parse_args()
     return parsed_args.log_level
-
-
-def log_level_string_to_int(log_level_string):
-    if not log_level_string in LOG_LEVEL_STRINGS:
-        message = 'Invalid choice: {0} (choose from {1})'.format(log_level_string, LOG_LEVEL_STRINGS)
-        raise argparse.ArgumentTypeError(message)
-
-    log_level_int = getattr(logging, log_level_string, logging.INFO)
-    # check the logging log_level_choices have not changed from our expected values
-    assert isinstance(log_level_int, int)
-
-    return log_level_int
 
 
 def log_args(logger=None):

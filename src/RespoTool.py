@@ -15,7 +15,7 @@ import archives
 import signalement
 import sigparser
 import utils
-from _meta import __version__
+from _meta import __appname__, __version__
 from widgets import customentries, modaldialog, siglist, statusbar
 
 
@@ -31,16 +31,14 @@ def fix_treeview():
 
 
 class RespoTool(tk.Tk):
-    def __init__(self, master=None, session_path=None, archives_dir=None, archives_pattern=None, auto_import=False,
-                 warning=True, warning_msg=""):
-        # Init var
-        tk.Tk.__init__(self, master)
-        self.master = master
+    def __init__(self, app_title, *, session_path=None, archives_dir=None, archives_pattern=None, auto_import=True,
+                 warning_message=""):
+        super().__init__()
+        self.app_title = app_title
         self.session_path = session_path
         self.archives_dir = archives_dir
         self.auto_import = auto_import
-        self.warning = warning
-        self.warning_msg = warning_msg
+        self.warning_message = warning_message
         self.current_respo = tk.StringVar()
         with open("data/respomaps.json", 'r', encoding='utf-8') as f:
             self.respomaps = json.load(f)
@@ -52,7 +50,7 @@ class RespoTool(tk.Tk):
         # Rendering
         fix_treeview()
         self._setup_widgets()
-        self.title("RespoTool " + __version__)
+        self.title(self.app_title)
         self.update_idletasks()
         self.minsize(742, self.winfo_reqheight())
         try:
@@ -79,9 +77,9 @@ class RespoTool(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", self.quit)
 
         # Warnings
-        if self.warning:
-            dialog_title = "RespoTool " + __version__
-            info = modaldialog.InfoDialog(self, dialog_title=dialog_title, body_text=self.warning_msg)
+        if self.warning_message:
+            dialog_title = self.app_title
+            info = modaldialog.InfoDialog(self, dialog_title=dialog_title, body_text=self.warning_message)
             info.spawn()
 
     def _setup_widgets(self):
@@ -342,19 +340,20 @@ class RespoTool(tk.Tk):
         self.main_frame.focus_force()
 
     def quit(self):
-        logging.info("Exiting RespoTool\n")
+        logging.info("Exiting {}\n".format(__appname__))
         logging.shutdown()
         raise SystemExit
 
 
 if __name__ == '__main__':
-    log_level = utils.init_logging("RespoTool", "respotool.log")
-    logging.info("Starting RespoTool {} with log_level={}".format(__version__, log_level))
+    log_level = utils.init_logging()
+    logging.info("Starting {} {} [log_level={}]".format(__appname__, __version__, log_level))
 
-    msg = ""
+    app_title = "{} {}".format(__appname__, __version__)
+    message = ""
     session = "saves/session.sig"
     arch_dir = "archives/"
     arch_pattern = "archives_{0}{0}{0}{0}.txt".format("[0-9]")
-    app = RespoTool(session_path=session, archives_dir=arch_dir, archives_pattern=arch_pattern, auto_import=True,
-                    warning=False, warning_msg=msg)
+    app = RespoTool(app_title, session_path=session, archives_dir=arch_dir, archives_pattern=arch_pattern,
+                    warning_message=message)
     app.mainloop()
