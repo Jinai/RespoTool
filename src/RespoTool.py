@@ -55,7 +55,8 @@ class RespoTool(tk.Tk):
         self.minsize(742, self.winfo_reqheight())
         try:
             self.tk.call('encoding', 'system', 'utf-8')
-            self.iconbitmap("data/img/respotool.ico")
+            path = "data/img/respotool.ico"
+            self.iconbitmap(default=path)
         except Exception as e:
             logging.error(e)
 
