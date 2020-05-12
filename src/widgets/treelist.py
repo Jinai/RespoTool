@@ -8,7 +8,7 @@ import tkinter.ttk as ttk
 class Treelist(ttk.Frame):
     def __init__(self, master, headers, column_widths=None, height=15, alt_colors=None, sortable=True, sort_keys=None,
                  stretch_bools=None, index_options=None, debounce_time=300, search_excludes=None, match_template=None,
-                 **kwargs):
+                 scroll_speed=3, **kwargs):
         ttk.Frame.__init__(self, master, **kwargs)
         self.master = master
         self.headers = headers
@@ -51,6 +51,9 @@ class Treelist(ttk.Frame):
         # A formatted string that can be used to display the number of matches yielded by a search query
         self.match_template = match_template if match_template else "{}/{}"
 
+        # Number of lines to scroll when using the mouse wheel. Internally, a scroll speed of N is represented as N-1
+        self.scroll_speed = max(scroll_speed - 1, 0)
+
         # Internal variables
         self._search_query = tk.StringVar()
         self._search_query.trace("w", lambda *x: self.search())
@@ -82,6 +85,7 @@ class Treelist(ttk.Frame):
         # Bindings
         self.tree.event_add("<<TreelistDelete>>", "<BackSpace>", "<Delete>")
         self.tree.bind("<Control-a>", lambda _: self.select_all())
+        self.tree.bind("<MouseWheel>", self.mousewheel_handler)
 
         self._build_tree()
 
@@ -192,3 +196,9 @@ class Treelist(ttk.Frame):
 
     def deselect_all(self):
         self.tree.selection_remove(self.tree.get_children())
+
+    def mousewheel_handler(self, event):
+        direction = 1
+        if event.delta > 0:
+            direction = -1
+        self.tree.yview_scroll(self.scroll_speed * direction, "units")
