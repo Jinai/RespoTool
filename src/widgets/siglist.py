@@ -88,7 +88,7 @@ class Siglist(Treelist):
                 index -= 1
             self.refresh()
             if self._search_query.get() != '':
-                self.search()
+                self.search(debounced=True)
             self.focus_index(index)
 
     def selection_indexes(self):
@@ -254,7 +254,7 @@ class Siglist(Treelist):
         if keep_search_query:
             key = self._search_query.get()
             if key != "" and key not in self.search_excludes:
-                self.search()
+                self.search(debounced=True)
                 return
         self.clear()
         self.populate()

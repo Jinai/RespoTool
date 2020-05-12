@@ -160,7 +160,7 @@ class Treelist(ttk.Frame):
             # Switch heading command to reverse the sort next time
             self.tree.heading(col, command=lambda col=col: self.sort(col, not descending))
             # In case the user is in the middle of a search
-            self.search()
+            self.search(debounced=True)
 
     def search(self, query=None, debounced=False):
         if self.debounce_time > 0 and not debounced:

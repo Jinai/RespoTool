@@ -330,7 +330,7 @@ class RespoTool(tk.Tk):
         self.tree_sig.refresh()
         if archives:
             self.archives.refresh()
-        self.tree_sig.search()
+        self.tree_sig.search(debounced=True)
         if scroll == "down":
             self.tree_sig.scroll_down()
         elif scroll == "up":
