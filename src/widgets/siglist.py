@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class Siglist(Treelist):
-    def __init__(self, master, signalements, archives, respomap_widget, statusbar, **kwargs):
+    def __init__(self, master, *, signalements, archives, respomap_widget, statusbar, **kwargs):
         super().__init__(master, **kwargs)
         self.signalements = signalements
         self.respomap_widget = respomap_widget
@@ -33,34 +33,35 @@ class Siglist(Treelist):
             lambda x: str(x.respo)
         ]
         self.archives = archives
-        self.last_popup_space = None
-        self.last_popup_rightclick = None
-        self.dialogs = []
+        self._last_popup_space = None
+        self._last_popup_rightclick = None
+        self._dialogs = []
         self.tree.bind('<Double-1>', self.on_doubleclick)
         self.tree.bind('<Button-3>', self.on_rightclick)
-        self.tree.bind('<Return>', self.on_enter)
+        self.tree.bind('<Return>', lambda _: self.edit())
         self.tree.bind('<Control-c>', lambda _: self.copy(with_load=True))
         self.tree.bind('<Control-x>', lambda _: self.copy())
         self.tree.bind('<Control-l>', lambda _: self.open_urls())
-        self.tree.bind('<space>', self.on_space)
-        self.tree.bind('<FocusOut>', self.remove_popups)
-        self.tree.bind('<<TreeviewSelect>>', self.remove_popups)
+        self.tree.bind('<space>', lambda _: self.on_space())
+        self.tree.bind('<FocusOut>', lambda _: self.remove_popups())
         self.tree.bind('<<TreeviewSelect>>', lambda _: self.selection_handler())
-        self.update_tags()
-        self.update_templates()
+        self.tree.bind('<<TreelistDelete>>', lambda _: self.delete())
+        self.get_tags()
+        self.get_templates()
+        self.get_statuses()
 
-    def update_tags(self):
+    def get_tags(self):
         with open("data/tags.json", 'r', encoding='utf-8') as f:
             self.tags = json.load(f)
         for tag in self.tags:
             keyword, color = tag
             self.tree.tag_configure(keyword, background=color)
 
-    def update_templates(self):
+    def get_templates(self):
         with open("data/duplicates_msg.json", 'r', encoding='utf-8') as f:
             self.archives_templates = json.load(f)
 
-    def update_statuses(self):
+    def get_statuses(self):
         with open("data/statuses.json", 'r', encoding='utf-8') as f:
             self.statuses = json.load(f)
 
@@ -131,10 +132,10 @@ class Siglist(Treelist):
             x = x + self.winfo_rootx()
             y = y + self.winfo_rooty() - 2
             self.remove_popups()
-            self.last_popup_rightclick = Popup(value, x, y, persistent=True, txt_color="#575757",
-                                               bg_color="white", border_color="#767676", border_width=1)
+            self._last_popup_rightclick = Popup(value, x, y, persistent=True, txt_color="#575757",
+                                                bg_color="white", border_color="#767676", border_width=1)
 
-    def on_enter(self, event):
+    def edit(self):
         selection = self.tree.selection()
         if selection:
             respo = self.respomap_widget.textvariable.get()
@@ -152,7 +153,7 @@ class Siglist(Treelist):
             data_index = self._data.index(values)
             title = "Signalement #{num} ({auteur})".format(num=values[0], auteur=values[2])
             dialog = EditStatusDialog(self, statuses=self.statuses, original_text=values[-2], dialog_title=title)
-            self.dialogs.append(dialog)
+            self._dialogs.append(dialog)
             dialog.spawn()
             new_statut = dialog.result
             if isinstance(new_statut, str) and new_statut != values[-2]:
@@ -195,7 +196,7 @@ class Siglist(Treelist):
             for url in utils.extract_urls(str(sig)):
                 webbrowser.open_new_tab(url)
 
-    def on_space(self, event):
+    def on_space(self):
         selection = self.tree.selection()
         if len(selection) == 1:
             item = selection[0]
@@ -218,13 +219,13 @@ class Siglist(Treelist):
                 x, y = self.tree.bbox(item, "Code")[:2]
                 x = x + self.winfo_rootx()
                 y = y + self.winfo_rooty() + 20
-                self.last_popup_space = Popup(text, x, y, persistent=True, max_alpha=0.90)
+                self._last_popup_space = Popup(text, x, y, persistent=True, max_alpha=0.90)
 
-    def remove_popups(self, event=None):
-        if self.last_popup_space:
-            self.last_popup_space.destroy()
-        if self.last_popup_rightclick:
-            self.last_popup_rightclick.destroy()
+    def remove_popups(self):
+        if self._last_popup_space:
+            self._last_popup_space.destroy()
+        if self._last_popup_rightclick:
+            self._last_popup_rightclick.destroy()
 
     def selection_handler(self):
         self.remove_popups()
@@ -236,7 +237,7 @@ class Siglist(Treelist):
             self.statusbar.clear()
 
     def close_dialogs(self):
-        for dialog in self.dialogs:
+        for dialog in self._dialogs:
             dialog.cancel()
         self.dialogs = []
 
@@ -250,12 +251,9 @@ class Siglist(Treelist):
         self.close_dialogs()
         if keep_search_query:
             key = self._search_query.get()
-            if key != '' and key not in self.search_excludes:
+            if key != "" and key not in self.search_excludes:
                 self.search()
                 return
         self.clear()
         self.populate()
-        self.update_tags()
-        self.update_templates()
-        self.update_statuses()
         self._matches_label.set("")
