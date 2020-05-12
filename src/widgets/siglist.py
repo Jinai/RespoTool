@@ -84,6 +84,8 @@ class Siglist(Treelist):
                 self.signalements.remove(sig)
                 logger.debug("Deleting {}".format(sig))
             index = super().delete()
+            if index == len(self.tree.get_children()):
+                index -= 1
             self.refresh()
             if self._search_query.get() != '':
                 self.search()
