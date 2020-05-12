@@ -139,9 +139,13 @@ class Treelist(ttk.Frame):
             self.focus_item(item)
 
     def focus_item(self, item):
-        self.tree.selection_set(item)
-        self.tree.focus_set()
-        self.tree.focus(item)
+        try:
+            self.focus_force()
+            self.tree.selection_set((item,))
+            self.tree.focus_set()
+            self.tree.focus(item)
+        except tk.TclError:
+            pass
 
     def sort(self, col, descending):
         if self.sortable:
