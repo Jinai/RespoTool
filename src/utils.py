@@ -5,7 +5,6 @@ import argparse
 import inspect
 import logging
 import os
-import platform
 import re
 import sys
 from logging.handlers import TimedRotatingFileHandler
@@ -116,14 +115,3 @@ def extract_numbers(text):
 
 def sequence_chunker(seq, size):
     return (seq[pos:pos + size] for pos in range(0, len(seq), size))
-
-
-def play_alert():
-    system = platform.system()
-    if system == "Windows":
-        import winsound
-        winsound.PlaySound('SystemHand', winsound.SND_ASYNC)
-    elif system == "Darwin":
-        pass
-    elif system == "Linux":
-        pass
