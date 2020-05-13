@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b4acb9e3edc6b14925913b6e484f77bba6255e20996ffca366c409585e61e256"
+            "sha256": "b8472db22fafbe03ac9350b31d1c19431169817f36be9eb4015cf463112d8615"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -30,6 +30,12 @@
             ],
             "version": "==0.17"
         },
+        "future": {
+            "hashes": [
+                "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"
+            ],
+            "version": "==0.18.2"
+        },
         "macholib": {
             "hashes": [
                 "sha256:0c436bc847e7b1d9bda0560351bf76d7caf930fb585a828d13608839ef42c432",
@@ -43,6 +49,12 @@
                 "sha256:60e58a96728fa741aac2800bf89cf89a59311c5bec336bd7a146a476446eb740"
             ],
             "version": "==0.18"
+        },
+        "pefile": {
+            "hashes": [
+                "sha256:a5d6e8305c6b210849b47a6174ddf9c452b2888340b8177874b862ba6c207645"
+            ],
+            "version": "==2019.4.18"
         },
         "py2app": {
             "hashes": [
@@ -61,6 +73,20 @@
             "index": "pypi",
             "markers": "platform_system == 'Windows'",
             "version": "==0.9.2.2"
+        },
+        "pyinstaller": {
+            "hashes": [
+                "sha256:3730fa80d088f8bb7084d32480eb87cbb4ddb64123363763cf8f2a1378c1c4b7"
+            ],
+            "index": "pypi",
+            "version": "==3.6"
+        },
+        "pywin32-ctypes": {
+            "hashes": [
+                "sha256:24ffc3b341d457d48e8922352130cf2644024a4ff09762a2261fd34c36ee5942",
+                "sha256:9dc2d991b3479cc2df15930958b674a48a227d5361d413827a4cfd0b5876fc98"
+            ],
+            "version": "==0.2.0"
         }
     }
 }
