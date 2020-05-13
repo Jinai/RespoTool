@@ -22,7 +22,7 @@ class ModalDialog(tk.Toplevel):
     # construction hooks
 
     def spawn(self):
-        self.attributes('-alpha', 0.0)
+        self.attributes("-alpha", 0.0)
         self.deiconify()
         self.title(self.dialog_title)
         self.main_frame = ttk.Frame(self)
@@ -46,7 +46,7 @@ class ModalDialog(tk.Toplevel):
             self.update_idletasks()
         self.minsize(self.winfo_reqwidth(), self.winfo_reqheight())
         self.resizable(width=self.can_resize, height=self.can_resize)
-        self.attributes('-alpha', 1.0)
+        self.attributes("-alpha", 1.0)
         if self.is_transient:
             self.transient(self.master)
         if self.is_modal:
@@ -65,7 +65,7 @@ class ModalDialog(tk.Toplevel):
         win_height = height + titlebar_height + frm_width
         x = master.winfo_rootx() + (master.winfo_width() // 2) - (win_width // 2)
         y = master.winfo_rooty() + (master.winfo_height() // 2) - (win_height // 2) - 9
-        self.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+        self.geometry("{}x{}+{}+{}".format(width, height, x, y))
 
     def body(self, container):
         # create dialog body.  return widget that should have

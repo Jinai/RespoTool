@@ -45,12 +45,12 @@ def init_logging(file=True):
 
 def get_log_level():
     parser = argparse.ArgumentParser(__name__)
-    parser.add_argument('--log-level',
+    parser.add_argument("--log-level",
                         default=logging.DEBUG,
-                        dest='log_level',
+                        dest="log_level",
                         type=lambda arg: logging._checkLevel(arg.upper()),
-                        nargs='?',
-                        help='Set the logging output level. {0}'.format([key for key in logging._nameToLevel]))
+                        nargs="?",
+                        help="Set the logging output level. {0}".format([key for key in logging._nameToLevel]))
     parsed_args = parser.parse_args()
     return parsed_args.log_level
 

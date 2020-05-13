@@ -8,7 +8,7 @@ from widgets.customborder import CustomBorder
 
 
 class StatusBar(ttk.Frame):
-    def __init__(self, master, text='', **opts):
+    def __init__(self, master, text="", **opts):
         ttk.Frame.__init__(self, master, **opts)
         self.master = master
         self.text = text
@@ -28,7 +28,7 @@ class StatusBar(ttk.Frame):
             self.unschedule_clear()
 
     def clear(self):
-        self._textvar.set('')
+        self._textvar.set("")
 
     def schedule_clear(self, delay):
         self.unschedule_clear()

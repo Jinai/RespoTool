@@ -24,11 +24,11 @@ def fix_treeview():
     def fixed_map(option):
         # Fix for setting text colour for Tkinter 8.6.9
         # From: https://bugs.python.org/issue36468
-        return [elm for elm in style.map('Treeview', query_opt=option) if
-                elm[:2] != ('!disabled', '!selected')]
+        return [elm for elm in style.map("Treeview", query_opt=option) if
+                elm[:2] != ("!disabled", "!selected")]
 
     style = ttk.Style()
-    style.map('Treeview', foreground=fixed_map('foreground'), background=fixed_map('background'))
+    style.map("Treeview", foreground=fixed_map("foreground"), background=fixed_map("background"))
 
 
 class RespoTool(tk.Tk):
@@ -41,9 +41,9 @@ class RespoTool(tk.Tk):
         self.auto_import = auto_import
         self.warning_message = warning_message
         self.current_respo = tk.StringVar()
-        with open("data/respomaps.json", 'r', encoding='utf-8') as f:
+        with open("data/respomaps.json", "r", encoding="utf-8") as f:
             self.respomaps = json.load(f)
-        with open("data/contact.json", 'r', encoding='utf-8') as f:
+        with open("data/contact.json", "r", encoding="utf-8") as f:
             self.contact = json.load(f)
         self.signalements = []
         self.archives = archives.Archives(archives_dir, archives_pattern)
@@ -55,7 +55,7 @@ class RespoTool(tk.Tk):
         self.update_idletasks()
         self.minsize(742, self.winfo_reqheight())
         try:
-            self.tk.call('encoding', 'system', 'utf-8')
+            self.tk.call("encoding", "system", "utf-8")
             path = "data/img/respotool.ico"
             self.iconbitmap(default=path)
         except Exception as e:
@@ -68,13 +68,13 @@ class RespoTool(tk.Tk):
         self.archives.open()
 
         # Bindings
-        self.bind('<Control-s>', lambda _: self.export_save())
-        self.bind('<Control-o>', lambda _: self.import_save())
-        self.bind('<Control-f>', lambda _: self.focus_searchbar())
-        self.bind('<Control-q>', lambda _: self.quit())
-        self.main_frame.bind('<Control-v>', lambda _: self.append_clipboard())
-        self.main_frame.bind('<Button-1>', lambda _: self.clear_focus())
-        self.tree_sig.tree.bind('<<TreeviewSelect>>', lambda _: self.selection_handler(), add="+")
+        self.bind("<Control-s>", lambda _: self.export_save())
+        self.bind("<Control-o>", lambda _: self.import_save())
+        self.bind("<Control-f>", lambda _: self.focus_searchbar())
+        self.bind("<Control-q>", lambda _: self.quit())
+        self.main_frame.bind("<Control-v>", lambda _: self.append_clipboard())
+        self.main_frame.bind("<Button-1>", lambda _: self.clear_focus())
+        self.tree_sig.tree.bind("<<TreeviewSelect>>", lambda _: self.selection_handler(), add="+")
         self.current_respo.trace("w", lambda *_: logging.debug("Setting respomap={}".format(self.current_respo.get())))
         self.protocol("WM_DELETE_WINDOW", self.quit)
 
@@ -88,7 +88,7 @@ class RespoTool(tk.Tk):
         self.statusbar = statusbar.StatusBar(self)
         self.statusbar.pack(side="bottom", fill="x")
         self.main_frame = ttk.Frame(self)
-        self.main_frame.pack(fill='both', expand=True, pady=5, padx=5)
+        self.main_frame.pack(fill="both", expand=True, pady=5, padx=5)
 
         # -------------------------------------------- IMPORT / EXPORT --------------------------------------------- #
 
@@ -122,9 +122,9 @@ class RespoTool(tk.Tk):
         lbl_icon_respo.pack(side="left")
         label_respo = ttk.Label(self.frame_respo, text="Respomap  :  ")
         label_respo.pack(side="left")
-        self.dropdown_respo = ttk.Combobox(self.frame_respo, state='readonly', textvariable=self.current_respo)
+        self.dropdown_respo = ttk.Combobox(self.frame_respo, state="readonly", textvariable=self.current_respo)
         self.dropdown_respo.pack(side="right")
-        self.dropdown_respo['values'] = self.respomaps['main']  # comptes principaux
+        self.dropdown_respo["values"] = self.respomaps["main"]  # comptes principaux
         self.dropdown_respo.textvariable = self.current_respo
 
         self.frame_search = ttk.Frame(self.main_frame)
@@ -256,7 +256,7 @@ class RespoTool(tk.Tk):
 
     def generate_contact_message(self):
         sig = self.tree_sig.get_selected_sigs()[0]
-        template = "\n".join(self.contact['message'])
+        template = "\n".join(self.contact["message"])
         message = template.format(**sig.__dict__)
         pyperclip.copy(message)
         self.statusbar.set("MP copié dans le presse-papiers.")
@@ -291,7 +291,7 @@ class RespoTool(tk.Tk):
         if path:
             filename = path
         else:
-            filename = fdialog.asksaveasfilename(initialdir="saves", initialfile='session', defaultextension='.sig')
+            filename = fdialog.asksaveasfilename(initialdir="saves", initialfile="session", defaultextension=".sig")
         if filename:
             logging.info("Exporting '{}'".format(filename))
             dicts = []
@@ -323,7 +323,7 @@ class RespoTool(tk.Tk):
 
     def focus_searchbar(self):
         self.searchbar.focus()
-        self.searchbar.select_range(0, 'end')
+        self.searchbar.select_range(0, "end")
 
     def refresh(self, archives=False, scroll=None):
         logging.debug("Refreshing {} sigs".format(len(self.signalements)))
@@ -347,7 +347,7 @@ class RespoTool(tk.Tk):
         raise SystemExit
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     log_level = utils.init_logging()
     logging.info("Starting {} {} [log_level={}]".format(__appname__, __version__, log_level))
     logging.info(

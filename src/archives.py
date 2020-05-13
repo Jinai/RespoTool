@@ -33,7 +33,7 @@ class Archives():
             logger.info("Reading \"{}\"".format(file))
             self.current_file = file
             try:
-                f = open(file, 'r', encoding='utf-8')
+                f = open(file, "r", encoding="utf-8")
             except IOError as e:
                 logger.error(e)
             else:
@@ -55,7 +55,7 @@ class Archives():
         archived = False
         logger.info("Writing {} to '{}'".format(sig.fields(), self.current_file))
         try:
-            f = open(self.current_file, 'a', encoding='utf-8')
+            f = open(self.current_file, "a", encoding="utf-8")
         except IOError as e:
             logger.error(e)
         else:
@@ -89,7 +89,7 @@ class Archives():
                  "------------------------------------------------------------"
         logger.info("Creating archive file \"{}\"".format(path))
         try:
-            f = open(path, 'w', encoding='utf-8')
+            f = open(path, "w", encoding="utf-8")
         except IOError as e:
             logger.error(e)
         else:
@@ -105,16 +105,16 @@ class Archives():
 
     def strip_comments(self):
         for sig in self.signalements:
-            if '//' in sig.statut:
-                sig.statut = sig.statut[:sig.statut.find('//')].strip()
+            if "//" in sig.statut:
+                sig.statut = sig.statut[:sig.statut.find("//")].strip()
 
-    def parse(self, text, col_sep='|'):
+    def parse(self, text, col_sep="|"):
         signalements = []
         year = utils.extract_numbers(self.current_file)[0]
         if not isinstance(text, str):
             return signalements
         for line in text.splitlines():
-            if line.strip() != '':
+            if line.strip() != "":
                 values = [elem.strip() for elem in line.split(col_sep)]
                 values[0] = values[0] + "/" + year[2:]
                 values[4] = [respo.strip() for respo in values[4].split(",")] if values[4] else []

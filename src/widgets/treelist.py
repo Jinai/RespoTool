@@ -70,14 +70,14 @@ class Treelist(ttk.Frame):
 
     def _setup_widgets(self):
         frame_tree = ttk.Frame(self)
-        frame_tree.pack(fill='both', expand=True)
+        frame_tree.pack(fill="both", expand=True)
         scrollbar = ttk.Scrollbar(frame_tree, orient="vertical")
-        scrollbar.pack(side='right', fill='y')
+        scrollbar.pack(side="right", fill="y")
 
         display = self.headers if self.index_show else self.headers[1:]
         self.tree = ttk.Treeview(frame_tree, columns=self.headers, displaycolumns=display, show="headings",
                                  height=self.height, selectmode="extended")
-        self.tree.pack(side='top', fill='both', expand=True)
+        self.tree.pack(side="top", fill="both", expand=True)
         self.tree.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=self.tree.yview)
 
@@ -106,7 +106,7 @@ class Treelist(ttk.Frame):
             self._data.append(values)
         if not tags:
             tags.append(["even_row", "odd_row"][self._row_count % 2])
-        self.tree.insert('', 'end', values=values, tags=tags)
+        self.tree.insert("", "end", values=values, tags=tags)
 
     def delete(self):
         selection = self.tree.selection()
@@ -114,7 +114,7 @@ class Treelist(ttk.Frame):
         for item in selection:
             if item == selection[-1]:
                 index = self.tree.get_children().index(item)
-            values = self.tree.item(item)['values']
+            values = self.tree.item(item)["values"]
             values[0] = str(values[0])
             self._data.remove(values)
             self.tree.delete(item)
@@ -153,12 +153,12 @@ class Treelist(ttk.Frame):
     def sort(self, col, descending):
         if self.sortable:
             tree_data = [(self.tree.set(child, col), self.tree.set(child, 0), child) for child in
-                         self.tree.get_children('')]
+                         self.tree.get_children("")]
             index = self.headers.index(col)
             tree_data.sort(reverse=descending, key=lambda x: (self.sort_keys[index](x), int(x[1])))
             self._data.sort(reverse=descending, key=lambda x: (self.sort_keys[index]([x[index]]), int(x[0])))
             for index, item in enumerate(tree_data):
-                self.tree.move(item[2], '', index)
+                self.tree.move(item[2], "", index)
                 self.tree.item(item[2], tags=[["even_row", "odd_row"][(index + 1) % 2]])
             # Switch heading command to reverse the sort next time
             self.tree.heading(col, command=lambda col=col: self.sort(col, not descending))
@@ -186,7 +186,7 @@ class Treelist(ttk.Frame):
         if query == "":
             for values in self._data:
                 self.insert(values, update=False)
-            self._matches_label.set('')
+            self._matches_label.set("")
         else:
             matches = 0
             for values in self._data:

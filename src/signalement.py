@@ -28,7 +28,7 @@ class Signalement():
         # Format d'archives
         template = " {} ".format(separator).join(Signalement.TEMPLATE.split(" "))
         d = dict(self.__dict__)
-        d['respo'] = ", ".join(d['respo'])
+        d["respo"] = ", ".join(d["respo"])
         return template.format(**d)
 
     def sigmdm(self):
@@ -36,7 +36,7 @@ class Signalement():
         return "[{}] {} a signalé {} ({}) : {}".format(self.date, self.auteur, self.code[1:], self.flag, self.desc)
 
     def ordered_dict(self):
-        return OrderedDict(zip(['date', 'auteur', 'code', 'flag', 'desc', 'statut', 'respo'], self.fields()))
+        return OrderedDict(zip(["date", "auteur", "code", "flag", "desc", "statut", "respo"], self.fields()))
 
     def playlister(self):
         # Format PlayLister de Saki + status
@@ -44,7 +44,7 @@ class Signalement():
 
     @staticmethod
     def from_dict(d):
-        return Signalement(d['date'], d['auteur'], d['code'], d['flag'], d['desc'], d['statut'], d['respo'])
+        return Signalement(d["date"], d["auteur"], d["code"], d["flag"], d["desc"], d["statut"], d["respo"])
 
     def __str__(self):
         return str(self.fields())

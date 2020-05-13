@@ -36,33 +36,33 @@ class Siglist(Treelist):
         self._last_popup_space = None
         self._last_popup_rightclick = None
         self._dialogs = []
-        self.tree.bind('<Double-1>', self.on_doubleclick)
-        self.tree.bind('<Button-3>', self.on_rightclick)
-        self.tree.bind('<Return>', lambda _: self.edit())
-        self.tree.bind('<Control-c>', lambda _: self.copy(with_load=True))
-        self.tree.bind('<Control-x>', lambda _: self.copy())
-        self.tree.bind('<Control-l>', lambda _: self.open_urls())
-        self.tree.bind('<space>', lambda _: self.on_space())
-        self.tree.bind('<FocusOut>', lambda _: self.remove_popups())
-        self.tree.bind('<<TreeviewSelect>>', lambda _: self.selection_handler())
-        # self.tree.bind('<<TreelistDelete>>', lambda _: self.delete())
+        self.tree.bind("<Double-1>", self.on_doubleclick)
+        self.tree.bind("<Button-3>", self.on_rightclick)
+        self.tree.bind("<Return>", lambda _: self.edit())
+        self.tree.bind("<Control-c>", lambda _: self.copy(with_load=True))
+        self.tree.bind("<Control-x>", lambda _: self.copy())
+        self.tree.bind("<Control-l>", lambda _: self.open_urls())
+        self.tree.bind("<space>", lambda _: self.on_space())
+        self.tree.bind("<FocusOut>", lambda _: self.remove_popups())
+        self.tree.bind("<<TreeviewSelect>>", lambda _: self.selection_handler())
+        # self.tree.bind("<<TreelistDelete>>", lambda _: self.delete())
         self.get_tags()
         self.get_templates()
         self.get_statuses()
 
     def get_tags(self):
-        with open("data/tags.json", 'r', encoding='utf-8') as f:
+        with open("data/tags.json", "r", encoding="utf-8") as f:
             self.tags = json.load(f)
         for tag in self.tags:
             keyword, color = tag
             self.tree.tag_configure(keyword, background=color)
 
     def get_templates(self):
-        with open("data/duplicates_msg.json", 'r', encoding='utf-8') as f:
+        with open("data/duplicates_msg.json", "r", encoding="utf-8") as f:
             self.archives_templates = json.load(f)
 
     def get_statuses(self):
-        with open("data/statuses.json", 'r', encoding='utf-8') as f:
+        with open("data/statuses.json", "r", encoding="utf-8") as f:
             self.statuses = json.load(f)
 
     def insert(self, values, update=True, tags=None):
@@ -77,7 +77,7 @@ class Siglist(Treelist):
     def delete(self):
         if self.tree.selection():
             for item in self.tree.selection():
-                values = self.tree.item(item)['values']
+                values = self.tree.item(item)["values"]
                 values[0] = str(values[0])  # Treeviews force str to int if it's a digit
                 values[-1] = [respo.strip() for respo in values[-1].split(",")] if values[-1] else []
                 sig = Signalement(*values[1:])
@@ -87,20 +87,20 @@ class Siglist(Treelist):
             if index == len(self.tree.get_children()):
                 index -= 1
             self.refresh()
-            if self._search_query.get() != '':
+            if self._search_query.get() != "":
                 self.search(debounced=True)
             self.focus_index(index)
 
     def selection_indexes(self):
         indexes = []
         for item in self.tree.selection():
-            indexes.append(int(self.tree.item(item)['values'][0]) - 1)
+            indexes.append(int(self.tree.item(item)["values"][0]) - 1)
         return indexes
 
     def get_selected_sigs(self):
         selected = []
         for item in self.tree.selection():
-            index = int(self.tree.item(item)['values'][0]) - 1
+            index = int(self.tree.item(item)["values"][0]) - 1
             selected.append(self.signalements[index])
         return selected
 
@@ -118,18 +118,18 @@ class Siglist(Treelist):
             # Clipboard
             item = self.tree.identify("item", event.x, event.y)
             column = int(self.tree.identify("column", event.x, event.y)[1:]) - 1
-            value = str(self.tree.item(item)['values'][column])
+            value = str(self.tree.item(item)["values"][column])
             pyperclip.copy(value)
             # Popup
             x, y = self.master.winfo_pointerx(), self.master.winfo_pointery()
             msg = utils.text_ellipsis(value, width=30)
-            Popup('"{}" copié dans le presse-papiers'.format(msg), x, y, offset=(10, -20))
+            Popup("'{}' copié dans le presse-papiers".format(msg), x, y, offset=(10, -20))
 
     def on_rightclick(self, event):
         if self.tree.identify_region(event.x, event.y) == "cell":
             item = self.tree.identify("item", event.x, event.y)
             column = int(self.tree.identify("column", event.x, event.y)[1:]) - 1
-            value = str(self.tree.item(item)['values'][column])
+            value = str(self.tree.item(item)["values"][column])
             x, y = self.tree.bbox(item, self.headers[column])[:2]
             x = x + self.winfo_rootx()
             y = y + self.winfo_rooty() - 2
@@ -150,7 +150,7 @@ class Siglist(Treelist):
                 return
             item = selection[0]
             item_index = self.tree.get_children().index(item)
-            values = self.tree.item(item)['values']
+            values = self.tree.item(item)["values"]
             values[0] = str(values[0])  # Treeviews force str to int if it's a digit
             data_index = self._data.index(values)
             title = "Signalement #{num} ({auteur})".format(num=values[0], auteur=values[2])
@@ -183,14 +183,14 @@ class Siglist(Treelist):
         if len(selection) == 1:
             item = selection[0]
             cmd = "/load " if with_load else ""
-            cmd += self.tree.item(item)['values'][3]
+            cmd += self.tree.item(item)["values"][3]
             logger.info("Copying '{}' to the clipboard".format(cmd))
             pyperclip.copy(cmd)
             try:
                 x, y = self.tree.bbox(item, "Code")[:2]
                 x = x + self.winfo_rootx()
                 y = y + self.winfo_rooty()
-                Popup('"{}" copié dans le presse-papiers'.format(cmd), x, y, offset=(0, -21))
+                Popup("'{}' copié dans le presse-papiers".format(cmd), x, y, offset=(0, -21))
             except ValueError:
                 pass
 

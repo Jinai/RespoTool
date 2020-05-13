@@ -98,15 +98,15 @@ class SearchBar(CustomEntry):
             self.entry.insert(0, self.placeholder_text)
             self.entry.configure(foreground=self.placeholder_color)
             self.set_slant(self.placeholder_slant)
-            self.entry.bind('<FocusIn>', self.focus_in, add="+")
-            self.entry.bind('<FocusOut>', self.focus_out, add="+")
+            self.entry.bind("<FocusIn>", self.focus_in, add="+")
+            self.entry.bind("<FocusOut>", self.focus_out, add="+")
 
     def focus_in(self, event):
         if self.icon_path_alt:
             self.label_icon.configure(image=self.icon_alt)
         if self.get() in ("", self.placeholder_text):
             self.delete(0, tk.END)
-            self.entry.configure(foreground='black')
+            self.entry.configure(foreground="black")
             self.set_slant("roman")
         super().focus_in(event)
 
@@ -124,6 +124,6 @@ class SearchBar(CustomEntry):
         self.entry.insert(0, self.placeholder_text)
 
     def set_slant(self, new_slant):
-        self.font = tkfont.Font(font=tk.Entry()['font'])
+        self.font = tkfont.Font(font=tk.Entry()["font"])
         self.font.configure(slant=new_slant)
         self.entry.configure(font=self.font)

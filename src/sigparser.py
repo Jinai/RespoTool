@@ -21,7 +21,7 @@ def parse(text, allow_duplicates=True, previous_sigs=None):
 
     for line in text.splitlines():
         line = line.rstrip()
-        if line == '':
+        if line == "":
             continue
 
         matches = {
