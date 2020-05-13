@@ -4,6 +4,7 @@
 import json
 import logging
 import os
+import platform
 import tkinter as tk
 import tkinter.filedialog as fdialog
 import tkinter.messagebox as mbox
@@ -349,6 +350,8 @@ class RespoTool(tk.Tk):
 if __name__ == '__main__':
     log_level = utils.init_logging()
     logging.info("Starting {} {} [log_level={}]".format(__appname__, __version__, log_level))
+    logging.info(
+        "Running on {} {} (Python {})".format(platform.system(), platform.version(), platform.python_version()))
 
     app_title = "{} {}".format(__appname__, __version__)
     message = ""

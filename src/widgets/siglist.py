@@ -184,6 +184,7 @@ class Siglist(Treelist):
             item = selection[0]
             cmd = "/load " if with_load else ""
             cmd += self.tree.item(item)['values'][3]
+            logger.info("Copying '{}' to the clipboard".format(cmd))
             pyperclip.copy(cmd)
             try:
                 x, y = self.tree.bbox(item, "Code")[:2]
@@ -195,7 +196,10 @@ class Siglist(Treelist):
 
     def open_urls(self):
         for sig in self.get_selected_sigs():
-            for url in utils.extract_urls(str(sig)):
+            urls = utils.extract_urls(str(sig))
+            if urls:
+                logger.info("Opening {} URLs for sig #{}".format(len(urls), self.signalements.index(sig) + 1))
+            for url in urls:
                 webbrowser.open_new_tab(url)
 
     def on_space(self):

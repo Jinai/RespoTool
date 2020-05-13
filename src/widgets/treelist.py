@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 # !python3
 
+import logging
 import tkinter as tk
 import tkinter.ttk as ttk
+
+logger = logging.getLogger(__name__)
 
 
 class Treelist(ttk.Frame):
@@ -178,6 +181,7 @@ class Treelist(ttk.Frame):
         if query == "" and self._last_search_query == "":
             return
 
+        logger.debug("Searching for '{}'".format(query))
         self.clear(keep_data=True)
         if query == "":
             for values in self._data:

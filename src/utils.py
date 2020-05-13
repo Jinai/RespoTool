@@ -19,14 +19,14 @@ def init_logging(file=True):
     log_level = get_log_level()
     logger = logging.getLogger()
     logger.setLevel(log_level)
-    fmt = "{asctime} :: {levelname:<5} :: {name:<9} :: {message}"
+    fmt = "{asctime}.{msecs:03.0f} :: {levelname:<5} :: {name:<9} :: {message}"
     datefmt = "%d/%m/%Y %H:%M:%S"
     fmt = logging.Formatter(fmt=fmt, datefmt=datefmt, style="{")
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(fmt)
     logger.addHandler(console_handler)
 
-    if file:
+    if file and hasattr(sys, "frozen"):
         log_dir = os.path.join(os.path.expanduser(os.path.join("~", "Documents")), __appname__)
         created_log_dir = True
         try:
