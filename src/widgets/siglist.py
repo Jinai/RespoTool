@@ -45,7 +45,7 @@ class Siglist(Treelist):
         self.tree.bind('<space>', lambda _: self.on_space())
         self.tree.bind('<FocusOut>', lambda _: self.remove_popups())
         self.tree.bind('<<TreeviewSelect>>', lambda _: self.selection_handler())
-        self.tree.bind('<<TreelistDelete>>', lambda _: self.delete())
+        # self.tree.bind('<<TreelistDelete>>', lambda _: self.delete())
         self.get_tags()
         self.get_templates()
         self.get_statuses()
