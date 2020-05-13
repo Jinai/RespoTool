@@ -7,8 +7,8 @@ import tkinter as tk
 class Popup(tk.Toplevel):
     def __init__(self, message, pos_x, pos_y, lifetime=1500, delay=0, fadein=200, fadeout=600, offset=(0, 0),
                  txt_color="white", bg_color="#111111", border_color="#999999", border_width=0, persistent=False,
-                 max_alpha=1.0, **options):
-        tk.Toplevel.__init__(self, **options)
+                 max_alpha=1.0, **kwargs):
+        super().__init__(**kwargs)
         self.message = message            # Message to display
         self.pos_x = pos_x                # Top left corner position on x-axis
         self.pos_y = pos_y                # Top left corner position on y-axis

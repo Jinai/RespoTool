@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_args(logger=logger)
-def parse(text, allow_duplicates=True, previous_sigs=None, sep="\n"):
+def parse(text, allow_duplicates=True, previous_sigs=None):
     if previous_sigs is None:
         previous_sigs = []
     signalements = []
@@ -19,8 +19,8 @@ def parse(text, allow_duplicates=True, previous_sigs=None, sep="\n"):
     if not isinstance(text, str):
         return signalements
 
-    for line in text.split(sep):
-        line = line.rstrip('\r\n')
+    for line in text.splitlines():
+        line = line.rstrip()
         if line == '':
             continue
 

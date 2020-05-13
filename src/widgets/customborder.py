@@ -6,7 +6,7 @@ import tkinter as tk
 
 class CustomBorder(tk.Frame):
     # A thin frame acting like a border / separator for other widgets.
-    # Color and thickness are customizable
+    # Color and thickness are customizable.
 
     def __init__(self, master, thickness=1, color="#D7D7D7", orient="horizontal", side="top"):
         tk.Frame.__init__(self, master)
@@ -28,9 +28,6 @@ class CustomBorder(tk.Frame):
         else:
             self.configure(width=self.thickness)
 
-    def pack(self, *args, **kwargs):
+    def pack(self, **kwargs):
         fill = "x" if self.orient == "horizontal" else "y"
-        side = kwargs.get("side")
-        padx = kwargs.get("padx")
-        pady = kwargs.get("pady")
-        super().pack(side=side, fill=fill, padx=padx, pady=pady)
+        super().pack(fill=fill, **kwargs)
