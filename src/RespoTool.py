@@ -41,9 +41,9 @@ class RespoTool(tk.Tk):
         self.auto_import = auto_import
         self.warning_message = warning_message
         self.current_respo = tk.StringVar()
-        with open("data/respomaps.json", "r", encoding="utf-8") as f:
+        with open(utils.resource_path("data/respomaps.json"), "r", encoding="utf-8") as f:
             self.respomaps = json.load(f)
-        with open("data/contact.json", "r", encoding="utf-8") as f:
+        with open(utils.resource_path("data/contact.json"), "r", encoding="utf-8") as f:
             self.contact = json.load(f)
         self.signalements = []
         self.archives = archives.Archives(archives_dir, archives_pattern)
@@ -56,7 +56,7 @@ class RespoTool(tk.Tk):
         self.minsize(742, self.winfo_reqheight())
         try:
             self.tk.call("encoding", "system", "utf-8")
-            path = "data/img/respotool.ico"
+            path = utils.resource_path("data/img/respotool.ico")
             self.iconbitmap(default=path)
         except Exception as e:
             logging.error(e)
@@ -117,7 +117,7 @@ class RespoTool(tk.Tk):
         # ----------------------------------------- CURRENT RESPO & SEARCH ----------------------------------------- #
 
         self.frame_respo = ttk.Frame(self.main_frame)
-        self.icon_respo = tk.PhotoImage(file="data/img/shield_respo.png")
+        self.icon_respo = tk.PhotoImage(file=utils.resource_path("data/img/shield_respo.png"))
         lbl_icon_respo = ttk.Label(self.frame_respo, image=self.icon_respo)
         lbl_icon_respo.pack(side="left")
         label_respo = ttk.Label(self.frame_respo, text="Respomap  :  ")
@@ -134,8 +134,8 @@ class RespoTool(tk.Tk):
             "text": " Rechercher"
         }
         icon_options = {
-            "path": "data/img/search1.png",
-            "alt": "data/img/search2.png",
+            "path": utils.resource_path("data/img/search1.png"),
+            "alt": utils.resource_path("data/img/search2.png")
         }
         self.searchbar = customentries.SearchBar(self.frame_search, placeholder_options=placeholder_options,
                                                  icon_options=icon_options, width=30)

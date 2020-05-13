@@ -51,18 +51,18 @@ class Siglist(Treelist):
         self.get_statuses()
 
     def get_tags(self):
-        with open("data/tags.json", "r", encoding="utf-8") as f:
+        with open(utils.resource_path("data/tags.json"), "r", encoding="utf-8") as f:
             self.tags = json.load(f)
         for tag in self.tags:
             keyword, color = tag
             self.tree.tag_configure(keyword, background=color)
 
     def get_templates(self):
-        with open("data/duplicates_msg.json", "r", encoding="utf-8") as f:
+        with open(utils.resource_path("data/duplicates_msg.json"), "r", encoding="utf-8") as f:
             self.archives_templates = json.load(f)
 
     def get_statuses(self):
-        with open("data/statuses.json", "r", encoding="utf-8") as f:
+        with open(utils.resource_path("data/statuses.json"), "r", encoding="utf-8") as f:
             self.statuses = json.load(f)
 
     def insert(self, values, update=True, tags=None):

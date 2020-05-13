@@ -13,6 +13,11 @@ import urlmarker
 from _meta import __appname__
 
 
+def resource_path(relative_path):
+    working_directory = "."
+    if hasattr(sys, "frozen") and hasattr(sys, "_MEIPASS"):
+        working_directory = sys._MEIPASS
+    return os.path.join(working_directory, relative_path)
 
 
 def init_logging(file=True):
