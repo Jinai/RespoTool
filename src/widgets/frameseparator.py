@@ -4,7 +4,7 @@
 import tkinter as tk
 
 
-class CustomBorder(tk.Frame):
+class FrameSeparator(tk.Frame):
     # A thin frame acting like a border / separator for other widgets.
     # Color and thickness are customizable.
 

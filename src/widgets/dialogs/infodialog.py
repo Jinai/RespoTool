@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# !python3
+
 from tkinter import ttk as ttk
 
 from widgets.dialogs.basedialog import BaseDialog

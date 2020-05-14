@@ -4,7 +4,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from widgets.customborder import CustomBorder
+from widgets.frameseparator import FrameSeparator
 
 
 class StatusBar(ttk.Frame):
@@ -14,7 +14,7 @@ class StatusBar(ttk.Frame):
         self.text = text
         self._textvar = tk.StringVar()
         self._textvar.set(self.text)
-        self.border = CustomBorder(self, orient="horizontal", thickness=1)
+        self.border = FrameSeparator(self, orient="horizontal", thickness=1)
         self.border.pack(side="top")
         self.label = tk.Label(self, anchor="w", textvariable=self._textvar)
         self.label.pack(side="left", fill="x", expand=True)
