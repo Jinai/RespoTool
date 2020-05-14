@@ -17,7 +17,8 @@ import signalement
 import sigparser
 import utils
 from _meta import __appname__, __version__
-from widgets import customentries, modaldialog, siglist, statusbar
+from widgets import customentries, siglist, statusbar
+from widgets.dialogs.infodialog import InfoDialog
 
 
 def fix_treeview():
@@ -81,7 +82,7 @@ class RespoTool(tk.Tk):
         # Warnings
         if self.warning_message:
             dialog_title = self.app_title
-            info = modaldialog.InfoDialog(self, dialog_title=dialog_title, body_text=self.warning_message)
+            info = InfoDialog(self, dialog_title=dialog_title, body_text=self.warning_message)
             info.spawn()
 
     def _setup_widgets(self):

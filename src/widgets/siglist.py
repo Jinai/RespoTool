@@ -9,7 +9,7 @@ import pyperclip
 
 import utils
 from signalement import Signalement
-from widgets.editstatus import EditStatusDialog
+from widgets.dialogs.editsigdialog import EditSigDialog
 from widgets.popup import Popup
 from widgets.treelist import Treelist
 
@@ -154,7 +154,7 @@ class Siglist(Treelist):
             values[0] = str(values[0])  # Treeviews force str to int if it's a digit
             data_index = self._data.index(values)
             title = "Signalement #{num} ({auteur})".format(num=values[0], auteur=values[2])
-            dialog = EditStatusDialog(self, statuses=self.statuses, original_text=values[-2], dialog_title=title)
+            dialog = EditSigDialog(self, statuses=self.statuses, original_text=values[-2], dialog_title=title)
             self._dialogs.append(dialog)
             dialog.spawn()
             new_statut = dialog.result

@@ -6,10 +6,10 @@ import tkinter.ttk as ttk
 from collections import OrderedDict
 
 import utils
-from .modaldialog import ModalDialog
+from widgets.dialogs.basedialog import BaseDialog
 
 
-class EditStatusDialog(ModalDialog):
+class EditSigDialog(BaseDialog):
     def __init__(self, master, *, statuses, original_text, **kwargs):
         super().__init__(master, **kwargs)
         self.statuses = statuses
