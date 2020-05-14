@@ -1,194 +1,222 @@
+v1.8 [14/05/2020]
+=================
+    * Correction d'un bug majeur provoquant la création d'une multitude d'archives lors
+      de l'archivage de signalements au passage d'une nouvelle année.
+    * Correction d'un bug mineur faisant que l'icône du programme n'était pas présente
+      dans toutes les fenêtres du programme.
+    * Correction d'un bug mineur de couleurs dans le tri par colonne.
+    * Correction d'un bug mineur de focus après suppression d'un signalement en fin de
+      liste.
+    * Recherche optimisée, ça ne rafraîchit plus la liste à chaque caractère saisi.
+    * Interface du programme plus grande par défaut.
+    * Affichage de la sélection en cours dans la barre d'état.
+    * Vitesse de défilement ajustée à 3 lignes par coup de molette au lieu de 1.
+    * Nouvelles icônes dans la barre de recherche.
+    * Il n'est plus possible de supprimer un signalement via l'interface car ce n'est
+      pas censé être fait. Si nécessaire, c'est toujours possible mais à la main en
+      modifiant le fichier de session.
+    * Les logs sont plus précis et plus récurrents.
+    * Beaucoup de changements et améliorations dans certains modules du code n'ayant
+      pas d'impact sur l'interface.
+    * Ajout du flag [-v | --version] au lancement du programme et amélioration du
+      message d'aide via [-h | --help].
+    * Ajout systématique d'un point en fin de phrase pour chaque élément de ce
+      changelog.
+
+
 v1.7 [08/02/2019]
 =================
     * Utilisation d'une liste de cases à cocher et d'une zone à commentaires pour
       indiquer quelles actions ont été menées lors du traitement d'un signalement.
       Plus besoin de formatter à la main le statut (ex. "modifié + record // pas ouf").
-    * Ctrl+L pour ouvrir toutes les URLs trouvées dans la sélection courante
+    * Ctrl+L pour ouvrir toutes les URLs trouvées dans la sélection courante.
     * Ajout d'un bouton pour générer un message automatique reprenant toutes les infos
       du signalement sélectionné. Le message est copié dans le presse-papiers et est
-      destiné a être envoyé par MP à l'auteur de la map
+      destiné a être envoyé par MP à l'auteur de la map.
     * Plusieurs boutons inutilisés ont été désactivés pour le moment (nouvelle session
-      et ajout de signalements via fichier). L'interface devrait être revue plus tard
+      et ajout de signalements via fichier). L'interface devrait être revue plus tard.
     * Petites modifications pour améliorer l'affichage sur Mac. Il y a encore pas mal
-      de fonctionnalités manquantes cela dit (notamment les raccourcis clavier)
+      de fonctionnalités manquantes cela dit (notamment les raccourcis clavier).
 
 
 v1.6 [19/04/2018]
 =================
     * Correction d'un bug provoquant parfois des effets indésirables lors de l'édition
-      d'un signalement si une recherche est en cours
-    * Correction du scrolling automatique en fin de liste ne marchant pas toujours
-    * Correction d'un bug avec l'import de signalemements via Ctrl+V
-    * Correction d'un bug avec le Ctrl+Espace
-    * Ctrl+X pour copier le code d'un signalement dans le presse-papiers
-    * Clic droit sur une cellule du tableau pour en afficher le contenu complet
-    * Ajout du logo respomap à gauche du menu déroulant d'« authentification »
-    * Léger changement d'apparence pour certains popups
-    * Changements dans l'organisation des fichiers ressources (images, données)
-    * Refactor de certaines parties du code (léger)
+      d'un signalement si une recherche est en cours.
+    * Correction du scrolling automatique en fin de liste ne marchant pas toujours.
+    * Correction d'un bug avec l'import de signalemements via Ctrl+V.
+    * Correction d'un bug avec le Ctrl+Espace.
+    * Ctrl+X pour copier le code d'un signalement dans le presse-papiers.
+    * Clic droit sur une cellule du tableau pour en afficher le contenu complet.
+    * Ajout du logo respomap à gauche du menu déroulant d'« authentification ».
+    * Léger changement d'apparence pour certains popups.
+    * Changements dans l'organisation des fichiers ressources (images, données).
+    * Refactor de certaines parties du code (léger).
 
 
 v1.5 [08/02/2017]
 =================
     * Correction du placeholder ne s'affichant pas directement dans la barre de
-      recherche
+      recherche.
     * Correction d'un bug qui laissait passer des retours à la ligne dans les
-      descriptions de signalements, brisant l'affichage du Ctrl+Espace
+      descriptions de signalements, brisant l'affichage du Ctrl+Espace.
     * Correction d'un bug qui faisait que les boutons d'import/export n'étaient pas de
       largeur égale. Cela affectait aussi le positionnement de la barre de recherche et
-      des 4 boutons du bas
+      des 4 boutons du bas.
     * Les tags (mots-clés) apparaissant dans les statuts et donnant lieu à une couleur
       particulière sont maintenant ordonnés. Un statut avec le mot-clé "todo" sera par
-      exemple toujours en rouge même si un autre mot-clé apparait
+      exemple toujours en rouge même si un autre mot-clé apparait.
     * Ajout de raccourcis clavier pour importer/exporter une session (Ctrl+O et Ctrl+S)
-      et pour coller des signalements depuis le presse-papiers (Ctrl+V)
-    * Ajout du nombre d'occurrences trouvées à gauche de la barre de recherche  
-    * Petite optimisation lors de l'ajout de signalements via fichier / presse-papiers,
-      l'interface n'est rafraîchie et la barre d'état n'affiche pas de message si aucun
-      signalements n'a effectivement été ajouté
+      et pour coller des signalements depuis le presse-papiers (Ctrl+V).
+    * Ajout du nombre d'occurrences trouvées à gauche de la barre de recherche.
+    * Petite optimisation lors de l'ajout de signalements via fichier/presse-papiers,
+      l'interface n'est pas rafraîchie et la barre d'état n'affiche pas de message si
+      aucun signalement n'a effectivement été ajouté.
 
 
 v1.4 [08/12/2016]
 =================
     * Les archives sont maintenant séparées par années. Cela ne change rien du point de
-      de vue de l'utilisateur, tout est géré par le programme
-    * Ajout d'une barre de statut indiquant le résultat des diverses actions
-      réalisables dans le programme
-    * Déplacement de la barre de recherche et léger redesign de celle-ci
+      de vue de l'utilisateur, tout est géré par le programme.
+    * Ajout d'une barre d'état indiquant le résultat des diverses actions réalisables
+      dans le programme.
+    * Déplacement de la barre de recherche et léger redesign de celle-ci.
     * Amélioration du parser de /sigmdm, il ne devrait plus y avoir de bugs à
-      l'importation depuis le presse-papiers
-    * Scroll automatique en bas de liste quand on insère de nouveaux signalements
-    * Des logs sont maintenant enregistrés dans C:\Users\{user}\Documents\RespoTool\
+      l'importation depuis le presse-papiers.
+    * Scroll automatique en bas de liste quand on insère de nouveaux signalements.
+    * Des logs sont maintenant enregistrés dans C:\Users\{user}\Documents\RespoTool.
 
 
 v1.3 [22/09/2016]
 =================
     * Appuyer sur Espace lorsqu'un signalement est sélectionné affiche sous forme
-      d'un popup les signalements des archives / session courante qui correspondent
+      d'un popup les signalements des archives/session courante qui correspondent
       à la même map. Le template d'affichage de ce popup est stocké dans un fichier
-      JSON. Modifiable pendant que le programme est ouvert
-    * Correction du popup de Ctrl+C apparaissant au mauvais endroit
+      JSON. Modifiable pendant que le programme est ouvert.
+    * Correction du popup de Ctrl+C apparaissant au mauvais endroit.
 
 
 v1.2 [09/09/2016]
 =================
-    * Possibilité de filtrer la liste par une recherche (Ctrl+F)
+    * Possibilité de filtrer la liste par une recherche (Ctrl+F).
     * Correction de nombreux bugs liés à l'affichage des signalements et au mauvais
-      indexage de ceux-ci dans la liste
+      indexage de ceux-ci dans la liste.
     * Correction d'un bug possible dans l'alternance des couleurs des lignes paires /
-      impaires
-    * Retrait de la scrollbar horizontale qui n'était pas très utile
+      impaires.
+    * Retrait de la scrollbar horizontale qui n'était pas très utile.
 
 
 v1.1 [29/08/2016]
 =================
     * Ajout de la colonne Respomap qui se charge de retenir quels respomaps se sont
-      occupés de quels signalements
+      occupés de quels signalements.
     * Les couleurs des lignes spéciales (todo, contacté, etc.) sont stockées dans un
-      fichier JSON et sont modifiables pendant que le programme est ouvert
+      fichier JSON et sont modifiables pendant que le programme est ouvert.
 
 
 v1.0 [23/08/2016]
 =================
-    * Correction d'un bug quand on sélectionne plusieurs signalements à supprimer
+    * Correction d'un bug quand on sélectionne plusieurs signalements à supprimer.
     * Les colonnes Description et Statut sont plus larges et s'adaptent mieux à la
-      fenêtre
-    * De même, la fenêtre peut être rétrécie un peu plus qu'avant en largeur
+      fenêtre.
+    * De même, la fenêtre peut être rétrécie un peu plus qu'avant en largeur.
     * Les doublons sont maintenant d'office ajoutés à la liste pour la fiabilité des
-      archives/stats
+      archives/stats.
     * Le fichier "session.sig" est automatiquement importé au démarrage (pourra être
-      amélioré)
+      amélioré).
     * Les fichiers de sessions sont maintenant enregistrés dans un format lisible, et
-      donc modifiable à la main en cas d'erreur
+      donc modifiable à la main en cas d'erreur.
     * La modification des statuts a été revue et invite maintenant l'utilisateur à
-      rentrer son texte dans une fenêtre séparée avec plus d'espace
+      rentrer son texte dans une fenêtre séparée avec plus d'espace.
 
 
 v0.6.3 [11/04/2016]
 ===================
-    * Possibilité d'archiver les n premiers signalements sélectionnés
-      Ils doivent être consécutifs et commencer par le premier signalement pour
-      maintenir l'ordre des archives
-    * Possibilité d'obtenir les signalements sous leur format originel : /sigmdm
-      (copié dans le presse-papiers), les statuts sont perdus lors de la conversion
-    * Nouveau logo (susceptible de changer)
+    * Possibilité d'archiver les n premiers signalements sélectionnés. Ils doivent être
+      consécutifs et commencer par le premier signalement pour maintenir l'ordre des
+      archives.
+    * Possibilité d'obtenir les signalements sous leur format originel (/sigmdm) via le
+      le presse-papiers. Les statuts sont perdus lors de la conversion.
+    * Nouveau logo (susceptible de changer).
 
 
 v0.6.2 [07/02/2016]
 ===================
-    * Meilleure gestion des caractères en UTF-8
+    * Meilleure gestion des caractères en UTF-8.
     * Correction de la perte de focus si Échap est utilisé pour annuler l'édition d'un
-      statut
-    * Correction d'un bug lors d'un double-clic sur la colonne des numéros de ligne
+      statut.
+    * Correction d'un bug lors d'un double-clic sur la colonne des numéros de ligne.
 
 
 v0.6.1 [04/12/2015]
 ===================
-    * Ctrl+Q pour quitter l'application
+    * Ctrl+Q pour quitter l'application.
     * Ctrl+C pour copier la commande de load du signalement sélectionné dans le
-      presse-papiers ("/load @code")
-    * Layout des boutons légèrement modifié, ils s'adaptent mieux à la fenêtre
-    * Message d'avertissement lors de l'archivage modifié
+      presse-papiers ("/load @code").
+    * Layout des boutons légèrement modifié pour qu'ils s'adaptent mieux à la fenêtre.
+    * Message d'avertissement lors de l'archivage modifié.
 
 
 v0.6 [01/12/2015]
 =================
-    * Correction d'un bug causé par les doublons où éditer un sig modifiait un autre
+    * Correction d'un bug causé par les doublons où éditer un sig modifiait un autre.
     * Encore amélioré la navigation au clavier, supprimer un élément garde le focus
-      sur l'élément suivant et permet d'enchaîner
-    * Case à cocher pour autoriser les doublons (cochée par défaut)
+      sur l'élément suivant et permet d'enchaîner.
+    * Case à cocher pour autoriser les doublons (cochée par défaut).
 
 
 v0.5.2 [29/11/2015]
 ===================
-    * Amélioré la navigation au clavier dans la liste de signalements, notamment
-      après avoir édité un statut (obligé d'utiliser la souris avant)
+    * Amélioration de la navigation au clavier dans la liste de signalements, notamment
+      après avoir édité un statut (obligé d'utiliser la souris auparavant).
 
 
 v0.5.1 [27/11/2015]
 ===================
-    * Ajusté l'apparence du pop-up
-    * Correction d'un bug dans l'affichage du pop-up
+    * Ajusté l'apparence du pop-up (cf. v0.5).
+    * Correction d'un bug dans l'affichage du pop-up (cf. v0.5).
 
 
 v0.5 [27/11/2015]
 =================
     * Un popup apparait maintenant lors d'un double-clic sur une cellule du tableau
-      (histoire d'avoir un retour visuel et d'être sûr que ça a bien fonctionné)
-    * Largeur de la colonne Statut légèrement augmentée
+      (histoire d'avoir un retour visuel et d'être sûr que ça a bien fonctionné).
+    * Largeur de la colonne Statut légèrement augmentée.
 
 
 v0.4 [11/11/2015]
 =================
-    * Correction du parser pour ne garder que le dernier signalement en cas de doublons
+    * Correction du parser pour ne garder que le dernier signalement en cas de
+      doublons.
     * Possibilité d'ajouter des signalements à la suite des autres sans tout effacer ou
-      devoir réencoder chaque statut
+      devoir réencoder chaque statut.
     * L'import/export ouvre une boite de dialogue pour sélectionner un fichier, c'est
-      plus pratique qu'un fichier par défaut
-    * Correction d'un petit bug qui empêchait de trier par numéro d'ajout dans la liste
-    * Signalements non traités en rouge
+      plus pratique qu'un fichier par défaut.
+    * Correction d'un bug mineur qui empêchait de trier la liste par numéro d'ajout.
+    * Signalements non traités en rouge.
 
 
 v0.3 [10/11/2015]
 =================   
-    * Sélectionner une ou plusieurs lignes puis faire Supprimer/Retour pour les retirer
-    * Sélectionner une ligne puis faire Entrée pour éditer le statut
+    * Sélectionner une ou plusieurs lignes puis faire Supprimer/Retour pour les
+      retirer.
+    * Sélectionner une ligne puis faire Entrée pour éditer le statut.
     * Archiver devrait mieux marcher, pour info ça ajoute les signalements traités à la
-      fin du fichier archives/archives.txt
+      fin du fichier archives/archives.txt.
     * Possibilité d'importer/exporter une sauvegarde des signalements en cours (plus
-      flexible que de garder le contenu de /sigmdm car les statuts sont conservés)
+      flexible que de garder le contenu de /sigmdm car les statuts sont conservés).
     * Tri par colonnes fonctionnel (par date ou par ordre alphabétique, permet par
-      exemple de rassembler les différents flags pour les traiter d'un coup)
+      exemple de rassembler les différents flags pour les traiter d'un coup).
     * statuts.txt liste les statuts disponibles (techniquement on peut mettre n'importe
-      quoi mais ce serait cool d'avoir les mêmes pour faire des stats par exemple)
+      quoi mais ce serait cool d'avoir les mêmes pour faire des stats par exemple).
 
 
 v0.2 [06/11/2015]
 =================
-    * Possibilité de copier le contenu de n'importe quelle cellule avec un double-clic
-    * Possibilité d'archiver les signalements [En test]
+    * Possibilité de copier le contenu de n'importe quelle cellule avec un double-clic.
+    * Possibilité d'archiver les signalements [En test].
 
 
 v0.1 [05/11/2015]
 =================
-    * Version initiale
+    * Version initiale.
