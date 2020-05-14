@@ -10,14 +10,14 @@ import sys
 from logging.handlers import TimedRotatingFileHandler
 
 import urlmarker
-from _meta import __appname__
+from _meta import __appname__, __version__
 
 
 def resource_path(relative_path):
     working_directory = "."
     if hasattr(sys, "frozen") and hasattr(sys, "_MEIPASS"):
         working_directory = sys._MEIPASS
-    return os.path.join(working_directory, relative_path)
+    return os.path.join(working_directory, os.path.normpath(relative_path))
 
 
 def init_logging(file=True):
@@ -33,29 +33,37 @@ def init_logging(file=True):
 
     if file and hasattr(sys, "frozen"):
         log_dir = os.path.join(os.path.expanduser(os.path.join("~", "Documents")), __appname__)
-        created_log_dir = True
-        try:
-            os.makedirs(log_dir)
-        except OSError:
-            created_log_dir = False  # Directory already exists
+        created_log_dir = create_directory(log_dir)
 
         path = os.path.join(log_dir, __appname__.lower() + ".log")
         file_handler = TimedRotatingFileHandler(filename=path, when="midnight", encoding="utf-8")
         file_handler.setFormatter(fmt)
         logger.addHandler(file_handler)
         if created_log_dir:
-            logger.info("Creating {}".format(log_dir))
+            logger.info("Creating '{}'".format(log_dir))
     return logging._levelToName[log_level]
 
 
+def create_directory(dirname):
+    try:
+        os.makedirs(dirname)
+        return True
+    except OSError:
+        return False
+
+
 def get_log_level():
-    parser = argparse.ArgumentParser(__name__)
-    parser.add_argument("--log-level",
-                        default=logging.DEBUG,
+    choices = [key for key in logging._levelToName.values()][-2::-1]
+    help_string = "set the logging output level to {0}".format(special_join(choices, ", ", " or "))
+    parser = argparse.ArgumentParser(__appname__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("-v", "--version", action="version",
+                        version="%(prog)s {}".format(__version__), help="show the version number and exit")
+    parser.add_argument("--log",
+                        default=logging._levelToName[logging.DEBUG],
                         dest="log_level",
                         type=lambda arg: logging._checkLevel(arg.upper()),
                         nargs="?",
-                        help="Set the logging output level. {0}".format([key for key in logging._nameToLevel]))
+                        help=help_string)
     parsed_args = parser.parse_args()
     return parsed_args.log_level
 
@@ -120,3 +128,19 @@ def extract_numbers(text):
 
 def sequence_chunker(seq, size):
     return (seq[pos:pos + size] for pos in range(0, len(seq), size))
+
+
+def special_join(seq, sep, last_sep):
+    result = ""
+    if len(seq) == 0:
+        return result
+    elif len(seq) == 1:
+        return str(seq[0])
+    for index, elem in enumerate(seq):
+        result += elem
+        if index < len(seq) - 2:
+            result += sep
+        elif index == len(seq) - 2:
+            result += last_sep
+
+    return result
