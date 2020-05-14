@@ -17,7 +17,7 @@ import signalement
 import sigparser
 import utils
 from _meta import __appname__, __version__
-from widgets import customentries, siglist, statusbar
+from widgets import searchbar, siglist, statusbar
 from widgets.dialogs.infodialog import InfoDialog
 
 
@@ -138,8 +138,8 @@ class RespoTool(tk.Tk):
             "path": utils.resource_path("data/img/search1.png"),
             "alt": utils.resource_path("data/img/search2.png")
         }
-        self.searchbar = customentries.SearchBar(self.frame_search, placeholder_options=placeholder_options,
-                                                 icon_options=icon_options, width=30)
+        self.searchbar = searchbar.SearchBar(self.frame_search, placeholder_options=placeholder_options,
+                                             icon_options=icon_options, width=30)
         self.searchbar.pack(side="right")
 
         # ---------------------------------------------- SIGNALEMENTS ---------------------------------------------- #
