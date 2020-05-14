@@ -1,5 +1,5 @@
 {
-	"message": [
+    "message": [
         "Salut, ta map a fait l'objet d'un signalement. Le voici :\n",
         "Date : {date}",
         "Code : {code}",
@@ -8,4 +8,3 @@
     ],
     "__comment": "Les différents accesseurs : {date} {auteur} {code} {flag} {desc} {statut} {respo}"
 }
-
