@@ -20,7 +20,6 @@ def parse(text, allow_duplicates=True, previous_sigs=None):
         return signalements
 
     for line in text.splitlines():
-        line = line.rstrip()
         if line == "":
             continue
 
@@ -29,9 +28,9 @@ def parse(text, allow_duplicates=True, previous_sigs=None):
             "auteur": "([a-zA-Z]{1,12})",
             "code": "([0-9]{13})",
             "flag": "(.*)",
-            "desc": "(.*)"
+            "desc": "(.+)"
         }
-        regex = "\[{date}\] {auteur} a signalé {code} \({flag}\) : {desc}".format(**matches)
+        regex = r"\[{date}\] {auteur} a signalé {code} \({flag}\) : {desc}".format(**matches)
         match = re.match(regex, line)
         if match:
             date, auteur, code, flag, desc = match.groups()
