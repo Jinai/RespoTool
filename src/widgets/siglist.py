@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # !python3
 
+import datetime
 import json
 import logging
 import webbrowser
@@ -130,6 +131,9 @@ class Siglist(Treelist):
             item = self.tree.identify("item", event.x, event.y)
             column = int(self.tree.identify("column", event.x, event.y)[1:]) - 1
             value = str(self.tree.item(item)["values"][column])
+            if self.headers[column] == "Code":
+                timestamp = int(value[1:11]) + int(value[11:]) / 1000
+                value = datetime.datetime.fromtimestamp(timestamp).strftime("%d/%m/%Y à %H:%M:%S")
             x, y = self.tree.bbox(item, self.headers[column])[:2]
             x = x + self.winfo_rootx()
             y = y + self.winfo_rooty() - 2
