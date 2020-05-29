@@ -89,6 +89,8 @@ class Treelist(ttk.Frame):
         self.tree.event_add("<<TreelistDelete>>", "<BackSpace>", "<Delete>")
         self.tree.bind("<Control-a>", lambda _: self.select_all())
         self.tree.bind("<MouseWheel>", self.mousewheel_handler)
+        self.tree.bind("<Home>", lambda _: self.scroll_up())
+        self.tree.bind("<End>", lambda _: self.scroll_down())
 
         self._build_tree()
 
