@@ -8,6 +8,24 @@ import tkinter.ttk as ttk
 logger = logging.getLogger(__name__)
 
 
+class _TreeScroll(ttk.Treeview):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.event_add("<<TreelistScroll>>", "None")
+
+    def yview(self, *args):
+        super().yview(*args)
+        self.event_generate("<<TreelistScroll>>")
+
+    def yview_moveto(self, fraction):
+        super().yview_moveto(fraction)
+        self.event_generate("<<TreelistScroll>>")
+
+    def yview_scroll(self, number, what):
+        super().yview_scroll(number, what)
+        self.event_generate("<<TreelistScroll>>")
+
+
 class Treelist(ttk.Frame):
     def __init__(self, master, headers, column_widths=None, height=15, alt_colors=None, sortable=True, sort_keys=None,
                  stretch_bools=None, index_options=None, debounce_time=300, search_excludes=None, match_template=None,
@@ -75,8 +93,8 @@ class Treelist(ttk.Frame):
         scrollbar.pack(side="right", fill="y")
 
         display = self.headers if self.index_show else self.headers[1:]
-        self.tree = ttk.Treeview(frame_tree, columns=self.headers, displaycolumns=display, show="headings",
-                                 height=self.height, selectmode="extended")
+        self.tree = _TreeScroll(frame_tree, columns=self.headers, displaycolumns=display, show="headings",
+                                height=self.height, selectmode="extended")
         self.tree.pack(side="top", fill="both", expand=True)
         self.tree.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=self.tree.yview)

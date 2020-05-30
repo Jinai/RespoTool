@@ -46,6 +46,7 @@ class Siglist(Treelist):
         self.tree.bind("<space>", lambda _: self.on_space())
         self.tree.bind("<FocusOut>", lambda _: self.remove_popups())
         self.tree.bind("<<TreeviewSelect>>", lambda _: self.selection_handler())
+        self.tree.bind("<<TreelistScroll>>", lambda _: self.remove_popups())
         # self.tree.bind("<<TreelistDelete>>", lambda _: self.delete())
         self.get_tags()
         self.get_templates()
@@ -233,9 +234,11 @@ class Siglist(Treelist):
 
     def remove_popups(self):
         if self._last_popup_space:
-            self._last_popup_space.destroy()
+            self._last_popup_space.fade_out()
+            self._last_popup_space = None
         if self._last_popup_rightclick:
-            self._last_popup_rightclick.destroy()
+            self._last_popup_rightclick.fade_out()
+            self._last_popup_rightclick = None
 
     def selection_handler(self):
         self.remove_popups()
