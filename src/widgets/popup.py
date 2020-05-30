@@ -5,7 +5,7 @@ import tkinter as tk
 
 
 class Popup(tk.Toplevel):
-    def __init__(self, message, pos_x, pos_y, lifetime=1500, delay=0, fadein=200, fadeout=600, offset=(0, 0),
+    def __init__(self, message, pos_x, pos_y, lifetime=1500, delay=0, fadein=200, fadeout=200, offset=(0, 0),
                  txt_color="white", bg_color="#111111", border_color="#999999", border_width=0, persistent=False,
                  max_alpha=1.0, **kwargs):
         super().__init__(**kwargs)
@@ -26,6 +26,7 @@ class Popup(tk.Toplevel):
         self.refresh_delay = 30           # Delay between each transparency adjustment (milliseconds)
         self.alpha_fadein = (self.max_alpha / self.fadein) * self.refresh_delay  # Fadein transparency increment
         self.alpha_fadeout = (self.max_alpha / self.fadeout) * self.refresh_delay  # Fadeout transparency decrement
+        self._fadein_after_id = None
         self.setup()
 
     def setup(self):
@@ -44,11 +45,12 @@ class Popup(tk.Toplevel):
         if alpha < self.max_alpha:
             alpha += self.alpha_fadein
             self.attributes("-alpha", alpha)
-            self.after(self.refresh_delay, self.fade_in)
+            self._fadein_after_id = self.after(self.refresh_delay, self.fade_in)
         elif not self.persistent:
             self.after(self.lifetime, self.fade_out)
 
     def fade_out(self):
+        self._cancel_fade_in()
         alpha = self.attributes("-alpha")
         if alpha > 0:
             alpha -= self.alpha_fadeout
@@ -56,3 +58,9 @@ class Popup(tk.Toplevel):
             self.after(self.refresh_delay, self.fade_out)
         else:
             self.destroy()
+
+    def _cancel_fade_in(self):
+        after_id = self._fadein_after_id
+        self._fadein_after_id = None
+        if after_id:
+            self.after_cancel(after_id)
