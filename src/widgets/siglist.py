@@ -227,10 +227,14 @@ class Siglist(Treelist):
                     text += self.archives_templates["session_msg"]
                     text += "\n    ".join(
                         [""] + [self.archives_templates["session"].format(**s.__dict__) for s in match_session])
-                x, y = self.tree.bbox(item, "Code")[:2]
-                x = x + self.winfo_rootx()
-                y = y + self.winfo_rooty() + 20
-                self._last_popup_space = Popup(text, x, y, persistent=True, max_alpha=0.90)
+                self.tree.see(item)
+                self.update_idletasks()
+                bbox = self.tree.bbox(item, "Code")
+                if bbox:
+                    x, y = bbox[:2]
+                    x = x + self.winfo_rootx()
+                    y = y + self.winfo_rooty() + 20
+                    self._last_popup_space = Popup(text, x, y, persistent=True, max_alpha=0.90)
 
     def remove_popups(self):
         if self._last_popup_space:
