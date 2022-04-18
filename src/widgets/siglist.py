@@ -169,7 +169,7 @@ class Siglist(Treelist):
                 sig_index = self.signalements.index(sig)
                 if respo not in sig.respo:
                     sig.respo.append(respo)
-                if new_statut == "/reset":
+                if " // " in new_statut and new_statut.split(" // ", 1)[1] == "/reset":
                     sig.respo = []
                 else:
                     sig.statut = new_statut
