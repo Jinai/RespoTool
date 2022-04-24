@@ -5,6 +5,8 @@ import logging
 import tkinter as tk
 import tkinter.ttk as ttk
 
+import searchparser
+
 logger = logging.getLogger(__name__)
 
 
@@ -29,7 +31,7 @@ class _TreeScroll(ttk.Treeview):
 class Treelist(ttk.Frame):
     def __init__(self, master, headers, column_widths=None, height=15, alt_colors=None, sortable=True, sort_keys=None,
                  stretch_bools=None, index_options=None, debounce_time=300, search_excludes=None, match_template=None,
-                 scroll_speed=3, **kwargs):
+                 search_tags=None, scroll_speed=3, **kwargs):
         ttk.Frame.__init__(self, master, **kwargs)
         self.master = master
         self.headers = headers
@@ -71,6 +73,9 @@ class Treelist(ttk.Frame):
 
         # A formatted string that can be used to display the number of matches yielded by a search query
         self.match_template = match_template if match_template else "{}/{}"
+
+        # A list of tags used to search, e.g. "respo:jinai" where "respo" is the tag
+        self.search_tags = search_tags if search_tags else headers
 
         # Number of lines to scroll when using the mouse wheel. Internally, a scroll speed of N is represented as N-1
         self.scroll_speed = max(scroll_speed - 1, 0)
@@ -209,13 +214,23 @@ class Treelist(ttk.Frame):
             self._matches_label.set("")
         else:
             matches = 0
+            notag, *tags = searchparser.SearchParser(self.search_tags).parse(query)
             for values in self._data:
-                for item in values:
-                    if query.lower() in str(item).lower():
+                for tag in tags:
+                    if not tag.content.lower() in str(values[tag.index]).lower():
+                        break
+                else:
+                    if notag.content:
+                        for item in values:
+                            if notag.content.lower() in str(item).lower():
+                                self.insert(values, update=False)
+                                matches += 1
+                                break
+                    else:
                         self.insert(values, update=False)
                         matches += 1
-                        break
             self._matches_label.set(self.match_template.format(matches, len(self._data)))
+
         self._last_search_query = query
         self.scroll_up()
 

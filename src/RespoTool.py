@@ -164,11 +164,12 @@ class RespoTool(tk.Tk):
             "stretch": False
         }
         exclude = [placeholder_options["text"]]
+        search_tags = ["num", "date", "auteur", "code", "flag", "desc", "statut", "respo"]
         self.tree_sig = siglist.Siglist(self.main_frame, signalements=self.signalements, archives=self.archives,
                                         respomap_widget=self.dropdown_respo, statusbar=self.statusbar,
                                         headers=headers, sort_keys=sort_keys, stretch_bools=stretch_bools, height=20,
                                         index_options=index_options, sortable=False, column_widths=column_widths,
-                                        match_template="{} sur {}", search_excludes=exclude)
+                                        match_template="{} sur {}", search_excludes=exclude, search_tags=search_tags)
         self.searchbar.entry.configure(textvariable=self.tree_sig._search_query)
         self.label_matches.configure(textvariable=self.tree_sig._matches_label)
 
