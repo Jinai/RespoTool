@@ -1,1 +1,1 @@
-pipenv run python -B setup.py py2exe
+pipenv run python -OO -B setup.py py2exe

@@ -25,13 +25,13 @@ def py2exe():
                 "dist_dir": dist_dir,
                 "dll_excludes": ["msvcr71.dll", "pywintypes34.dll"],
                 "excludes": [
-                    "doctest", "unittest", "xml", "xmlrpc", "difflib", "optparse", "dis", "bz2",
+                    "doctest", "unittest", "xml", "xmlrpc", "difflib", "optparse", "bz2",
                     "bdb", "ftplib", "optparse", "pdb", "pydoc", "pyexpat", "pywintypes",
-                    "selectors", "socketserver", "win32api", "win32con", "_bz2", "_hashlib",
+                    "socketserver", "win32api", "win32con", "_bz2", "_hashlib",
                     "_lzma", "_ssl", "netbios", "netrc", "pkgutil", "plistlib", "pprint",
                     "py_compile", "runpy", "ssl", "win32wnet", "zipfile", "_multiprocessing",
                     "_osx_support", "_strptime", "_threading_local", "lzma", "gzip", "getopt",
-                    "getpass", "hmac", "urllib", "operators"
+                    "getpass", "hmac", "urllib", "operators", "pyreadline", "calendar"
                 ],
             }
         },
