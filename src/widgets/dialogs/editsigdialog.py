@@ -32,8 +32,8 @@ class EditSigDialog(BaseDialog):
                     var = tk.IntVar(master=self, value=0)
                     self.parsed_state[status] = var
 
-                var.trace("w", lambda *_, var=var, name=status: self.checkbutton_callback(var, name))
-                cb = ttk.Checkbutton(column, text=status.title(), variable=var, takefocus=False)
+                command = lambda var=var, status=status: self.validate_status(var, status)
+                cb = ttk.Checkbutton(column, text=status.title(), variable=var, takefocus=False, command=command)
                 cb.pack(side="top", anchor="w")
 
         # Text area for comments
@@ -68,15 +68,14 @@ class EditSigDialog(BaseDialog):
             var = tk.IntVar(master=self, value=1)
             self.parsed_state[status.strip()] = var
 
-    def checkbutton_callback(self, current_var, name):
-        if name == "todo" and current_var.get():
-            for status, var in self.parsed_state.items():
-                if status != "todo" and var.get():
-                    var.set(0)
-        elif name != "todo" and current_var.get():
-            todo = self.parsed_state["todo"]
-            if todo.get():
-                todo.set(0)
+    def validate_status(self, current_var, status):
+        if status != "todo" and current_var.get():
+            # Remove todo if any other status is checked. Note that you can still have it if you add it last.
+            self.parsed_state["todo"].set(0)
+        elif not current_var.get():
+            if not any([var.get() for var in self.parsed_state.values()]):
+                # If no status is checked, force todo
+                self.parsed_state["todo"].set(1)
 
     def apply(self):
         self.comment = self.comment_field.get("1.0", tk.END).strip()
